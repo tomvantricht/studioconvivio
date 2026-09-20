@@ -633,6 +633,13 @@ textarea:focus-visible,
 .price-list .amount { font-weight: 700; color: var(--ink); white-space: nowrap; }
 .price-list .note { display: block; font-size: 12px; color: var(--ink-faint); font-weight: 400; }
 
+/* Klein "incl. btw"-bijschrift, direct onder een prijs of prijslijst. */
+.vat-note {
+  display: block; font-size: 11px; color: var(--ink-faint);
+  font-weight: 400; font-style: normal; text-transform: none; letter-spacing: 0;
+  margin-top: 4px;
+}
+
 /* ---------------------------------------------------------------------- */
 /* Mini-collectiekaarten (bv. op Hoe werkt het)                            */
 /* ---------------------------------------------------------------------- */

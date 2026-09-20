@@ -82,6 +82,7 @@
 .coll-price {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 12px;
   margin-top: 28px;
   padding-top: 20px;
@@ -90,6 +91,7 @@
 }
 .coll-price .amount { font-family: var(--serif); font-size: 28px; color: var(--ink); }
 .coll-price .unit { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.coll-price .vat-note { flex-basis: 100%; margin-top: 0; }
 .coll-hero .hero-actions { margin-top: 24px; }
 
 .coll-hero-media { position: relative; }
@@ -182,6 +184,7 @@
         <div class="coll-price">
           <span class="amount">Vanaf €16,75</span>
           <span class="unit">per persoon</span>
+          <span class="vat-note">Incl. btw</span>
         </div>
         <div class="hero-actions">
           <a class="btn" href="reserveren.html">Ik wil deze set reserveren</a>

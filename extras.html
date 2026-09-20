@@ -148,6 +148,7 @@
       <div class="kicker"><span>Maak het compleet</span></div>
       <h1>Extra's</h1>
       <p class="lede">Onze pakketten Moss &amp; Mist en Mocha Sky zijn compleet, maar soms wil je net iets meer. Blader hieronder door losse tafelitems en decoratie en voeg toe wat je wilt: je keuze staat automatisch klaar zodra je verdergaat naar <a class="link" href="reserveren.html">reserveren</a>.</p>
+      <span class="vat-note" style="margin-top:14px;">Alle prijzen op deze pagina zijn incl. btw</span>
     </div>
   </section>
 
@@ -318,6 +319,7 @@
         <p class="xt-summary-empty" id="xtSummaryEmpty">Je hebt nog niets toegevoegd. Klik op een item hierboven om het aan je offerte toe te voegen.</p>
         <div class="xt-summary-lines" id="xtSummaryLines"></div>
         <div class="xt-summary-total" id="xtSummaryTotal" style="display:none;"><span>Subtotaal extra's</span><span id="xtSummaryTotalPrice"></span></div>
+        <p class="vat-note" id="xtSummaryVatNote" style="display:none;">Incl. btw</p>
         <p class="xt-summary-note">Dit subtotaal komt automatisch terug in de offerte op de reserveringspagina, samen met je tafelpakket.</p>
         <p class="xt-summary-cta"><a class="btn" href="reserveren.html">Ga verder naar reserveren</a></p>
       </div>
@@ -385,6 +387,7 @@
   var summaryLinesEl = document.getElementById('xtSummaryLines');
   var summaryTotalEl = document.getElementById('xtSummaryTotal');
   var summaryTotalPriceEl = document.getElementById('xtSummaryTotalPrice');
+  var summaryVatNoteEl = document.getElementById('xtSummaryVatNote');
 
   function renderSummary() {
     var s = ScExtrasShop.summary();
@@ -392,6 +395,7 @@
       summaryEmpty.style.display = 'block';
       summaryLinesEl.innerHTML = '';
       summaryTotalEl.style.display = 'none';
+      summaryVatNoteEl.style.display = 'none';
       return;
     }
     summaryEmpty.style.display = 'none';
@@ -400,6 +404,7 @@
     }).join('');
     summaryTotalEl.style.display = 'flex';
     summaryTotalPriceEl.textContent = ScExtrasShop.fmt(s.subtotal) + (s.lines.some(function (l) { return l.overleg; }) ? ' + in overleg' : '');
+    summaryVatNoteEl.style.display = 'block';
   }
 
   ScExtrasShop.wire(root, renderSummary);
