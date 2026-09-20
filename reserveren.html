@@ -206,7 +206,6 @@
 <main id="inhoud">
   <section class="section" style="padding-bottom:40px;">
     <div class="wrap" style="max-width:720px;">
-      <p class="eyebrow">Reserveren</p>
       <h1 style="font-size:clamp(30px,3.8vw,44px);margin-top:14px;">Dien je reservering in</h1>
       <p class="lede" style="margin-top:16px;">Heb je een collectie gevonden die perfect past bij jouw gelegenheid? Vul onderstaand formulier in. Je ziet direct een prijsindicatie, en na ontvangst sturen we je een voorlopig akkoord.</p>
     </div>
@@ -390,15 +389,6 @@
               </div>
             </div>
 
-            <span class="sc-sublabel">Extra services</span>
-            <div class="sc-flat-items" id="scExtraServicesList" role="group" aria-label="Extra services">
-              <div class="sc-flat-item-row">
-                <label class="sc-item-tile">
-                  <input type="checkbox" id="scDishwashCheck">
-                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Afwasservice</span><span class="sc-item-price" id="scDishwashPrice">10% van pakketprijs</span></span>
-                </label>
-              </div>
-            </div>
             <div id="scFlatExtrasStandardAnchor"></div>
           </div>
 
@@ -411,7 +401,6 @@
             <div class="sc-summary-line" id="scLineFlowers" style="display:none;"><span>Verse bloemen</span><span id="scLineFlowersPrice"></span></div>
             <div class="sc-summary-line" id="scLineCards" style="display:none;"><span>Handgemaakte kaarten</span><span id="scLineCardsPrice"></span></div>
             <div class="sc-summary-line" id="scLineDelivery" style="display:none;"><span id="scLineDeliveryLabel">Bezorging</span><span id="scLineDeliveryPrice"></span></div>
-            <div class="sc-summary-line" id="scLineDishwash" style="display:none;"><span>Afwasservice</span><span id="scLineDishwashPrice"></span></div>
             <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€100,50</strong></div>
             <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
             <p class="sc-summary-note sc-deposit-note" style="margin-top:8px;">Let op: naast dit bedrag rekenen we een <strong>borg van €150,00</strong>. Je krijgt deze borg volledig terug zodra alle gehuurde spullen in goede staat zijn geretourneerd.</p>
@@ -568,8 +557,6 @@
   var lineDelivery = document.getElementById('scLineDelivery');
   var lineDeliveryLabel = document.getElementById('scLineDeliveryLabel');
   var lineDeliveryPrice = document.getElementById('scLineDeliveryPrice');
-  var lineDishwash = document.getElementById('scLineDishwash');
-  var lineDishwashPrice = document.getElementById('scLineDishwashPrice');
   var summaryNote = document.getElementById('scSummaryNote');
   var totalPriceEl = document.getElementById('scTotalPrice');
 
@@ -579,9 +566,6 @@
   var daysWrap = document.getElementById('scDaysWrap');
   var standardBlock = document.getElementById('scStandardBlock');
   var customBlock = document.getElementById('scCustomBlock');
-  var dishwashCheck = document.getElementById('scDishwashCheck');
-  var dishwashPriceEl = document.getElementById('scDishwashPrice');
-
   var addressField = document.getElementById('scAddressField');
   var addressInput = document.getElementById('scDeliveryAddress');
   var addressStatus = document.getElementById('scAddressStatus');
@@ -818,8 +802,6 @@
     });
   });
 
-  dishwashCheck.addEventListener('change', recalc);
-
   var lastComputedTotal = null;
 
   function recalc() {
@@ -839,7 +821,6 @@
       lineServetringen.style.display = 'none';
       linePlacemats.style.display = 'none';
       lineDelivery.style.display = 'none';
-      lineDishwash.style.display = 'none';
       totalPriceEl.textContent = 'Op aanvraag';
       lastComputedTotal = null;
       summaryNote.textContent = 'Voor ' + reasons.join(' en ') + ' stellen we in overleg een passende prijs samen. We nemen na ontvangst van je aanvraag contact met je op.';
@@ -920,17 +901,6 @@
       linePlacematsPrice.textContent = fmt(placematsPrice);
     } else { linePlacemats.style.display = 'none'; }
 
-    var dishwashPrice = 0;
-    if (dishwashCheck.checked) {
-      dishwashPrice = baseTableCost * 0.10;
-      lineDishwash.style.display = 'flex';
-      lineDishwashPrice.textContent = fmt(dishwashPrice);
-      dishwashPriceEl.textContent = '+ ' + fmt(dishwashPrice);
-    } else {
-      lineDishwash.style.display = 'none';
-      dishwashPriceEl.textContent = '10% van pakketprijs';
-    }
-
     var dRadio = getDeliveryMode();
     var deliveryPrice = 0;
     if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
@@ -943,7 +913,7 @@
       lineDeliveryPrice.textContent = fmt(deliveryPrice);
     } else { lineDelivery.style.display = 'none'; }
 
-    var total = baseTableCost + cardsPrice + flowersPrice + tafellampenPrice + zijdebloemenPrice + servetringenPrice + placematsPrice + dishwashPrice + deliveryPrice;
+    var total = baseTableCost + cardsPrice + flowersPrice + tafellampenPrice + zijdebloemenPrice + servetringenPrice + placematsPrice + deliveryPrice;
     totalPriceEl.textContent = fmt(total);
     lastComputedTotal = total;
 
