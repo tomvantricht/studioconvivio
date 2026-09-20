@@ -837,6 +837,10 @@
 
     var guests = Math.max(1, parseInt(guestsInput.value, 10) || 1);
     var days = longerRentalCheck.checked ? Math.max(4, parseInt(daysInput.value, 10) || 4) : 3;
+    // De p.p.-prijs dekt de hele standaard huurperiode van 3 dagen als één
+    // vast bedrag (dus geen 3x doorberekenen). Alleen dagen ná dag 3 tellen
+    // als extra dagprijs: dag 4 = +1x, dag 5 = +2x, enzovoort.
+    var dayFactor = days <= 3 ? 1 : 1 + (days - 3);
     var mode = getMode();
     var baseTableCost = 0;
     var labelName = '';
@@ -844,13 +848,13 @@
     if (mode === 'standard') {
       var pkg = getSelectedPackage();
       var pricePerPerson = pkg ? parseFloat(pkg.dataset.price) : 0;
-      baseTableCost = pricePerPerson * guests * days;
+      baseTableCost = pricePerPerson * guests * dayFactor;
       labelName = pkg ? pkg.value : '';
     } else {
       var checks = form.querySelectorAll('.sc-item-check:checked');
       var perPersonSum = 0;
       checks.forEach(function (el) { perPersonSum += parseFloat(el.dataset.price); });
-      baseTableCost = perPersonSum * guests * days;
+      baseTableCost = perPersonSum * guests * dayFactor;
       labelName = 'Maatwerkpakket (' + checks.length + ' tafel-items)';
     }
 
