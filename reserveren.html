@@ -143,6 +143,44 @@
   .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon::after { content: "\2713"; }
   .sc-item-price { color: var(--ink-soft); font-size: 12px; white-space: nowrap; }
 
+  /* ---- Extra tafelitems als "shop"-kaartjes met foto i.p.v. vinklijst ---- */
+  .sc-shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 480px) { .sc-shop-grid { grid-template-columns: repeat(3, 1fr); } }
+  .sc-shop-item { display: flex; flex-direction: column; }
+  .sc-shop-card {
+    position: relative; display: block; cursor: pointer;
+    border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg);
+    overflow: hidden; background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .sc-shop-card:has(input:checked) { border-color: var(--sc-moss); box-shadow: inset 0 0 0 2px rgba(107,122,94,0.2); }
+  .sc-shop-card input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .sc-shop-photo {
+    display: block; aspect-ratio: 1 / 1; position: relative;
+    background: linear-gradient(155deg, #eee7d8, #e3ded2);
+  }
+  .sc-shop-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sc-shop-ph-icon {
+    position: absolute; inset: 0; margin: auto; width: 32%; height: 32%;
+    fill: none; stroke: var(--sc-mocha); stroke-width: 2.4;
+    stroke-linejoin: round; stroke-linecap: round; opacity: 0.55;
+  }
+  .sc-shop-ph-label {
+    position: absolute; left: 0; right: 0; bottom: 8px; text-align: center;
+    font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint);
+  }
+  .sc-shop-badge {
+    position: absolute; top: 6px; right: 6px; width: 22px; height: 22px;
+    border-radius: 50%; background: #fff; border: 1px solid var(--sc-line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: transparent; transition: all 0.15s ease;
+  }
+  .sc-shop-card input:checked ~ .sc-shop-photo .sc-shop-badge { background: var(--sc-moss); border-color: var(--sc-moss); color: #fff; }
+  .sc-shop-body { display: block; padding: 8px 10px 10px; }
+  .sc-shop-name { display: block; font-size: 12.5px; color: var(--sc-ink); line-height: 1.3; }
+  .sc-shop-price { display: block; font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+  .sc-shop-qty { margin: 6px 0 0 0 !important; }
+
   .sc-qty-field { margin: 4px 0 10px 28px; display: none; }
   .sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; }
   .sc-qty-field input[type="number"] { max-width: 90px; }
@@ -442,48 +480,78 @@
 
       <div id="scFlatExtrasTemplate" style="display:none;">
         <span class="sc-sublabel" style="margin-top:0;">Extra tafelitems</span>
-        <div class="sc-flat-items">
-          <div class="sc-flat-item-row">
-            <label class="sc-item-tile">
+        <div class="sc-shop-grid">
+          <div class="sc-shop-item">
+            <label class="sc-shop-card">
               <input type="checkbox" id="scTafellampenCheck">
-              <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Tafellampen</span><span class="sc-item-price">€3,95/stuk</span></span>
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 20h6M10 15.5l-1.5 4.5M14 15.5l1.5 4.5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">✓</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Tafellampen</span><span class="sc-shop-price">€3,95/stuk</span></span>
             </label>
-            <div class="sc-qty-field sc-qty-field-flat" id="scTafellampenQtyWrap"><input type="number" id="scTafellampenQty" min="1" max="4" value="1"></div>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scTafellampenQtyWrap"><input type="number" id="scTafellampenQty" min="1" max="4" value="1"></div>
           </div>
-          <div class="sc-flat-item-row">
-            <label class="sc-item-tile">
+          <div class="sc-shop-item">
+            <label class="sc-shop-card">
               <input type="checkbox" id="scServetringenCheck">
-              <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Servetringen</span><span class="sc-item-price">€1,00/stuk</span></span>
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.6"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">✓</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Servetringen</span><span class="sc-shop-price">€1,00/stuk</span></span>
             </label>
-            <div class="sc-qty-field sc-qty-field-flat" id="scServetringenQtyWrap"><input type="number" id="scServetringenQty" min="1" value="1"></div>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scServetringenQtyWrap"><input type="number" id="scServetringenQty" min="1" value="1"></div>
           </div>
-          <div class="sc-flat-item-row">
-            <label class="sc-item-tile">
+          <div class="sc-shop-item">
+            <label class="sc-shop-card">
               <input type="checkbox" id="scPlacematsCheck">
-              <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Placemats</span><span class="sc-item-price">€1,50/stuk</span></span>
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">✓</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Placemats</span><span class="sc-shop-price">€1,50/stuk</span></span>
             </label>
-            <div class="sc-qty-field sc-qty-field-flat" id="scPlacematsQtyWrap"><input type="number" id="scPlacematsQty" min="1" value="1"></div>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scPlacematsQtyWrap"><input type="number" id="scPlacematsQty" min="1" value="1"></div>
           </div>
-          <div class="sc-flat-item-row" id="scZijdebloemenRow">
-            <label class="sc-item-tile">
+          <div class="sc-shop-item" id="scZijdebloemenRow">
+            <label class="sc-shop-card">
               <input type="checkbox" id="scZijdebloemenCheck">
-              <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Zijdebloemen</span><span class="sc-item-price">€7,95/bos</span></span>
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 3v10M12 13c-3 0-5 2-5 5M12 13c3 0 5 2 5 5M7 18h10"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">✓</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Zijdebloemen</span><span class="sc-shop-price">€7,95/bos</span></span>
             </label>
-            <div class="sc-qty-field sc-qty-field-flat" id="scZijdebloemenQtyWrap"><input type="number" id="scZijdebloemenQty" min="1" max="4" value="1"></div>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scZijdebloemenQtyWrap"><input type="number" id="scZijdebloemenQty" min="1" max="4" value="1"></div>
           </div>
-          <div class="sc-flat-item-row">
-            <label class="sc-item-tile">
+          <div class="sc-shop-item">
+            <label class="sc-shop-card">
               <input type="checkbox" id="scFlowersCheck">
-              <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Verse bloemen</span><span class="sc-item-price">Prijs in overleg</span></span>
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><circle cx="7" cy="13" r="3"/><circle cx="17" cy="13" r="3"/><path d="M12 16v5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">✓</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Verse bloemen</span><span class="sc-shop-price">Prijs in overleg</span></span>
             </label>
-            <div class="sc-qty-field sc-qty-field-flat" id="scFlowersQtyWrap"><input type="number" id="scFlowersQty" min="1" max="4" value="1"></div>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scFlowersQtyWrap"><input type="number" id="scFlowersQty" min="1" max="4" value="1"></div>
           </div>
-          <div class="sc-flat-item-row">
-            <label class="sc-item-tile">
+          <div class="sc-shop-item">
+            <label class="sc-shop-card">
               <input type="checkbox" id="scCardsCheck">
-              <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Handgemaakte kaarten</span><span class="sc-item-price">Vanaf €2,00</span></span>
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">✓</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">Vanaf €2,00</span></span>
             </label>
-            <div class="sc-qty-field sc-qty-field-flat" id="scCardsQtyWrap">
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scCardsQtyWrap">
               <input type="number" id="scCardsQty" min="1" max="4" value="1">
               <input type="text" id="scCardsType" placeholder="Welk soort? bijv. menukaarten, naamkaarten">
             </div>
