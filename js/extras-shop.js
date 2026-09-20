@@ -13,25 +13,24 @@ window.ScExtrasShop = (function () {
     return out;
   }
 
-  // Bouwt de kaartjes-grid (per categorie) als HTML-string. Gebruikt op
-  // reserveren.html, waar de catalogus niet los hoeft te staan als
-  // doorzoekbare pagina-inhoud en dus uit de gedeelde data mag komen.
+  // Bouwt de itemlijst (per categorie) als HTML-string, zonder foto's: een
+  // compacte vinklijst. Gebruikt op reserveren.html, waar de items alleen
+  // hoeven te worden aangevinkt en de foto's van de shop-kaartjes op
+  // extras.html geen meerwaarde hebben.
   function renderCatalog() {
     var html = '';
     SC_EXTRAS_CATALOG.forEach(function (group) {
-      html += '<div class="sc-shop-category"><span class="sc-shop-category-label">' + group.category + '</span><div class="sc-shop-grid">';
+      html += '<div class="sc-shop-category"><span class="sc-shop-category-label">' + group.category + '</span><div class="sc-shop-grid sc-shop-grid--flat">';
       group.items.forEach(function (item) {
         var priceLabel = item.price === null ? item.unit : fmt(item.price) + '/' + item.unit;
         html += '' +
           '<div class="sc-shop-item" data-key="' + item.key + '">' +
-            '<label class="sc-shop-card">' +
+            '<label class="sc-shop-card sc-shop-card--flat">' +
               '<input type="checkbox" class="sc-shop-check">' +
-              '<span class="sc-shop-photo">' +
-                '<svg class="sc-shop-ph-icon" viewBox="0 0 24 24">' + item.icon + '</svg>' +
-                '<span class="sc-shop-ph-label">Foto volgt</span>' +
-                '<span class="sc-shop-badge">✓</span>' +
+              '<span class="sc-shop-body">' +
+                '<span class="sc-shop-name"><span class="sc-shop-check-icon"></span>' + item.name + '</span>' +
+                '<span class="sc-shop-price">' + priceLabel + '</span>' +
               '</span>' +
-              '<span class="sc-shop-body"><span class="sc-shop-name">' + item.name + '</span><span class="sc-shop-price">' + priceLabel + '</span></span>' +
             '</label>' +
             '<div class="sc-qty-field sc-qty-field-flat sc-shop-qty">' +
               '<input type="number" class="sc-shop-qty-input" min="1" max="' + item.max + '" value="1">' +
