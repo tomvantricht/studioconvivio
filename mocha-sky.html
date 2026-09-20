@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mocha Sky Collectie | Tafelstyling | Studio Convivio</title>
+<meta name="description" content="Mocha Sky: warme aardetinten met een moderne uitstraling. Stijlvol, tijdloos en uitnodigend voor je gedekte tafel. Vanaf €17,75 p.p.">
+<link rel="canonical" href="https://www.studio-convivio.nl/mocha-sky.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Studio Convivio">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Mocha Sky Collectie | Tafelstyling | Studio Convivio">
+<meta property="og:description" content="Mocha Sky: warme aardetinten met een moderne uitstraling. Stijlvol, tijdloos en uitnodigend voor je gedekte tafel. Vanaf €17,75 p.p.">
+<meta property="og:url" content="https://www.studio-convivio.nl/mocha-sky.html">
+<meta property="og:image" content="https://www.studio-convivio.nl/images/img-beee9a1e.webp">
+<meta property="og:image:width" content="900">
+<meta property="og:image:height" content="1600">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="images/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
+<link rel="stylesheet" href="css/site.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Mocha Sky tafelpakket",
+  "description": "Mocha Sky: warme aardetinten met een moderne uitstraling. Stijlvol, tijdloos en uitnodigend voor je gedekte tafel. Vanaf €17,75 p.p.",
+  "image": "https://www.studio-convivio.nl/images/img-beee9a1e.webp",
+  "brand": {
+    "@type": "Brand",
+    "name": "Studio Convivio"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://www.studio-convivio.nl/mocha-sky.html",
+    "price": "17.75",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/InStock",
+    "eligibleQuantity": {
+      "@type": "QuantitativeValue",
+      "unitText": "per persoon"
+    },
+    "seller": {
+      "@type": "LocalBusiness",
+      "name": "Studio Convivio",
+      "@id": "https://www.studio-convivio.nl/#studio-convivio"
+    }
+  }
+}
+</script>
+<style>
+/* ---- Pagina-specifiek: Mocha Sky ------------------------------------ */
+
+.coll-hero { padding: clamp(40px, 6vw, 72px) 0 clamp(36px, 5vw, 56px); }
+.coll-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .coll-hero-inner { grid-template-columns: 0.82fr 1.05fr; }
+}
+.coll-hero h1 { font-size: clamp(36px, 4.4vw, 54px); margin-top: 12px; }
+.coll-hero .sub {
+  margin-top: 10px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--mocha-dark);
+}
+.coll-hero .lede { margin-top: 22px; font-size: 17px; color: var(--ink-soft); max-width: 48ch; }
+.coll-hero .body { margin-top: 14px; color: var(--ink-soft); max-width: 48ch; }
+
+.coll-price {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  max-width: 48ch;
+}
+.coll-price .amount { font-family: var(--serif); font-size: 28px; color: var(--ink); }
+.coll-price .unit { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.coll-hero .hero-actions { margin-top: 24px; }
+
+.coll-hero-media { position: relative; order: -1; }
+@media (min-width: 900px) { .coll-hero-media { order: 0; } }
+.coll-hero-media .frame {
+  position: absolute;
+  top: -14px; left: -14px;
+  width: 100%; height: 100%;
+  border: 1px solid var(--mocha);
+  z-index: 0;
+}
+.coll-hero-media .shot {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 5;
+  max-height: 460px;
+  margin-right: auto;
+  overflow: hidden;
+  background: var(--paper-deep);
+}
+.coll-hero-media .shot img { width: 100%; height: 100%; object-fit: cover; }
+
+.coll-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.coll-strip figure { margin: 0; }
+.coll-strip .shot { aspect-ratio: 1 / 1; overflow: hidden; background: var(--paper-deep); }
+.coll-strip img { width: 100%; height: 100%; object-fit: cover; }
+.coll-strip figcaption {
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-faint);
+}
+@media (max-width: 620px) { .coll-strip { grid-template-columns: repeat(2, 1fr); } .coll-strip figure:last-child { display: none; } }
+
+.include-layout { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 56px); align-items: start; }
+@media (min-width: 860px) { .include-layout { grid-template-columns: 0.8fr 1fr; } }
+.include-note { font-size: 16px; color: var(--ink-soft); }
+.include-note h2 { font-size: clamp(26px, 3vw, 36px); margin-bottom: 14px; }
+.include-cols li::before {
+  content: "";
+  display: inline-block;
+  width: 4px; height: 4px;
+  margin-right: 12px;
+  vertical-align: middle;
+  background: var(--mocha);
+  transform: rotate(45deg);
+}
+.fineprint { margin-top: 28px; color: var(--ink-faint); font-size: 13px; max-width: 60ch; }
+
+.next-coll { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 48px); align-items: center; }
+@media (min-width: 860px) { .next-coll { grid-template-columns: 0.7fr 1fr; } }
+.next-coll .shot { aspect-ratio: 4 / 3; max-height: 260px; overflow: hidden; background: var(--paper-deep); }
+.next-coll .shot img { width: 100%; height: 100%; object-fit: cover; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#inhoud">Naar de inhoud</a>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img class="logo-img logo-img--onlight" src="images/logo.webp" alt="Studio Convivio" width="911" height="369">
+      <small>Tafelstyling &amp; verhuur</small>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="hoofdnavigatie">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
+      <ul>
+        <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
+        <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="inhoud">
+
+  <section class="coll-hero">
+    <div class="wrap coll-hero-inner">
+      <div>
+        <h1>Mocha Sky</h1>
+        <p class="sub">Warme aardetinten met een moderne uitstraling</p>
+        <p class="lede">Mocha Sky combineert de warmte van rijke aardetinten met lichte, verfijnde accenten. Het resultaat is een stijlvolle tafelsetting die tegelijkertijd modern, toegankelijk en tijdloos aanvoelt.</p>
+        <p class="body">De zachte balans tussen warme mocha-kleuren en frisse nuances creëert een rustige en luxe sfeer die gasten direct welkom laat voelen. Deze collectie is ontworpen voor momenten die net dat beetje extra mogen hebben. Elegant zonder afstandelijk te zijn, verfijnd zonder overdadig te worden.</p>
+        <div class="coll-price">
+          <span class="amount">Vanaf €17,75</span>
+          <span class="unit">per persoon</span>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-mocha" href="reserveren.html">Ik wil deze set reserveren</a>
+        </div>
+      </div>
+      <div class="coll-hero-media">
+        <span class="frame" aria-hidden="true"></span>
+        <div class="shot photo-tone photo-tone--mocha">
+          <img src="images/img-beee9a1e.webp" alt="Gedekte tafel in de Mocha Sky-collectie" width="900" height="1600" decoding="async" fetchpriority="high">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="coll-strip">
+        <figure>
+          <div class="shot"><img src="images/img-25e2bb73.webp" alt="Sfeerbeeld Mocha Sky" loading="lazy" width="1000" height="667" decoding="async"></div>
+        </figure>
+        <figure>
+          <div class="shot"><img src="images/img-52c47e24.webp" alt="Sfeerbeeld Mocha Sky" loading="lazy" width="900" height="1600" decoding="async"></div>
+        </figure>
+        <figure>
+          <div class="shot"><img src="images/img-7520bfa8.webp" alt="Sfeerbeeld Mocha Sky" loading="lazy" width="900" height="1600" decoding="async"></div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper-alt">
+    <div class="wrap include-layout">
+      <div class="include-note">
+        <h2>Wat zit er in het pakket?</h2>
+        <p>Bij Studio Convivio krijg je per collectie één compleet pakket aan standaard benodigdheden. De verdere aankleding boek je makkelijk zelf bij, naar smaak.</p>
+        <p class="fineprint">Standaard huurperiode van 3 dagen, zelf ophalen en terugbrengen in Wageningen. Liever bezorgd of gestyled op locatie? Bekijk de <a class="link" href="aanvullende-services-en-maatwerk.html">aanvullende services</a>.</p>
+      </div>
+      <div>
+        <ul class="include-cols">
+          <li>Dinerborden</li>
+          <li>Voorgerechtborden</li>
+          <li>Bestek</li>
+          <li>Voorgerechtbestek</li>
+          <li>Waterglazen</li>
+          <li>Wijnglazen</li>
+          <li>Dessertcoupe</li>
+          <li>Katoenen servetten</li>
+          <li>Placemats</li>
+          <li>Tafelkleed 250cm x 160cm</li>
+        </ul>
+        <p style="margin-top:30px;"><a class="btn btn-mocha" href="reserveren.html">Ik wil deze set reserveren</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap next-coll">
+      <div class="shot photo-tone photo-tone--moss">
+        <img src="images/img-044ae929.webp" alt="Gedekte tafel in de Moss &amp; Mist-collectie" loading="lazy" width="1600" height="1066" decoding="async">
+      </div>
+      <div>
+        <div class="kicker"><span>Liever iets lichters?</span></div>
+        <h3 style="font-size:clamp(22px,2.4vw,30px);">Moss &amp; Mist</h3>
+        <p style="margin-top:12px;color:var(--ink-soft);max-width:48ch;">Zachte groentinten en natuurlijke materialen, rustig en elegant, met een vleugje buitengevoel.</p>
+        <p style="margin-top:18px;"><a class="link" href="moss-and-mist.html">Ontdek de Moss &amp; Mist collectie</a></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div>
+      <a class="brand" href="index.html">
+        <img class="logo-img" src="images/logo.webp" alt="Studio Convivio" width="911" height="369" loading="lazy">
+        <small>Tafelstyling &amp; verhuur</small>
+      </a>
+      <p class="footer-blurb">Stijlvolle tafelaankleding voor bijzondere momenten: servies, glaswerk, linnen en decoratie, verhuurd en gestyled vanuit Wageningen.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigatie</h4>
+      <ul>
+        <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
+        <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="aanvullende-services-en-maatwerk.html">Extra services &amp; maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Gelegenheden</h4>
+      <ul>
+        <li><a href="21-diner.html">21-diner</a></li>
+        <li><a href="verjaardagsjubileum.html">Verjaardagsjubileum</a></li>
+        <li><a href="huwelijksjubileum.html">Huwelijksjubileum</a></li>
+        <li><a href="intieme-bruiloft.html">Intieme bruiloft</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></li>
+        <li><a href="https://www.instagram.com/studio.convivio" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.tiktok.com/@studio_convivio" rel="noopener">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© Studio Convivio. Alle rechten voorbehouden.</p>
+    <ul>
+      <li><a href="faq.html">Veelgestelde vragen</a></li>
+      <li><a href="algemene-voorwaarden.html">Algemene voorwaarden</a></li>
+      <li><a href="juridische-verklaring.html">Juridische verklaring</a></li>
+      <li><a href="privacy-van-gegevens.html">Privacy van gegevens</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="js/site.js"></script>
+
+</body>
+</html>

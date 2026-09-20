@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoe werkt het? | Studio Convivio</title>
+<meta name="description" content="In vijf stappen naar een stijlvol gedekte tafel: kies je collectie, dien je reservering in en wij regelen de rest. Zo werkt het huren bij Studio Convivio.">
+<link rel="canonical" href="https://www.studio-convivio.nl/hoe-werkt-het.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Studio Convivio">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Hoe werkt het? | Studio Convivio">
+<meta property="og:description" content="In vijf stappen naar een stijlvol gedekte tafel: kies je collectie, dien je reservering in en wij regelen de rest. Zo werkt het huren bij Studio Convivio.">
+<meta property="og:url" content="https://www.studio-convivio.nl/hoe-werkt-het.html">
+<meta property="og:image" content="https://www.studio-convivio.nl/images/img-52c47e24.webp">
+<meta property="og:image:width" content="900">
+<meta property="og:image:height" content="1600">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="images/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* ---- Pagina-specifiek: Hoe werkt het? -------------------------------- */
+
+.hw-hero { padding: clamp(40px, 6vw, 72px) 0 clamp(32px, 4vw, 48px); }
+.hw-hero-inner { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 56px); align-items: center; }
+.hw-hero .lede, .hw-hero .body { max-width: none; }
+.hw-hero h1 { max-width: none; font-size: clamp(36px, 4.4vw, 54px); margin-top: 12px; }
+.hw-hero .lede { margin-top: 20px; font-size: 18px; color: var(--ink-soft); }
+.hw-hero .body { margin-top: 14px; color: var(--ink-soft); }
+
+.hw-route { position: relative; margin-top: 8px; }
+.hw-route::before {
+  content: ""; position: absolute; left: 21px; top: 10px; bottom: 10px;
+  width: 1px; background: var(--line);
+}
+@media (min-width: 780px) { .hw-route::before { left: 27px; } }
+.hw-step { position: relative; display: grid; grid-template-columns: 1fr; gap: 6px; padding: 0 0 38px 62px; }
+@media (min-width: 780px) {
+  .hw-step { grid-template-columns: 0.55fr 1fr; gap: clamp(20px, 3vw, 48px); padding-left: 80px; }
+}
+.hw-step:last-child { padding-bottom: 0; }
+.hw-step .marker {
+  position: absolute; left: 0; top: 0;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border: 1px solid var(--moss);
+  border-radius: 50%;
+  background: var(--paper-alt);
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--moss-dark);
+}
+@media (min-width: 780px) { .hw-step .marker { width: 56px; height: 56px; font-size: 17px; } }
+.hw-step h3 { font-size: clamp(21px, 2.2vw, 26px); padding-top: 8px; }
+.hw-step p { color: var(--ink-soft); max-width: 58ch; padding-top: 8px; }
+
+.hw-compare { display: grid; grid-template-columns: 1fr; gap: clamp(28px, 4vw, 52px); align-items: start; }
+@media (min-width: 940px) { .hw-compare { grid-template-columns: 1.6fr 0.8fr; } }
+
+.hw-extras { padding-left: clamp(0px, 2vw, 28px); }
+@media (min-width: 940px) { .hw-extras { border-left: 1px solid var(--line); } }
+.hw-extras h3 { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; font-family: inherit; font-weight: 600; color: var(--ink-soft); }
+.hw-extras .xintro { margin-top: 6px; font-size: 13px; color: var(--ink-faint); max-width: 34ch; }
+.hw-extras ul { list-style: none; margin: 16px 0 0; padding: 0; }
+.hw-extras li { padding: 7px 0; font-size: 15px; color: var(--ink); border-bottom: 1px solid var(--line); }
+.hw-extras a { display: inline-block; margin-top: 16px; }
+.hw-coll-heads { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.hw-coll-heads .shot { aspect-ratio: 16 / 9; overflow: hidden; background: var(--paper-deep); }
+.hw-coll-heads .shot img { width: 100%; height: 100%; object-fit: cover; }
+.hw-coll-heads h3 { margin-top: 14px; font-size: 22px; }
+.hw-coll-heads p { margin-top: 6px; font-size: 14px; color: var(--ink-soft); }
+.hw-coll-heads .price { margin-top: 10px; font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--ink); }
+.hw-coll-heads a { display: inline-block; margin-top: 12px; }
+
+table.hw-table { width: 100%; border-collapse: collapse; }
+table.hw-table caption {
+  text-align: left; padding-bottom: 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+table.hw-table th, table.hw-table td { padding: 11px 8px; border-bottom: 1px solid var(--line-soft); text-align: left; }
+table.hw-table thead th {
+  font-family: var(--sans); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint);
+  border-bottom: 1px solid var(--line);
+}
+table.hw-table td.item { color: var(--ink); }
+table.hw-table th.col, table.hw-table td.mark { text-align: center; width: 92px; }
+table.hw-table td.mark span {
+  display: inline-block; width: 7px; height: 7px;
+  background: var(--moss); transform: rotate(45deg);
+}
+table.hw-table td.mark.mocha span { background: var(--mocha); }
+table.hw-table td.mark.none { color: var(--ink-faint); font-size: 13px; }
+
+.hw-ledger { display: grid; grid-template-columns: 1fr; gap: clamp(24px, 4vw, 56px); }
+@media (min-width: 820px) { .hw-ledger { grid-template-columns: 1fr 1fr; } }
+.hw-ledger h3 { font-size: 20px; margin-bottom: 14px; }
+.hw-ledger ul { list-style: none; margin: 0; padding: 0; }
+.hw-ledger li { display: flex; align-items: baseline; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+.hw-ledger li .label { flex: 0 1 auto; }
+.hw-ledger li .dots { flex: 1 1 auto; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
+.hw-ledger li .amount { font-family: var(--serif); white-space: nowrap; }
+.hw-ledger .note { display: block; font-size: 13px; color: var(--ink-faint); }
+
+.hw-cta { text-align: center; }
+.hw-cta h2 { font-size: clamp(26px, 3vw, 34px); }
+.hw-cta p { margin-top: 14px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#inhoud">Naar de inhoud</a>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img class="logo-img logo-img--onlight" src="images/logo.webp" alt="Studio Convivio" width="911" height="369">
+      <small>Tafelstyling &amp; verhuur</small>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="hoofdnavigatie">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
+      <ul>
+        <li><a href="hoe-werkt-het.html" aria-current="page">Hoe werkt het?</a></li>
+        <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="inhoud">
+
+  <section class="hw-hero">
+    <div class="wrap hw-hero-inner">
+      <div>
+        <h1>Hoe werkt het?</h1>
+        <p class="lede">We maken het huren van een stijlvolle tafelsetting graag zo eenvoudig mogelijk. Kies jouw favoriete collectie, reserveer de gewenste datum en wij zorgen voor de rest.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker"></div>
+        <h2>In vijf stappen klaar voor een sfeervolle tafel</h2>
+      </div>
+      <div class="hw-route">
+        <div class="hw-step">
+          <span class="marker" aria-hidden="true">01</span>
+          <h3>Kies jouw tafelpakket</h3>
+          <p>Ontdek onze zorgvuldig samengestelde tafelsettings en kies de collectie die past bij jouw gelegenheid. Onze standaard sets zijn direct online te reserveren. Heb je specifieke wensen of een groter gezelschap? Dan denken we graag mee over een oplossing op maat.</p>
+        </div>
+        <div class="hw-step">
+          <span class="marker" aria-hidden="true">02</span>
+          <h3>Plaats je reservering</h3>
+          <p>Selecteer jouw gewenste datum en dien je reservering in via de website. Na ontvangst ontvang je een voorlopig akkoord, zo weet je direct dat we jouw aanvraag hebben ontvangen en in behandeling nemen.</p>
+        </div>
+        <div class="hw-step">
+          <span class="marker" aria-hidden="true">03</span>
+          <h3>Ontvang de bevestiging</h3>
+          <p>Wij controleren de beschikbaarheid en stemmen eventuele details met je af. Zodra alles klopt, ontvang je een definitieve bevestiging. Wil je extra gemak? Kies dan voor bezorging of styling op locatie.</p>
+        </div>
+        <div class="hw-step">
+          <span class="marker" aria-hidden="true">04</span>
+          <h3>Geniet van je tafel</h3>
+          <p>Haal je pakket op of laat het bezorgen en creëer moeiteloos een bijzonder tafelmoment.</p>
+        </div>
+        <div class="hw-step">
+          <span class="marker" aria-hidden="true">05</span>
+          <h3>Na afloop</h3>
+          <p>Na afloop retourneer je de gehuurde items volgens afspraak, de was en afwas verzorgen wij.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker"></div>
+        <h2>Kies je collectie</h2>
+      </div>
+      <div class="hw-coll-heads">
+        <div>
+          <div class="shot photo-tone photo-tone--mocha">
+            <img src="images/img-52c47e24.webp" alt="Gedekte tafel in de Mocha Sky-collectie" width="900" height="1600" decoding="async" loading="lazy">
+          </div>
+          <h3>Mocha Sky</h3>
+          <p>Warme aardetinten met een moderne, tijdloze uitstraling.</p>
+          <p class="price">Vanaf €17,75 p.p.</p>
+          <a class="link" href="mocha-sky.html">Ontdek Mocha Sky</a>
+        </div>
+        <div>
+          <div class="shot photo-tone photo-tone--moss">
+            <img src="images/img-044ae929.webp" alt="Gedekte tafel in de Moss &amp; Mist-collectie" width="1600" height="1066" decoding="async" loading="lazy">
+          </div>
+          <h3>Moss &amp; Mist</h3>
+          <p>Zachte groentinten met een natuurlijke, rustige sfeer.</p>
+          <p class="price">Vanaf €16,75 p.p.</p>
+          <a class="link" href="moss-and-mist.html">Ontdek Moss &amp; Mist</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Wat krijg je bij een pakket?</h2>
+      </div>
+      <div class="hw-compare">
+        <div>
+          <table class="hw-table">
+            <caption>Inbegrepen in de prijs</caption>
+            <thead>
+              <tr>
+                <th scope="col">Per persoon</th>
+                <th scope="col" class="col">Mocha Sky</th>
+                <th scope="col" class="col">Moss &amp; Mist</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="item">Dinerborden</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Voorgerechtborden</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Dessertcoupe</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Bestek</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Voorgerechtbestek</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Waterglazen</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Wijnglazen</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Katoenen servetten</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+              <tr><td class="item">Placemats</td><td class="mark mocha"><span></span></td><td class="mark none">–</td></tr>
+              <tr><td class="item">Tafelkleed 250cm x 160cm</td><td class="mark mocha"><span></span></td><td class="mark"><span></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="hw-extras">
+          <h3>Los bij te huren</h3>
+          <p class="xintro">Niet inbegrepen, wel toe te voegen aan je reservering.</p>
+          <ul>
+            <li>Tafellampen</li>
+            <li>Zijde boeket</li>
+            <li>Servetringen</li>
+            <li>Broodmandje</li>
+            <li>Kandelaars</li>
+            <li>Cilindervaasjes</li>
+            <li>Menukaarten</li>
+            <li>Naamkaarten</li>
+            <li>Strikjes</li>
+          </ul>
+          <a class="link" href="aanvullende-services-en-maatwerk.html">Bekijk alle extra's</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Wil je meer uit handen geven?</h2>
+        <p>Voeg bezorging of styling op locatie toe aan je reservering.</p>
+      </div>
+      <div class="hw-ledger">
+        <div>
+          <h3>Bezorgen &amp; styling</h3>
+          <ul>
+            <li>
+              <span class="label">Bezorgen en ophalen</span>
+              <span class="dots" aria-hidden="true"></span>
+              <span class="amount">€25 + €0,25/km</span>
+            </li>
+            <li>
+              <span class="label">Tafelstyling op locatie<span class="note">incl. bezorgen &amp; ophalen</span></span>
+              <span class="dots" aria-hidden="true"></span>
+              <span class="amount">€59 + €0,25/km</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:30px;"><a class="link" href="aanvullende-services-en-maatwerk.html">Bekijk alle extra services en maatwerk</a></p>
+    </div>
+  </section>
+
+  <section class="section hw-cta">
+    <div class="wrap" style="max-width:520px;">
+      <h2>Klaar voor je reservering?</h2>
+      <p>Kies je collectie en eventuele extra's en dien je aanvraag in. Wij nemen daarna contact met je op.</p>
+      <p style="margin-top:26px;"><a class="btn" href="reserveren.html">Reserveer jouw tafelsetting</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div>
+      <a class="brand" href="index.html">
+        <img class="logo-img" src="images/logo.webp" alt="Studio Convivio" width="911" height="369" loading="lazy">
+        <small>Tafelstyling &amp; verhuur</small>
+      </a>
+      <p class="footer-blurb">Stijlvolle tafelaankleding voor bijzondere momenten: servies, glaswerk, linnen en decoratie, verhuurd en gestyled vanuit Wageningen.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigatie</h4>
+      <ul>
+        <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
+        <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="aanvullende-services-en-maatwerk.html">Extra services &amp; maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Gelegenheden</h4>
+      <ul>
+        <li><a href="21-diner.html">21-diner</a></li>
+        <li><a href="verjaardagsjubileum.html">Verjaardagsjubileum</a></li>
+        <li><a href="huwelijksjubileum.html">Huwelijksjubileum</a></li>
+        <li><a href="intieme-bruiloft.html">Intieme bruiloft</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></li>
+        <li><a href="https://www.instagram.com/studio.convivio" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.tiktok.com/@studio_convivio" rel="noopener">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© Studio Convivio. Alle rechten voorbehouden.</p>
+    <ul>
+      <li><a href="faq.html">Veelgestelde vragen</a></li>
+      <li><a href="algemene-voorwaarden.html">Algemene voorwaarden</a></li>
+      <li><a href="juridische-verklaring.html">Juridische verklaring</a></li>
+      <li><a href="privacy-van-gegevens.html">Privacy van gegevens</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="js/site.js"></script>
+
+</body>
+</html>
