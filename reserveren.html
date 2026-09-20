@@ -91,11 +91,13 @@
   .sc-package-option input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
   .sc-package-card {
     border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg);
-    padding: 16px 14px; background: var(--sc-cream); text-align: left;
+    background: var(--sc-cream); text-align: left; overflow: hidden;
     transition: border-color 0.15s ease, background 0.15s ease; height: 100%;
   }
+  .sc-package-photo { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .sc-package-body { padding: 16px 14px; }
   .sc-package-card strong { display: block; font-family: var(--serif); font-size: 18px; margin-bottom: 2px; text-align: center; }
-  .sc-package-card > span.sc-price-tag { display: block; font-size: 13px; color: var(--ink-soft); text-align: center; margin-bottom: 10px; }
+  .sc-package-body > span.sc-price-tag { display: block; font-size: 13px; color: var(--ink-soft); text-align: center; margin-bottom: 10px; }
   .sc-package-option input:checked + .sc-package-card { border-color: var(--sc-moss); background: #eef1e9; }
   .sc-included-list { list-style: none; margin: 0; padding: 0; font-size: 12px; color: #5c5c54; }
   .sc-included-list li { padding: 2px 0; display: flex; gap: 6px; align-items: baseline; }
@@ -238,23 +240,29 @@
                 <label class="sc-package-option">
                   <input type="radio" name="package" value="Moss &amp; Mist" data-price="16.75" checked>
                   <div class="sc-package-card">
-                    <strong>Moss &amp; Mist</strong>
-                    <span class="sc-price-tag">€16,75 p.p.</span>
-                    <ul class="sc-included-list">
-                      <li>Dinerborden</li><li>Bestek</li><li>Waterglazen</li><li>Wijnglazen</li>
-                      <li>Voorgerechtbestek</li><li>Voorgerecht bord</li><li>Stoffen servetten</li><li>Champagneglazen</li>
-                    </ul>
+                    <img class="sc-package-photo" src="images/img-044ae929.webp" alt="Gedekte tafel in de Moss &amp; Mist-collectie" loading="lazy" decoding="async">
+                    <div class="sc-package-body">
+                      <strong>Moss &amp; Mist</strong>
+                      <span class="sc-price-tag">€16,75 p.p.</span>
+                      <ul class="sc-included-list">
+                        <li>Dinerborden</li><li>Bestek</li><li>Waterglazen</li><li>Wijnglazen</li>
+                        <li>Voorgerechtbestek</li><li>Voorgerecht bord</li><li>Stoffen servetten</li><li>Champagneglazen</li>
+                      </ul>
+                    </div>
                   </div>
                 </label>
                 <label class="sc-package-option">
                   <input type="radio" name="package" value="Mocha Sky" data-price="17.75">
                   <div class="sc-package-card">
-                    <strong>Mocha Sky</strong>
-                    <span class="sc-price-tag">€17,75 p.p.</span>
-                    <ul class="sc-included-list">
-                      <li>Dinerborden</li><li>Bestek</li><li>Waterglazen</li><li>Wijnglazen</li>
-                      <li>Voorgerechtbestek</li><li>Voorgerecht bord</li><li>Stoffen servetten</li><li>Placemats</li><li>Champagneglazen</li>
-                    </ul>
+                    <img class="sc-package-photo" src="images/img-beee9a1e.webp" alt="Gedekte tafel in de Mocha Sky-collectie" loading="lazy" decoding="async">
+                    <div class="sc-package-body">
+                      <strong>Mocha Sky</strong>
+                      <span class="sc-price-tag">€17,75 p.p.</span>
+                      <ul class="sc-included-list">
+                        <li>Dinerborden</li><li>Bestek</li><li>Waterglazen</li><li>Wijnglazen</li>
+                        <li>Voorgerechtbestek</li><li>Voorgerecht bord</li><li>Stoffen servetten</li><li>Placemats</li><li>Champagneglazen</li>
+                      </ul>
+                    </div>
                   </div>
                 </label>
               </div>
