@@ -155,13 +155,34 @@
   <section class="section">
     <div class="wrap xt-wrap">
 
-      <div class="xt-category">
-        <span class="xt-category-label">Bezorgen &amp; styling</span>
-        <ul class="price-list">
-          <li><span>Bezorgen en ophalen</span><span class="amount">€25 + €0,25/km</span></li>
-          <li><span>Tafelstyling op locatie<span class="note">incl. bezorgen &amp; ophalen</span></span><span class="amount">€59 + €0,25/km</span></li>
-        </ul>
-        <span class="vat-note" style="margin-top:12px;">Incl. btw</span>
+      <div class="xt-category sc-shop-category">
+        <span class="xt-category-label sc-shop-category-label">Bezorgen &amp; styling</span>
+        <div class="sc-shop-grid" style="grid-template-columns:repeat(2,1fr);">
+          <div class="xt-delivery-item">
+            <label class="sc-shop-card">
+              <input type="radio" name="xtDeliveryMode" class="xt-delivery-check" value="bezorgen">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="2" y="9" width="11" height="7" rx="1"/><path d="M13 12h4l3 2.5V16h-3"/><circle cx="6.5" cy="18" r="1.6"/><circle cx="16.5" cy="18" r="1.6"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Bezorgen en ophalen</span><span class="sc-shop-price">€25 + €0,25/km</span></span>
+            </label>
+          </div>
+          <div class="xt-delivery-item">
+            <label class="sc-shop-card">
+              <input type="radio" name="xtDeliveryMode" class="xt-delivery-check" value="styling">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 00-6 6c0 4.5 6 12 6 12s6-7.5 6-12a6 6 0 00-6-6z"/><circle cx="12" cy="9" r="2.2"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Tafelstyling op locatie<span class="vat-note" style="margin-top:0;">Incl. bezorgen &amp; ophalen</span></span><span class="sc-shop-price">€59 + €0,25/km</span></span>
+            </label>
+          </div>
+        </div>
+        <p style="font-size:12px;color:var(--ink-faint);margin-top:12px;max-width:56ch;">De uiteindelijke prijs hangt af van de afstand; die bereken je op de reserveringspagina. Je keuze hier staat daar al klaar.</p>
+        <span class="vat-note" style="margin-top:6px;">Incl. btw</span>
       </div>
 
       <div class="xt-category sc-shop-category">
@@ -384,7 +405,7 @@
     </ul>
   </div>
 </footer>
-<script src="js/site.js?v=2"></script>
+<script src="js/site.js?v=3"></script>
 <script src="js/extras-catalog.js?v=2"></script>
 <script src="js/extras-shop.js?v=2"></script>
 <script>
@@ -416,6 +437,17 @@
 
   ScExtrasShop.wire(root, renderSummary);
   renderSummary();
+
+  var deliveryRadios = document.querySelectorAll('input[name="xtDeliveryMode"]');
+  var savedDeliveryMode = ScCart.getDeliveryMode();
+  if (savedDeliveryMode) {
+    deliveryRadios.forEach(function (r) { if (r.value === savedDeliveryMode) r.checked = true; });
+  }
+  deliveryRadios.forEach(function (r) {
+    r.addEventListener('change', function () {
+      if (r.checked) ScCart.setDeliveryMode(r.value);
+    });
+  });
 })();
 </script>
 

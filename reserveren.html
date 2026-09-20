@@ -556,7 +556,7 @@
     </ul>
   </div>
 </footer>
-<script src="js/site.js?v=2"></script>
+<script src="js/site.js?v=3"></script>
 <script src="js/extras-catalog.js?v=2"></script>
 <script src="js/extras-shop.js?v=2"></script>
 
@@ -745,17 +745,32 @@
   });
 
   var deliveryModeRadios = form.querySelectorAll('input[name="deliveryMode"]');
+  function applyDeliveryModeVisibility(mode) {
+    if (mode === 'geen') {
+      addressField.classList.remove('sc-visible');
+      manualKmField.classList.remove('sc-visible');
+    } else {
+      addressField.classList.add('sc-visible');
+    }
+  }
   deliveryModeRadios.forEach(function (r) {
     r.addEventListener('change', function () {
-      if (r.value === 'geen') {
-        addressField.classList.remove('sc-visible');
-        manualKmField.classList.remove('sc-visible');
-      } else {
-        addressField.classList.add('sc-visible');
-      }
+      applyDeliveryModeVisibility(r.value);
+      ScCart.setDeliveryMode(r.value);
       recalc();
     });
   });
+
+  // Op de extra's-pagina kan alvast een bezorgmodus gekozen zijn; die nemen
+  // we hier over zodat je hem niet opnieuw hoeft aan te klikken.
+  var savedDeliveryMode = ScCart.getDeliveryMode();
+  if (savedDeliveryMode) {
+    var savedDeliveryRadio = form.querySelector('input[name="deliveryMode"][value="' + savedDeliveryMode + '"]');
+    if (savedDeliveryRadio) {
+      savedDeliveryRadio.checked = true;
+      applyDeliveryModeVisibility(savedDeliveryMode);
+    }
+  }
 
   var lastComputedTotal = null;
 

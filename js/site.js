@@ -4,6 +4,7 @@
 // via localStorage zodat een keuze op de ene pagina op de andere terugkomt.
 window.ScCart = (function () {
   var KEY = 'sc_extras_cart_v1';
+  var DELIVERY_KEY = 'sc_delivery_mode_v1';
   function read() {
     try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
   }
@@ -25,7 +26,19 @@ window.ScCart = (function () {
     for (var k in cart) { if (cart.hasOwnProperty(k)) n += cart[k].qty; }
     return n;
   }
-  return { read: read, setItem: setItem, getItem: getItem, count: count };
+  // Bezorgmodus (geen/bezorgen/styling) staat los van het item-winkelmandje:
+  // het is een eenmalige keuze, geen aantal, en de definitieve prijs hangt af
+  // van de afstand die alleen op reserveren.html wordt berekend.
+  function setDeliveryMode(mode) {
+    try {
+      if (mode && mode !== 'geen') { localStorage.setItem(DELIVERY_KEY, mode); }
+      else { localStorage.removeItem(DELIVERY_KEY); }
+    } catch (e) {}
+  }
+  function getDeliveryMode() {
+    try { return localStorage.getItem(DELIVERY_KEY); } catch (e) { return null; }
+  }
+  return { read: read, setItem: setItem, getItem: getItem, count: count, setDeliveryMode: setDeliveryMode, getDeliveryMode: getDeliveryMode };
 })();
 
 (function () {
