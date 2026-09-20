@@ -64,6 +64,10 @@
     color: var(--sc-mocha);
     margin-bottom: 10px;
   }
+  .sc-hint { font-size: 13px; color: var(--ink-soft); margin: -4px 0 14px; }
+  .sc-hint a { color: var(--sc-moss-dark); }
+  .sc-shop-category + .sc-shop-category { margin-top: 22px; }
+  .sc-shop-category-label { display: block; font-size: 12px; font-weight: 600; color: var(--sc-ink); margin-bottom: 10px; }
   .sc-sublabel {
     display: block;
     font-size: 11px;
@@ -236,6 +240,7 @@
       <ul>
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html" aria-current="page">Reserveren</a></li>
+        <li><a href="extras.html">Extra's</a></li>
         <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
@@ -440,12 +445,7 @@
 
           <div class="sc-summary">
             <div class="sc-summary-line"><span id="scLinePackage">Moss &amp; Mist × 2 personen × 3 dagen</span><span id="scLinePackagePrice">€100,50</span></div>
-            <div class="sc-summary-line" id="scLineTafellampen" style="display:none;"><span>Tafellampen</span><span id="scLineTafellampenPrice"></span></div>
-            <div class="sc-summary-line" id="scLineZijdebloemen" style="display:none;"><span>Zijdebloemen</span><span id="scLineZijdebloemenPrice"></span></div>
-            <div class="sc-summary-line" id="scLineServetringen" style="display:none;"><span>Servetringen</span><span id="scLineServetringenPrice"></span></div>
-            <div class="sc-summary-line" id="scLinePlacemats" style="display:none;"><span>Placemats</span><span id="scLinePlacematsPrice"></span></div>
-            <div class="sc-summary-line" id="scLineFlowers" style="display:none;"><span>Verse bloemen</span><span id="scLineFlowersPrice"></span></div>
-            <div class="sc-summary-line" id="scLineCards" style="display:none;"><span>Handgemaakte kaarten</span><span id="scLineCardsPrice"></span></div>
+            <div id="scXtraSummaryLines"></div>
             <div class="sc-summary-line" id="scLineDelivery" style="display:none;"><span id="scLineDeliveryLabel">Bezorging</span><span id="scLineDeliveryPrice"></span></div>
             <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€100,50</strong></div>
             <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
@@ -479,84 +479,9 @@
       </div>
 
       <div id="scFlatExtrasTemplate" style="display:none;">
-        <span class="sc-sublabel" style="margin-top:0;">Extra tafelitems</span>
-        <div class="sc-shop-grid">
-          <div class="sc-shop-item">
-            <label class="sc-shop-card">
-              <input type="checkbox" id="scTafellampenCheck">
-              <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 20h6M10 15.5l-1.5 4.5M14 15.5l1.5 4.5"/></svg>
-                <span class="sc-shop-ph-label">Foto volgt</span>
-                <span class="sc-shop-badge">✓</span>
-              </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Tafellampen</span><span class="sc-shop-price">€3,95/stuk</span></span>
-            </label>
-            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scTafellampenQtyWrap"><input type="number" id="scTafellampenQty" min="1" max="4" value="1"></div>
-          </div>
-          <div class="sc-shop-item">
-            <label class="sc-shop-card">
-              <input type="checkbox" id="scServetringenCheck">
-              <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.6"/></svg>
-                <span class="sc-shop-ph-label">Foto volgt</span>
-                <span class="sc-shop-badge">✓</span>
-              </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Servetringen</span><span class="sc-shop-price">€1,00/stuk</span></span>
-            </label>
-            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scServetringenQtyWrap"><input type="number" id="scServetringenQty" min="1" value="1"></div>
-          </div>
-          <div class="sc-shop-item">
-            <label class="sc-shop-card">
-              <input type="checkbox" id="scPlacematsCheck">
-              <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>
-                <span class="sc-shop-ph-label">Foto volgt</span>
-                <span class="sc-shop-badge">✓</span>
-              </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Placemats</span><span class="sc-shop-price">€1,50/stuk</span></span>
-            </label>
-            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scPlacematsQtyWrap"><input type="number" id="scPlacematsQty" min="1" value="1"></div>
-          </div>
-          <div class="sc-shop-item" id="scZijdebloemenRow">
-            <label class="sc-shop-card">
-              <input type="checkbox" id="scZijdebloemenCheck">
-              <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 3v10M12 13c-3 0-5 2-5 5M12 13c3 0 5 2 5 5M7 18h10"/></svg>
-                <span class="sc-shop-ph-label">Foto volgt</span>
-                <span class="sc-shop-badge">✓</span>
-              </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Zijdebloemen</span><span class="sc-shop-price">€7,95/bos</span></span>
-            </label>
-            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scZijdebloemenQtyWrap"><input type="number" id="scZijdebloemenQty" min="1" max="4" value="1"></div>
-          </div>
-          <div class="sc-shop-item">
-            <label class="sc-shop-card">
-              <input type="checkbox" id="scFlowersCheck">
-              <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><circle cx="7" cy="13" r="3"/><circle cx="17" cy="13" r="3"/><path d="M12 16v5"/></svg>
-                <span class="sc-shop-ph-label">Foto volgt</span>
-                <span class="sc-shop-badge">✓</span>
-              </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Verse bloemen</span><span class="sc-shop-price">Prijs in overleg</span></span>
-            </label>
-            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scFlowersQtyWrap"><input type="number" id="scFlowersQty" min="1" max="4" value="1"></div>
-          </div>
-          <div class="sc-shop-item">
-            <label class="sc-shop-card">
-              <input type="checkbox" id="scCardsCheck">
-              <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
-                <span class="sc-shop-ph-label">Foto volgt</span>
-                <span class="sc-shop-badge">✓</span>
-              </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">Vanaf €2,00</span></span>
-            </label>
-            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty" id="scCardsQtyWrap">
-              <input type="number" id="scCardsQty" min="1" max="4" value="1">
-              <input type="text" id="scCardsType" placeholder="Welk soort? bijv. menukaarten, naamkaarten">
-            </div>
-          </div>
-        </div>
+        <span class="sc-sublabel" style="margin-top:0;">Extra's</span>
+        <p class="sc-hint">Bekijk het volledige assortiment op de <a href="extras.html">extra's-pagina</a>. Wat je daar toevoegt, staat hier automatisch al klaar.</p>
+        <div id="scXtraCatalog"></div>
       </div>
 
     </div>
@@ -577,6 +502,7 @@
       <ul>
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="extras.html">Extra's</a></li>
         <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="aanvullende-services-en-maatwerk.html">Extra services &amp; maatwerk</a></li>
@@ -611,6 +537,8 @@
   </div>
 </footer>
 <script src="js/site.js"></script>
+<script src="js/extras-catalog.js"></script>
+<script src="js/extras-shop.js"></script>
 
 <script>
 (function () {
@@ -618,18 +546,6 @@
 
   var linePackage = document.getElementById('scLinePackage');
   var linePackagePrice = document.getElementById('scLinePackagePrice');
-  var lineCards = document.getElementById('scLineCards');
-  var lineCardsPrice = document.getElementById('scLineCardsPrice');
-  var lineFlowers = document.getElementById('scLineFlowers');
-  var lineFlowersPrice = document.getElementById('scLineFlowersPrice');
-  var lineTafellampen = document.getElementById('scLineTafellampen');
-  var lineTafellampenPrice = document.getElementById('scLineTafellampenPrice');
-  var lineZijdebloemen = document.getElementById('scLineZijdebloemen');
-  var lineZijdebloemenPrice = document.getElementById('scLineZijdebloemenPrice');
-  var lineServetringen = document.getElementById('scLineServetringen');
-  var lineServetringenPrice = document.getElementById('scLineServetringenPrice');
-  var linePlacemats = document.getElementById('scLinePlacemats');
-  var linePlacematsPrice = document.getElementById('scLinePlacematsPrice');
   var lineDelivery = document.getElementById('scLineDelivery');
   var lineDeliveryLabel = document.getElementById('scLineDeliveryLabel');
   var lineDeliveryPrice = document.getElementById('scLineDeliveryPrice');
@@ -659,30 +575,12 @@
 
   var flatExtrasTemplate = document.getElementById('scFlatExtrasTemplate');
   var standardAnchor = document.getElementById('scFlatExtrasStandardAnchor');
+  var xtraCatalogEl = document.getElementById('scXtraCatalog');
+  var xtraSummaryLinesEl = document.getElementById('scXtraSummaryLines');
   flatExtrasTemplate.style.display = 'block';
   standardAnchor.parentNode.insertBefore(flatExtrasTemplate, standardAnchor.nextSibling);
-
-  var cardsCheck = document.getElementById('scCardsCheck');
-  var cardsQtyWrap = document.getElementById('scCardsQtyWrap');
-  var cardsQty = document.getElementById('scCardsQty');
-  var flowersCheck = document.getElementById('scFlowersCheck');
-  var flowersQtyWrap = document.getElementById('scFlowersQtyWrap');
-  var flowersQty = document.getElementById('scFlowersQty');
-  var tafellampenCheck = document.getElementById('scTafellampenCheck');
-  var tafellampenQtyWrap = document.getElementById('scTafellampenQtyWrap');
-  var tafellampenQty = document.getElementById('scTafellampenQty');
-  var zijdebloemenCheck = document.getElementById('scZijdebloemenCheck');
-  var zijdebloemenQtyWrap = document.getElementById('scZijdebloemenQtyWrap');
-  var zijdebloemenQty = document.getElementById('scZijdebloemenQty');
-  var servetringenCheck = document.getElementById('scServetringenCheck');
-  var servetringenQtyWrap = document.getElementById('scServetringenQtyWrap');
-  var servetringenQty = document.getElementById('scServetringenQty');
-  var placematsCheck = document.getElementById('scPlacematsCheck');
-  var placematsQtyWrap = document.getElementById('scPlacematsQtyWrap');
-  var placematsQty = document.getElementById('scPlacematsQty');
-
-  var TAFELLAMPEN_MAX = 4;
-  var PER_PERSON_QTY_MULTIPLIER = 2;
+  xtraCatalogEl.innerHTML = ScExtrasShop.renderCatalog();
+  ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); });
 
   function bindFlatToggle(check, wrap) {
     check.addEventListener('change', function () {
@@ -690,46 +588,7 @@
       recalc();
     });
   }
-  bindFlatToggle(cardsCheck, cardsQtyWrap);
-  bindFlatToggle(flowersCheck, flowersQtyWrap);
-  bindFlatToggle(tafellampenCheck, tafellampenQtyWrap);
-  bindFlatToggle(zijdebloemenCheck, zijdebloemenQtyWrap);
-  bindFlatToggle(servetringenCheck, servetringenQtyWrap);
-  bindFlatToggle(placematsCheck, placematsQtyWrap);
   bindFlatToggle(longerRentalCheck, daysWrap);
-  [cardsQty, flowersQty, tafellampenQty, zijdebloemenQty, servetringenQty, placematsQty].forEach(function (el) {
-    el.addEventListener('input', recalc);
-  });
-
-  tafellampenQty.addEventListener('input', function () {
-    var v = parseInt(tafellampenQty.value, 10);
-    if (!isNaN(v) && v > TAFELLAMPEN_MAX) tafellampenQty.value = TAFELLAMPEN_MAX;
-  });
-
-  function guestsQtyMax() {
-    var guests = Math.max(1, parseInt(guestsInput.value, 10) || 1);
-    return guestsInput.value === 'over30' ? null : guests * PER_PERSON_QTY_MULTIPLIER;
-  }
-  function bindGuestsQtyMax(qtyInput) {
-    function clamp() {
-      var max = guestsQtyMax();
-      var v = parseInt(qtyInput.value, 10);
-      if (max === null) { qtyInput.removeAttribute('max'); return; }
-      qtyInput.max = max;
-      if (!isNaN(v) && v > max) qtyInput.value = max;
-    }
-    qtyInput.addEventListener('input', clamp);
-    return clamp;
-  }
-  var updateCardsMax = bindGuestsQtyMax(cardsQty);
-  var updateZijdebloemenMax = bindGuestsQtyMax(zijdebloemenQty);
-  var updateFlowersMax = bindGuestsQtyMax(flowersQty);
-  var updateServetringenMax = bindGuestsQtyMax(servetringenQty);
-  var updatePlacematsMax = bindGuestsQtyMax(placematsQty);
-  function updateGuestsQtyMaxes() {
-    updateCardsMax(); updateZijdebloemenMax(); updateFlowersMax(); updateServetringenMax(); updatePlacematsMax();
-  }
-  guestsInput.addEventListener('change', updateGuestsQtyMaxes);
 
   var modeRadios = form.querySelectorAll('input[name="mode"]');
   modeRadios.forEach(function (r) {
@@ -890,12 +749,7 @@
       if (daysOverLimit) reasons.push('meer dan 7 huurdagen');
       linePackage.textContent = 'Aanvraag voor ' + reasons.join(' en ');
       linePackagePrice.textContent = '';
-      lineCards.style.display = 'none';
-      lineFlowers.style.display = 'none';
-      lineTafellampen.style.display = 'none';
-      lineZijdebloemen.style.display = 'none';
-      lineServetringen.style.display = 'none';
-      linePlacemats.style.display = 'none';
+      xtraSummaryLinesEl.innerHTML = '';
       lineDelivery.style.display = 'none';
       totalPriceEl.textContent = 'Op aanvraag';
       lastComputedTotal = null;
@@ -929,57 +783,10 @@
     linePackage.textContent = labelName + ' × ' + guests + ' personen × ' + days + ' dag' + (days > 1 ? 'en' : '');
     linePackagePrice.textContent = fmt(baseTableCost);
 
-    var qtyMax = guestsQtyMax();
-
-    var cardsPrice = 0;
-    if (cardsCheck.checked) {
-      var caQty = Math.max(1, parseInt(cardsQty.value, 10) || 1);
-      if (qtyMax !== null) caQty = Math.min(qtyMax, caQty);
-      cardsPrice = caQty * 2;
-      lineCards.style.display = 'flex';
-      lineCardsPrice.textContent = fmt(cardsPrice) + ' (Vanaf)';
-    } else { lineCards.style.display = 'none'; }
-
-    var flowersPrice = 0;
-    if (flowersCheck.checked) {
-      lineFlowers.style.display = 'flex';
-      lineFlowersPrice.textContent = 'Prijs in overleg';
-    } else { lineFlowers.style.display = 'none'; }
-
-    var tafellampenPrice = 0;
-    if (tafellampenCheck.checked) {
-      var tlQty = Math.min(TAFELLAMPEN_MAX, Math.max(1, parseInt(tafellampenQty.value, 10) || 1));
-      tafellampenPrice = tlQty * 3.95;
-      lineTafellampen.style.display = 'flex';
-      lineTafellampenPrice.textContent = fmt(tafellampenPrice);
-    } else { lineTafellampen.style.display = 'none'; }
-
-    var zijdebloemenPrice = 0;
-    if (zijdebloemenCheck.checked) {
-      var zbQty = Math.max(1, parseInt(zijdebloemenQty.value, 10) || 1);
-      if (qtyMax !== null) zbQty = Math.min(qtyMax, zbQty);
-      zijdebloemenPrice = zbQty * 7.95;
-      lineZijdebloemen.style.display = 'flex';
-      lineZijdebloemenPrice.textContent = fmt(zijdebloemenPrice);
-    } else { lineZijdebloemen.style.display = 'none'; }
-
-    var servetringenPrice = 0;
-    if (servetringenCheck.checked) {
-      var srQty = Math.max(1, parseInt(servetringenQty.value, 10) || 1);
-      if (qtyMax !== null) srQty = Math.min(qtyMax, srQty);
-      servetringenPrice = srQty * 1.00;
-      lineServetringen.style.display = 'flex';
-      lineServetringenPrice.textContent = fmt(servetringenPrice);
-    } else { lineServetringen.style.display = 'none'; }
-
-    var placematsPrice = 0;
-    if (placematsCheck.checked) {
-      var pmQty = Math.max(1, parseInt(placematsQty.value, 10) || 1);
-      if (qtyMax !== null) pmQty = Math.min(qtyMax, pmQty);
-      placematsPrice = pmQty * 1.50;
-      linePlacemats.style.display = 'flex';
-      linePlacematsPrice.textContent = fmt(placematsPrice);
-    } else { linePlacemats.style.display = 'none'; }
+    var xtraSummary = ScExtrasShop.summary();
+    xtraSummaryLinesEl.innerHTML = xtraSummary.lines.map(function (line) {
+      return '<div class="sc-summary-line"><span>' + line.label + '</span><span>' + line.priceLabel + '</span></div>';
+    }).join('');
 
     var dRadio = getDeliveryMode();
     var deliveryPrice = 0;
@@ -993,7 +800,7 @@
       lineDeliveryPrice.textContent = fmt(deliveryPrice);
     } else { lineDelivery.style.display = 'none'; }
 
-    var total = baseTableCost + cardsPrice + flowersPrice + tafellampenPrice + zijdebloemenPrice + servetringenPrice + placematsPrice + deliveryPrice;
+    var total = baseTableCost + xtraSummary.subtotal + deliveryPrice;
     totalPriceEl.textContent = fmt(total);
     lastComputedTotal = total;
 
@@ -1007,7 +814,6 @@
     recalc();
   });
   form.addEventListener('change', recalc);
-  updateGuestsQtyMaxes();
   recalc();
 
   form.addEventListener('submit', function (e) {
@@ -1023,10 +829,12 @@
       statusEl.className = 'sc-status sc-err';
       return;
     }
-    if (cardsCheck.checked && !document.getElementById('scCardsType').value.trim()) {
+    var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
+    if (cardsEntry && cardsEntry.qty > 0 && !(cardsEntry.type || '').trim()) {
       statusEl.textContent = 'Vul aan welk soort kaarten je wilt (bijv. menukaarten, naamkaarten).';
       statusEl.className = 'sc-status sc-err';
-      document.getElementById('scCardsType').focus();
+      var cardsTypeInput = xtraCatalogEl.querySelector('[data-key="handgemaakte-kaarten"] .sc-shop-type-input');
+      if (cardsTypeInput) cardsTypeInput.focus();
       return;
     }
 
@@ -1047,15 +855,14 @@
       formData.append('maatwerk_items', items.join(', '));
     }
 
-    if (cardsCheck.checked) {
-      formData.append('handgemaakte_kaarten_aantal', cardsQty.value);
-      formData.append('handgemaakte_kaarten_type', document.getElementById('scCardsType').value);
-    }
-    if (flowersCheck.checked) formData.append('verse_bloemen_aantal', flowersQty.value);
-    if (tafellampenCheck.checked) formData.append('tafellampen_aantal', tafellampenQty.value);
-    if (zijdebloemenCheck.checked) formData.append('zijdebloemen_aantal', zijdebloemenQty.value);
-    if (servetringenCheck.checked) formData.append('servetringen_aantal', servetringenQty.value);
-    if (placematsCheck.checked) formData.append('placemats_aantal', placematsQty.value);
+    var xtraCart = ScCart.read();
+    var xtraLines = [];
+    ScExtrasShop.flatItems().forEach(function (item) {
+      var entry = xtraCart[item.key];
+      if (!entry || entry.qty < 1) return;
+      xtraLines.push(item.name + ' × ' + entry.qty + (entry.type ? ' (' + entry.type + ')' : ''));
+    });
+    formData.append('extra_items', xtraLines.length ? xtraLines.join(', ') : 'Geen');
 
     if (dRadio && dRadio.value !== 'geen') {
       formData.append('bezorgmodus', dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen');

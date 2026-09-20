@@ -1,4 +1,33 @@
-// Studio Convivio: gedeeld site-script (mobiel menu). Geen dependencies.
+// Studio Convivio: gedeeld site-script (mobiel menu, extra's-winkelmandje). Geen dependencies.
+
+// Winkelmandje voor losse extra's, gedeeld tussen extras.html en reserveren.html
+// via localStorage zodat een keuze op de ene pagina op de andere terugkomt.
+window.ScCart = (function () {
+  var KEY = 'sc_extras_cart_v1';
+  function read() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  function write(cart) {
+    try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) {}
+  }
+  function setItem(itemKey, qty, extra) {
+    var cart = read();
+    if (qty > 0) { cart[itemKey] = extra ? Object.assign({ qty: qty }, extra) : { qty: qty }; }
+    else { delete cart[itemKey]; }
+    write(cart);
+    return cart;
+  }
+  function getItem(itemKey) {
+    return read()[itemKey] || null;
+  }
+  function count() {
+    var cart = read(), n = 0;
+    for (var k in cart) { if (cart.hasOwnProperty(k)) n += cart[k].qty; }
+    return n;
+  }
+  return { read: read, setItem: setItem, getItem: getItem, count: count };
+})();
+
 (function () {
   // Vangnet: de homepage draait binnen een paginaskelet waarvan het
   // <html>-element geen lang-attribuut meesturt. Schermlezers kiezen dan de

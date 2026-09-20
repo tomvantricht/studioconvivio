@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extra's | Studio Convivio</title>
+<meta name="description" content="Blader door losse extra's zoals kandelaars, tafellampen en unieke servetringen, en voeg ze rechtstreeks toe aan je offerte voor Studio Convivio.">
+<link rel="canonical" href="https://www.studio-convivio.nl/extras.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Studio Convivio">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Extra's | Studio Convivio">
+<meta property="og:description" content="Blader door losse extra's zoals kandelaars, tafellampen en unieke servetringen, en voeg ze rechtstreeks toe aan je offerte voor Studio Convivio.">
+<meta property="og:url" content="https://www.studio-convivio.nl/extras.html">
+<meta property="og:image" content="https://www.studio-convivio.nl/images/img-9a61a475.webp">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="images/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* ---- Pagina-specifiek: Extra's ---------------------------------------- */
+
+.xt-hero { padding: clamp(40px, 6vw, 72px) 0 clamp(24px, 3vw, 36px); }
+.xt-hero h1 { max-width: none; font-size: clamp(36px, 4.4vw, 54px); margin-top: 12px; }
+.xt-hero .lede { margin-top: 18px; font-size: 18px; color: var(--ink-soft); max-width: 62ch; }
+
+.xt-wrap {
+  --sc-ink: var(--ink);
+  --sc-moss: var(--moss);
+  --sc-moss-dark: var(--moss-dark);
+  --sc-mocha: var(--mocha);
+  --sc-line: var(--line);
+  --sc-radius-lg: 6px;
+  --sc-radius-md: 4px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+.xt-wrap * { box-sizing: border-box; }
+
+.xt-category + .xt-category { margin-top: clamp(28px, 4vw, 44px); }
+.xt-category-label {
+  display: block; font-family: var(--serif); font-style: italic;
+  font-size: clamp(20px, 2.2vw, 26px); color: var(--ink); margin-bottom: 16px;
+}
+
+.sc-shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 620px) { .sc-shop-grid { grid-template-columns: repeat(4, 1fr); } }
+.sc-shop-item { display: flex; flex-direction: column; }
+.sc-shop-card {
+  position: relative; display: block; cursor: pointer;
+  border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg);
+  overflow: hidden; background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.sc-shop-card:has(input:checked) { border-color: var(--sc-moss); box-shadow: inset 0 0 0 2px rgba(107,122,94,0.2); }
+.sc-shop-card input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.sc-shop-photo {
+  display: block; aspect-ratio: 1 / 1; position: relative;
+  background: linear-gradient(155deg, #eee7d8, #e3ded2);
+}
+.sc-shop-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sc-shop-ph-icon {
+  position: absolute; inset: 0; margin: auto; width: 32%; height: 32%;
+  fill: none; stroke: var(--sc-mocha); stroke-width: 2.4;
+  stroke-linejoin: round; stroke-linecap: round; opacity: 0.55;
+}
+.sc-shop-ph-label {
+  position: absolute; left: 0; right: 0; bottom: 8px; text-align: center;
+  font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint);
+}
+.sc-shop-badge {
+  position: absolute; top: 6px; right: 6px; width: 22px; height: 22px;
+  border-radius: 50%; background: #fff; border: 1px solid var(--sc-line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: transparent; transition: all 0.15s ease;
+}
+.sc-shop-card input:checked ~ .sc-shop-photo .sc-shop-badge { background: var(--sc-moss); border-color: var(--sc-moss); color: #fff; }
+.sc-shop-body { display: block; padding: 10px 12px 12px; }
+.sc-shop-name { display: block; font-size: 13.5px; color: var(--sc-ink); line-height: 1.3; }
+.sc-shop-price { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.sc-shop-qty { margin: 8px 0 0 0 !important; }
+
+.sc-qty-field { margin: 4px 0 10px 0; display: none; }
+.sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; }
+.sc-qty-field.sc-qty-field-flat { padding: 0 12px; }
+.sc-qty-field input[type="number"] {
+  max-width: 90px; font-family: inherit; font-size: 14px; padding: 9px 10px;
+  border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); background: #fff; color: var(--sc-ink);
+}
+.sc-qty-field input[type="text"] {
+  flex: 1; min-width: 160px; font-family: inherit; font-size: 14px; padding: 9px 10px;
+  border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); background: #fff; color: var(--sc-ink);
+}
+
+.xt-summary {
+  margin-top: clamp(36px, 5vw, 56px); padding: 22px; background: var(--paper-alt);
+  border-radius: var(--sc-radius-lg);
+}
+.xt-summary h2 { font-size: 22px; }
+.xt-summary-empty { margin-top: 12px; font-size: 14px; color: var(--ink-faint); }
+.xt-summary-line {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 14px;
+}
+.xt-summary-lines { margin-top: 10px; }
+.xt-summary-total {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding-top: 14px; margin-top: 4px; font-family: var(--serif); font-size: 19px;
+}
+.xt-summary-note { margin-top: 10px; font-size: 12px; color: var(--ink-faint); }
+.xt-summary-cta { margin-top: 18px; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#inhoud">Naar de inhoud</a>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="brand" href="index.html">
+      <img class="logo-img logo-img--onlight" src="images/logo.webp" alt="Studio Convivio" width="911" height="369">
+      <small>Tafelstyling &amp; verhuur</small>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="hoofdnavigatie">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
+      <ul>
+        <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
+        <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="extras.html" aria-current="page">Extra's</a></li>
+        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="inhoud">
+
+  <section class="xt-hero">
+    <div class="wrap">
+      <div class="kicker"><span>Maak het compleet</span></div>
+      <h1>Extra's</h1>
+      <p class="lede">Onze pakketten Moss &amp; Mist en Mocha Sky zijn compleet, maar soms wil je net iets meer. Blader hieronder door losse tafelitems en decoratie en voeg toe wat je wilt: je keuze staat automatisch klaar zodra je verdergaat naar <a class="link" href="reserveren.html">reserveren</a>.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap xt-wrap">
+
+      <div class="xt-category sc-shop-category">
+        <span class="xt-category-label sc-shop-category-label">Tafelitems</span>
+        <div class="sc-shop-grid">
+          <div class="sc-shop-item" data-key="voorgerecht-bestek">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M6 2v6a1 1 0 002 0V2M8 2v6a1 1 0 01-2 0M7 8v13M14 2c2 1.2 3 3.2 3 6 0 2.5-1 4.3-3 5.3V21"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Voorgerecht bestek</span><span class="sc-shop-price">€1,45/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="40" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="extra-wijnglas">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M8 3h8l-1 6a3 3 0 01-6 0L8 3zM12 12v6M9 21h6"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Extra wijnglas</span><span class="sc-shop-price">€0,95/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="40" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="champagneglazen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M10.5 3h3l-.6 10a1 2.2 0 01-1.8 0L10.5 3zM12 13v6M9 21h6"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Champagneglazen</span><span class="sc-shop-price">€0,75/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="40" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="servetringen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 7.5l2 4.5-2 4.5-2-4.5z"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Unieke servetringen</span><span class="sc-shop-price">€0,90/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="40" value="1"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xt-category sc-shop-category">
+        <span class="xt-category-label sc-shop-category-label">Decoratie &amp; sfeer</span>
+        <div class="sc-shop-grid">
+          <div class="sc-shop-item" data-key="tafellampen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M9 20h6M10 15.5l-1.5 4.5M14 15.5l1.5 4.5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Tafellampen</span><span class="sc-shop-price">€3,95/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="zijdebloemen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 3v10M12 13c-3 0-5 2-5 5M12 13c3 0 5 2 5 5M7 18h10"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Zijdebloemen</span><span class="sc-shop-price">€7,95/bos</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="kandelaar">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 2v5M8 8h8l-1.2 3H9.2zM12 11v7M8 21h8"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Kandelaar</span><span class="sc-shop-price">€1,95/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="10" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="kaarsen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M9 21h6M12 21V9M9.5 9h5l-.8-2.5M12 4.5c1.2 1 1.6 2.2 0 3.5-1.6-1.3-1.2-2.5 0-3.5z"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Kaarsen</span><span class="sc-shop-price">€0,45/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="20" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="cilindervazen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="4" y="9" width="4" height="11" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="11" width="4" height="9" rx="1"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Cilindervazen</span><span class="sc-shop-price">€6,00/set van 4</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="krijtbord">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="12" rx="1"/><path d="M9 20l1.5-4M15 20l-1.5-4"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Staand krijtbord</span><span class="sc-shop-price">€12,00/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="3" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="verse-bloemen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><circle cx="7" cy="13" r="3"/><circle cx="17" cy="13" r="3"/><path d="M12 16v5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Verse bloemen</span><span class="sc-shop-price">Prijs in overleg</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="handgemaakte-kaarten">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">Prijs in overleg</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
+              <input type="number" class="sc-shop-qty-input" min="1" max="4" value="1">
+              <input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menu-, naam-, welkom- of bedankkaarten">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xt-summary">
+        <h2>Jouw extra's</h2>
+        <p class="xt-summary-empty" id="xtSummaryEmpty">Je hebt nog niets toegevoegd. Klik op een item hierboven om het aan je offerte toe te voegen.</p>
+        <div class="xt-summary-lines" id="xtSummaryLines"></div>
+        <div class="xt-summary-total" id="xtSummaryTotal" style="display:none;"><span>Subtotaal extra's</span><span id="xtSummaryTotalPrice"></span></div>
+        <p class="xt-summary-note">Dit subtotaal komt automatisch terug in de offerte op de reserveringspagina, samen met je tafelpakket.</p>
+        <p class="xt-summary-cta"><a class="btn" href="reserveren.html">Ga verder naar reserveren</a></p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div>
+      <a class="brand" href="index.html">
+        <img class="logo-img" src="images/logo.webp" alt="Studio Convivio" width="911" height="369" loading="lazy">
+        <small>Tafelstyling &amp; verhuur</small>
+      </a>
+      <p class="footer-blurb">Stijlvolle tafelaankleding voor bijzondere momenten: servies, glaswerk, linnen en decoratie, verhuurd en gestyled vanuit Wageningen.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigatie</h4>
+      <ul>
+        <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
+        <li><a href="reserveren.html">Reserveren</a></li>
+        <li><a href="extras.html">Extra's</a></li>
+        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="aanvullende-services-en-maatwerk.html">Extra services &amp; maatwerk</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Gelegenheden</h4>
+      <ul>
+        <li><a href="21-diner.html">21-diner</a></li>
+        <li><a href="verjaardagsjubileum.html">Verjaardagsjubileum</a></li>
+        <li><a href="huwelijksjubileum.html">Huwelijksjubileum</a></li>
+        <li><a href="intieme-bruiloft.html">Intieme bruiloft</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></li>
+        <li><a href="https://www.instagram.com/studio.convivio" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.tiktok.com/@studio_convivio" rel="noopener">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© Studio Convivio. Alle rechten voorbehouden.</p>
+    <ul>
+      <li><a href="faq.html">Veelgestelde vragen</a></li>
+      <li><a href="algemene-voorwaarden.html">Algemene voorwaarden</a></li>
+      <li><a href="juridische-verklaring.html">Juridische verklaring</a></li>
+      <li><a href="privacy-van-gegevens.html">Privacy van gegevens</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="js/site.js"></script>
+<script src="js/extras-catalog.js"></script>
+<script src="js/extras-shop.js"></script>
+<script>
+(function () {
+  var root = document.querySelector('.xt-wrap');
+  var summaryEmpty = document.getElementById('xtSummaryEmpty');
+  var summaryLinesEl = document.getElementById('xtSummaryLines');
+  var summaryTotalEl = document.getElementById('xtSummaryTotal');
+  var summaryTotalPriceEl = document.getElementById('xtSummaryTotalPrice');
+
+  function renderSummary() {
+    var s = ScExtrasShop.summary();
+    if (s.lines.length === 0) {
+      summaryEmpty.style.display = 'block';
+      summaryLinesEl.innerHTML = '';
+      summaryTotalEl.style.display = 'none';
+      return;
+    }
+    summaryEmpty.style.display = 'none';
+    summaryLinesEl.innerHTML = s.lines.map(function (line) {
+      return '<div class="xt-summary-line"><span>' + line.label + '</span><span>' + line.priceLabel + '</span></div>';
+    }).join('');
+    summaryTotalEl.style.display = 'flex';
+    summaryTotalPriceEl.textContent = ScExtrasShop.fmt(s.subtotal) + (s.lines.some(function (l) { return l.overleg; }) ? ' + in overleg' : '');
+  }
+
+  ScExtrasShop.wire(root, renderSummary);
+  renderSummary();
+})();
+</script>
+
+</body></html>
