@@ -25,8 +25,6 @@ window.SC_EXTRAS_CATALOG = [
         icon: '<path d="M9 21h6M12 21V9M9.5 9h5l-.8-2.5M12 4.5c1.2 1 1.6 2.2 0 3.5-1.6-1.3-1.2-2.5 0-3.5z"/>' },
       { key: 'cilindervazen', name: 'Cilindervazen', price: 6.00, unit: 'set van 4', max: 4,
         icon: '<rect x="4" y="9" width="4" height="11" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="11" width="4" height="9" rx="1"/>' },
-      { key: 'verse-bloemen', name: 'Verse bloemen', price: null, unit: 'Prijs in overleg', max: 4,
-        icon: '<circle cx="12" cy="7" r="3"/><circle cx="7" cy="13" r="3"/><circle cx="17" cy="13" r="3"/><path d="M12 16v5"/>' },
       { key: 'handgemaakte-kaarten', name: 'Handgemaakte kaarten', price: null, unit: 'Prijs in overleg', max: 4, hasType: true,
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' }
     ]
