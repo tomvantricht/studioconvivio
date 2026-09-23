@@ -247,6 +247,9 @@
               <span class="sc-shop-photo">
                 <img src="images/img-ddd003eb.webp" alt="Unieke servetring in de vorm van een champagnedop" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="servetringen" aria-label="Bekijk alle 4 foto's van unieke servetringen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>4
+                </button>
               </span>
               <span class="sc-shop-body"><span class="sc-shop-name">Unieke servetringen</span><span class="sc-shop-price">€0,90/stuk</span></span>
             </label>
@@ -264,6 +267,9 @@
               <span class="sc-shop-photo">
                 <img src="images/img-2fb20330.webp" alt="Draadloze tafellamp met bruine kap" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="tafellampen" aria-label="Bekijk alle 2 foto's van tafellampen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
+                </button>
               </span>
               <span class="sc-shop-body"><span class="sc-shop-name">Tafellampen</span><span class="sc-shop-price">€3,95/stuk</span></span>
             </label>
@@ -287,6 +293,9 @@
               <span class="sc-shop-photo">
                 <img src="images/img-c41acedc.webp" alt="Zilveren kandelaar met gedraaide kaars" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="kandelaar" aria-label="Bekijk alle 2 foto's van kandelaar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
+                </button>
               </span>
               <span class="sc-shop-body"><span class="sc-shop-name">Kandelaar</span><span class="sc-shop-price">€1,95/stuk</span></span>
             </label>
@@ -309,6 +318,9 @@
               <span class="sc-shop-photo">
                 <img src="images/img-c12e54f6.webp" alt="Set glazen vaasjes in verschillende vormen" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="cilindervazen" aria-label="Bekijk alle 2 foto's van cilindervazen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
+                </button>
               </span>
               <span class="sc-shop-body"><span class="sc-shop-name">Cilindervazen</span><span class="sc-shop-price">€6,00/set van 4</span></span>
             </label>
@@ -416,6 +428,17 @@
     </ul>
   </div>
 </footer>
+
+<div class="gallery-lightbox" id="galleryLightbox" hidden>
+  <button type="button" class="gallery-close" id="galleryClose" aria-label="Sluiten">&times;</button>
+  <button type="button" class="gallery-nav gallery-nav--prev" id="galleryPrev" aria-label="Vorige foto">&#8249;</button>
+  <button type="button" class="gallery-nav gallery-nav--next" id="galleryNext" aria-label="Volgende foto">&#8250;</button>
+  <div class="gallery-lightbox-media">
+    <img id="galleryImg" src="" alt="">
+    <div class="gallery-dots" id="galleryDots"></div>
+  </div>
+</div>
+
 <script src="js/site.js?v=4"></script>
 <script src="js/extras-catalog.js?v=2"></script>
 <script src="js/extras-shop.js?v=2"></script>
@@ -458,6 +481,82 @@
     r.addEventListener('change', function () {
       if (r.checked) ScCart.setDeliveryMode(r.value);
     });
+  });
+
+  // Fotogalerij per product: meerdere foto's van hetzelfde item (andere hoek
+  // of variant) samen bekijken, los van het aan- of uitvinken van het item.
+  var GALLERY_IMAGES = {
+    'servetringen': [
+      { src: 'images/img-ddd003eb.webp', alt: 'Unieke servetring, goudkleurige champagnedop' },
+      { src: 'images/img-a2ea5439.webp', alt: 'Unieke servetring, bruin-wit patroon' },
+      { src: 'images/img-2f8c3e29.webp', alt: 'Unieke servetring, rode Opera-dop' },
+      { src: 'images/img-0aedb310.webp', alt: 'Unieke servetring, zwarte dop' }
+    ],
+    'tafellampen': [
+      { src: 'images/img-2fb20330.webp', alt: 'Tafellamp, aan in het donker' },
+      { src: 'images/img-2b8e7039.webp', alt: 'Tafellamp op tafel bij daglicht' }
+    ],
+    'kandelaar': [
+      { src: 'images/img-c41acedc.webp', alt: 'Twee zilveren kandelaars met gedraaide kaarsen' },
+      { src: 'images/img-963e96bb.webp', alt: 'Zilveren kandelaar, close-up' }
+    ],
+    'cilindervazen': [
+      { src: 'images/img-c12e54f6.webp', alt: 'Set glazen vaasjes, leeg' },
+      { src: 'images/img-cfa2e677.webp', alt: 'Dezelfde glazen vaasjes met verse bloemen' }
+    ]
+  };
+
+  var galleryLightbox = document.getElementById('galleryLightbox');
+  var galleryImg = document.getElementById('galleryImg');
+  var galleryDots = document.getElementById('galleryDots');
+  var galleryClose = document.getElementById('galleryClose');
+  var galleryPrev = document.getElementById('galleryPrev');
+  var galleryNext = document.getElementById('galleryNext');
+  var galleryPhotos = [];
+  var galleryIndex = 0;
+
+  function renderGallery() {
+    var photo = galleryPhotos[galleryIndex];
+    galleryImg.src = photo.src;
+    galleryImg.alt = photo.alt;
+    galleryDots.innerHTML = galleryPhotos.map(function (_, i) {
+      return '<span' + (i === galleryIndex ? ' class="is-active"' : '') + '></span>';
+    }).join('');
+    galleryPrev.disabled = galleryIndex === 0;
+    galleryNext.disabled = galleryIndex === galleryPhotos.length - 1;
+  }
+  function openGallery(key) {
+    galleryPhotos = GALLERY_IMAGES[key];
+    if (!galleryPhotos) return;
+    galleryIndex = 0;
+    renderGallery();
+    galleryLightbox.hidden = false;
+    document.body.classList.add('gallery-open');
+    galleryClose.focus();
+  }
+  function closeGallery() {
+    galleryLightbox.hidden = true;
+    document.body.classList.remove('gallery-open');
+  }
+
+  document.querySelectorAll('.sc-shop-gallery-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openGallery(btn.getAttribute('data-gallery'));
+    });
+  });
+  galleryClose.addEventListener('click', closeGallery);
+  galleryPrev.addEventListener('click', function () { if (galleryIndex > 0) { galleryIndex--; renderGallery(); } });
+  galleryNext.addEventListener('click', function () { if (galleryIndex < galleryPhotos.length - 1) { galleryIndex++; renderGallery(); } });
+  galleryLightbox.addEventListener('click', function (e) {
+    if (e.target === galleryLightbox) closeGallery();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (galleryLightbox.hidden) return;
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowRight' && galleryIndex < galleryPhotos.length - 1) { galleryIndex++; renderGallery(); }
+    if (e.key === 'ArrowLeft' && galleryIndex > 0) { galleryIndex--; renderGallery(); }
   });
 })();
 </script>
