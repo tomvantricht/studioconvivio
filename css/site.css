@@ -230,9 +230,9 @@ textarea:focus-visible,
 .announce-bar-text a { color: var(--paper); text-decoration: underline; text-underline-offset: 2px; }
 .announce-bar-text a:hover { color: var(--gold); }
 .announce-bar-close {
-  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
   background: none; border: none; color: var(--paper);
-  font-size: 20px; line-height: 1; cursor: pointer; padding: 6px 8px; border-radius: 4px;
+  font-size: 20px; line-height: 1; cursor: pointer; padding: 8px 10px; border-radius: 4px;
 }
 .announce-bar-close:hover { background: rgba(248,246,239,0.15); }
 
