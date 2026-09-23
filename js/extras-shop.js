@@ -13,6 +13,18 @@ window.ScExtrasShop = (function () {
     return out;
   }
 
+  // Het maximumaantal dat je van een item kunt kiezen: bij een vaste
+  // voorraad is dat de voorraad zelf, anders de praktische bovengrens `max`.
+  function effectiveMax(item) {
+    return item.stock != null ? item.stock : item.max;
+  }
+  function isSoldOut(item) {
+    return item.stock === 0;
+  }
+  function isLowStock(item) {
+    return item.stock != null && item.stock > 0 && item.stock <= 5;
+  }
+
   // Bouwt de itemlijst (per categorie) als HTML-string, zonder foto's: een
   // compacte vinklijst. Gebruikt op reserveren.html, waar de items alleen
   // hoeven te worden aangevinkt en de foto's van de shop-kaartjes op
@@ -22,20 +34,23 @@ window.ScExtrasShop = (function () {
     SC_EXTRAS_CATALOG.forEach(function (group) {
       html += '<div class="sc-shop-category"><span class="sc-shop-category-label">' + group.category + '</span><div class="sc-shop-grid sc-shop-grid--flat">';
       group.items.forEach(function (item) {
-        var priceLabel = item.price === null ? item.unit : fmt(item.price) + '/' + item.unit;
+        var soldOut = isSoldOut(item);
+        var priceLabel = soldOut ? 'Uitverkocht' : (item.price === null ? item.unit : fmt(item.price) + '/' + item.unit);
+        var stockNote = !soldOut && isLowStock(item) ? '<span class="sc-shop-stock">Nog ' + item.stock + ' beschikbaar</span>' : '';
         html += '' +
-          '<div class="sc-shop-item" data-key="' + item.key + '">' +
+          '<div class="sc-shop-item' + (soldOut ? ' is-soldout' : '') + '" data-key="' + item.key + '">' +
             '<label class="sc-shop-card sc-shop-card--flat">' +
-              '<input type="checkbox" class="sc-shop-check">' +
+              '<input type="checkbox" class="sc-shop-check"' + (soldOut ? ' disabled' : '') + '>' +
               '<span class="sc-shop-body">' +
                 '<span class="sc-shop-name"><span class="sc-shop-check-icon"></span>' + item.name + '</span>' +
-                '<span class="sc-shop-price">' + priceLabel + '</span>' +
+                '<span class="sc-shop-price">' + priceLabel + stockNote + '</span>' +
               '</span>' +
             '</label>' +
-            '<div class="sc-qty-field sc-qty-field-flat sc-shop-qty">' +
-              '<input type="number" class="sc-shop-qty-input" min="1" max="' + item.max + '" value="1">' +
-              (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menu-, naam-, welkom- of bedankkaarten">' : '') +
-            '</div>' +
+            (soldOut ? '' :
+              '<div class="sc-qty-field sc-qty-field-flat sc-shop-qty">' +
+                '<input type="number" class="sc-shop-qty-input" min="1" max="' + effectiveMax(item) + '" value="1">' +
+                (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menu-, naam-, welkom- of bedankkaarten">' : '') +
+              '</div>') +
           '</div>';
       });
       html += '</div></div>';
@@ -50,6 +65,7 @@ window.ScExtrasShop = (function () {
     root.querySelectorAll('.sc-shop-item').forEach(function (itemEl) {
       var key = itemEl.getAttribute('data-key');
       var check = itemEl.querySelector('.sc-shop-check');
+      if (check.disabled) return; // Uitverkocht: niet aan te vinken, geen aantalveld.
       var qtyWrap = itemEl.querySelector('.sc-shop-qty');
       var qtyInput = itemEl.querySelector('.sc-shop-qty-input');
       var typeInput = itemEl.querySelector('.sc-shop-type-input');
