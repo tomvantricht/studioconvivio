@@ -215,6 +215,105 @@ textarea:focus-visible,
 .link:hover { background-size: 0% 1px; color: var(--mocha-dark); }
 
 /* ---------------------------------------------------------------------- */
+/* Meldingsbalk (boven de header)                                         */
+/* ---------------------------------------------------------------------- */
+.announce-bar {
+  position: relative;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  padding: 10px 46px;
+  font-size: 13px;
+}
+.announce-bar[hidden] { display: none; }
+.announce-bar-text { margin: 0; }
+.announce-bar-text a { color: var(--paper); text-decoration: underline; text-underline-offset: 2px; }
+.announce-bar-text a:hover { color: var(--gold); }
+.announce-bar-close {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--paper);
+  font-size: 20px; line-height: 1; cursor: pointer; padding: 6px 8px; border-radius: 4px;
+}
+.announce-bar-close:hover { background: rgba(248,246,239,0.15); }
+
+/* ---------------------------------------------------------------------- */
+/* Stories: cirkelrij + volledig-scherm verhaalweergave                   */
+/* ---------------------------------------------------------------------- */
+.story-row { padding: 20px 0 4px; }
+.story-row-scroll {
+  display: flex; gap: 18px; overflow-x: auto;
+  padding: 2px var(--edge) 6px; margin: 0 calc(var(--edge) * -1);
+  scrollbar-width: none;
+}
+.story-row-scroll::-webkit-scrollbar { display: none; }
+.story-avatar {
+  flex: 0 0 auto; width: 76px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  background: none; border: none; padding: 0; cursor: pointer; font-family: inherit;
+}
+.story-ring {
+  display: block; width: 68px; height: 68px; border-radius: 50%; padding: 3px;
+  background: conic-gradient(from 180deg, var(--moss), var(--gold), var(--mocha), var(--moss));
+}
+.story-ring img {
+  display: block; width: 100%; height: 100%; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--paper);
+}
+.story-label { font-size: 11px; text-align: center; color: var(--ink-soft); line-height: 1.25; }
+.story-avatar:hover .story-label { color: var(--ink); }
+.story-avatar:focus-visible { outline: none; }
+.story-avatar:focus-visible .story-ring { outline: 2px solid var(--moss-dark); outline-offset: 3px; border-radius: 50%; }
+
+.story-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: #000;
+  display: flex; align-items: center; justify-content: center;
+}
+.story-overlay[hidden] { display: none; }
+body.story-open { overflow: hidden; }
+.story-slide { position: relative; width: 100%; height: 100%; max-width: 480px; margin: 0 auto; overflow: hidden; background: #141311; }
+@media (min-width: 760px) {
+  .story-slide { height: min(90vh, 860px); border-radius: 14px; }
+}
+.story-slide-media { position: absolute; inset: 0; cursor: pointer; }
+.story-slide-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.story-slide-media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(20,20,19,0.88) 0%, rgba(20,20,19,0.42) 42%, rgba(20,20,19,0) 66%);
+}
+.story-slide-copy {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 28px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+  color: var(--paper); pointer-events: none;
+}
+.story-slide-copy > * { pointer-events: auto; }
+.story-slide-kicker { display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.story-slide-copy h2 { font-family: var(--serif); font-size: clamp(26px, 5.5vw, 34px); color: var(--paper); margin: 0 0 10px; }
+.story-slide-copy p { font-size: 15px; color: rgba(248,246,239,0.88); max-width: 42ch; margin: 0 0 18px; }
+.story-slide-copy .btn { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.story-slide-copy .btn:hover { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+
+.story-progress { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; gap: 4px; z-index: 3; }
+.story-progress-seg { flex: 1; height: 2.5px; border-radius: 2px; background: rgba(255,255,255,0.32); }
+.story-progress-seg.is-active { background: #fff; }
+
+.story-close {
+  position: absolute; top: 14px; right: 14px; z-index: 3;
+  width: 34px; height: 34px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.35); color: #fff; font-size: 19px; line-height: 1; cursor: pointer;
+}
+.story-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 38px; height: 38px; border-radius: 50%; border: none;
+  background: rgba(0,0,0,0.35); color: #fff; font-size: 22px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.story-nav--prev { left: 10px; }
+.story-nav--next { right: 10px; }
+.story-nav[disabled] { opacity: 0.3; cursor: default; }
+@media (max-width: 640px) { .story-nav { display: none; } }
+
+/* ---------------------------------------------------------------------- */
 /* Header / navigatie                                                     */
 /* ---------------------------------------------------------------------- */
 .site-header {

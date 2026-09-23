@@ -53,17 +53,39 @@ window.ScCart = (function () {
   var header = document.querySelector('.site-header');
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.querySelector('.site-nav');
-  if (!toggle || !nav) return;
 
-  // Het mobiele menu begint precies onder de header. Die hoogte hangt af
-  // van de logogrootte, dus meten we 'm in plaats van een vast getal aan
-  // te houden.
+  // Het mobiele menu begint precies onder de header. We meten de afstand
+  // vanaf de viewport-top tot de onderkant van de header (niet alleen de
+  // headerhoogte zelf), zodat een meldingsbalk erboven correct meetelt.
   function setHeaderHeight() {
-    if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+    if (header) document.documentElement.style.setProperty('--header-h', header.getBoundingClientRect().bottom + 'px');
   }
   setHeaderHeight();
   window.addEventListener('resize', setHeaderHeight);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(setHeaderHeight);
+
+  // Meldingsbalk boven de header: sluit voor de rest van het bezoek (per
+  // tabblad/sessie) en herbereken meteen de headerhoogte voor het mobiele menu.
+  var announceBar = document.getElementById('announceBar');
+  if (announceBar) {
+    var ANNOUNCE_KEY = 'sc_announce_dismissed_v1';
+    var dismissed = false;
+    try { dismissed = sessionStorage.getItem(ANNOUNCE_KEY) === '1'; } catch (e) {}
+    if (dismissed) {
+      announceBar.hidden = true;
+      setHeaderHeight();
+    }
+    var announceClose = announceBar.querySelector('.announce-bar-close');
+    if (announceClose) {
+      announceClose.addEventListener('click', function () {
+        announceBar.hidden = true;
+        try { sessionStorage.setItem(ANNOUNCE_KEY, '1'); } catch (e) {}
+        setHeaderHeight();
+      });
+    }
+  }
+
+  if (!toggle || !nav) return;
 
   function setOpen(isOpen) {
     nav.classList.toggle('is-open', isOpen);

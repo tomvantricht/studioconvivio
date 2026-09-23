@@ -123,6 +123,11 @@
 
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 
+<div class="announce-bar" id="announceBar">
+  <p class="announce-bar-text">Nu ook losse extra's bestellen &mdash; <a href="extras.html">bekijk het assortiment</a></p>
+  <button type="button" class="announce-bar-close" aria-label="Melding sluiten">&times;</button>
+</div>
+
 <header class="site-header">
   <div class="site-header-inner">
     <a class="brand" href="index.html" aria-current="page">
@@ -145,6 +150,36 @@
 </header>
 
 <main id="inhoud">
+
+  <!-- SECTIE: Stories -->
+  <section class="story-row" aria-label="In het kort">
+    <div class="story-row-scroll">
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-044ae929-800.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Moss &amp; Mist</span>
+      </button>
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-25e2bb73.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Mocha Sky</span>
+      </button>
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-52c47e24.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Hoe werkt het?</span>
+      </button>
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-c41acedc.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Extra's</span>
+      </button>
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-43ca6586.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Gelegenheden</span>
+      </button>
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-728b3f21-800.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Reserveren</span>
+      </button>
+    </div>
+  </section>
 
   <!-- SECTIE: Hero -->
   <section class="hero">
@@ -261,7 +296,7 @@
   </section>
 
   <!-- SECTIE: Gelegenheden -->
-  <section class="section section--paper-alt">
+  <section class="section section--paper-alt" id="gelegenheden">
     <div class="wrap">
       <div class="section-head">
         <div class="kicker"><span>Voor elk bijzonder moment</span></div>
@@ -385,6 +420,26 @@
     </ul>
   </div>
 </footer>
-<script src="js/site.js?v=3"></script>
+
+<div class="story-overlay" id="storyOverlay" hidden>
+  <div class="story-slide" id="storySlide">
+    <div class="story-progress" id="storyProgress"></div>
+    <button type="button" class="story-close" id="storyClose" aria-label="Sluiten">&times;</button>
+    <button type="button" class="story-nav story-nav--prev" id="storyPrev" aria-label="Vorige">&#8249;</button>
+    <button type="button" class="story-nav story-nav--next" id="storyNext" aria-label="Volgende">&#8250;</button>
+    <div class="story-slide-media">
+      <img id="storySlideImg" src="" alt="">
+    </div>
+    <div class="story-slide-copy">
+      <span class="story-slide-kicker" id="storySlideKicker"></span>
+      <h2 id="storySlideHeading"></h2>
+      <p id="storySlideBlurb"></p>
+      <a class="btn" id="storySlideCta" href="#"></a>
+    </div>
+  </div>
+</div>
+
+<script src="js/site.js?v=4"></script>
+<script src="js/stories.js?v=1"></script>
 
 </body></html>
