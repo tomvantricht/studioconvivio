@@ -21,7 +21,9 @@ window.SC_EXTRAS_CATALOG = [
         icon: '<path d="M12 3v10M12 13c-3 0-5 2-5 5M12 13c3 0 5 2 5 5M7 18h10"/>' },
       { key: 'kandelaar', name: 'Kandelaar', price: 1.95, unit: 'stuk', max: 10,
         icon: '<path d="M12 2v5M8 8h8l-1.2 3H9.2zM12 11v7M8 21h8"/>' },
-      { key: 'cilindervazen', name: 'Cilindervazen', price: 6.00, unit: 'set van 4', max: 4,
+      { key: 'kleine-vaasjes', name: 'Kleine vaasjes', price: 6.00, unit: 'set van 4', max: 4,
+        icon: '<rect x="4" y="9" width="4" height="11" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="11" width="4" height="9" rx="1"/>' },
+      { key: 'cilindervazen', name: 'Cilindervazen', price: null, unit: 'Prijs volgt', max: 4,
         icon: '<rect x="4" y="9" width="4" height="11" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="11" width="4" height="9" rx="1"/>' },
       { key: 'handgemaakte-kaarten', name: 'Handgemaakte kaarten', price: null, unit: 'Prijs in overleg', max: 4, hasType: true,
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' }
