@@ -13,7 +13,7 @@
 <meta property="og:title" content="Extra's | Studio Convivio">
 <meta property="og:description" content="Blader door losse extra's zoals kandelaars, tafellampen en unieke servetringen, en voeg ze rechtstreeks toe aan je offerte voor Studio Convivio.">
 <meta property="og:url" content="https://www.studio-convivio.nl/extras.html">
-<meta property="og:image" content="https://www.studio-convivio.nl/images/img-9a61a475.webp">
+<meta property="og:image" content="https://www.studio-convivio.nl/images/og-b3e40ab5.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="images/favicon-32.png" sizes="32x32">
@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
-<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/site.css?v=2">
 <style>
 /* ---- Pagina-specifiek: Extra's ---------------------------------------- */
 
@@ -100,7 +100,7 @@
 }
 .sc-shop-card--flat input:checked ~ .sc-shop-body .sc-shop-check-icon { background: var(--sc-moss); border-color: var(--sc-moss); }
 .sc-shop-card--flat input:checked ~ .sc-shop-body .sc-shop-check-icon::after { content: "\2713"; }
-.sc-shop-stock { display: block; font-size: 12px; color: var(--sc-mocha); margin-top: 1px; }
+.sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); margin-top: 1px; }
 .sc-shop-item.is-soldout .sc-shop-card { opacity: 0.5; cursor: default; }
 .sc-shop-item.is-soldout .sc-shop-price { font-style: italic; }
 
@@ -138,11 +138,6 @@
 <body>
 
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
-
-<div class="announce-bar" id="announceBar">
-  <p class="announce-bar-text">Nu ook losse extra's bestellen &mdash; <a href="extras.html">bekijk het assortiment</a></p>
-  <button type="button" class="announce-bar-close" aria-label="Melding sluiten">&times;</button>
-</div>
 
 <header class="site-header">
   <div class="site-header-inner">
@@ -209,7 +204,7 @@
             </label>
           </div>
         </div>
-        <p style="font-size:12px;color:var(--ink-faint);margin-top:12px;max-width:56ch;">De uiteindelijke prijs hangt af van de afstand; die bereken je op de reserveringspagina. Je keuze hier staat daar al klaar.</p>
+        <p style="font-size:12px;color:var(--ink-faint);margin-top:12px;max-width:56ch;">De uiteindelijke prijs hangt af van de afstand; die bereken je op de reserveringspagina. De kilometerprijs geldt voor alle vier de ritten: heen en terug bij het bezorgen en heen en terug bij het ophalen. Je keuze hier staat daar al klaar.</p>
         <span class="vat-note" style="margin-top:6px;">Incl. btw</span>
       </div>
 
@@ -224,7 +219,7 @@
                 <span class="sc-shop-ph-label">Foto volgt</span>
                 <span class="sc-shop-badge">&#10003;</span>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Champagneglazen</span><span class="sc-shop-price">€0,75/stuk</span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Champagneglazen</span><span class="sc-shop-price">€0,75/stuk<span class="sc-shop-stock">Max. 50 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="50" value="1"></div>
           </div>
@@ -238,9 +233,48 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>4
                 </button>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Unieke servetringen</span><span class="sc-shop-price">€0,90/stuk</span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Unieke servetringen</span><span class="sc-shop-price">€0,50/stuk<span class="sc-shop-stock">Max. 25 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="25" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="strikjes">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 12L5 8v8zM12 12l7-4v8zM12 12l-2 7M12 12l2 7"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Strikjes (onbedrukt)</span><span class="sc-shop-price">€0,30/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="strikjes-bedrukt">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 12L5 8v8zM12 12l7-4v8zM12 12l-2 7M12 12l2 7"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Strikjes (bedrukt)</span><span class="sc-shop-price">€0,80/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
+              <input type="number" class="sc-shop-qty-input" min="1" value="1">
+              <input type="text" class="sc-shop-type-input" placeholder="Wat moet erop? Bijv. de namen van je gasten (mag ook in de opmerkingen)">
+            </div>
+          </div>
+          <div class="sc-shop-item" data-key="broodmandjes">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M4 11h16l-2 8H6zM7 11c0-3 2-5 5-5s5 2 5 5"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Broodmandjes</span><span class="sc-shop-price">€3,50/stuk<span class="sc-shop-stock">Max. 2 per aanvraag</span></span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="2" value="1"></div>
           </div>
         </div>
       </div>
@@ -258,7 +292,7 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
                 </button>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Tafellampen</span><span class="sc-shop-price">€3,95/stuk<span class="sc-shop-stock">Nog 4 beschikbaar</span></span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Tafellampen</span><span class="sc-shop-price">€3,95/stuk<span class="sc-shop-stock">Max. 4 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
           </div>
@@ -270,7 +304,7 @@
                 <span class="sc-shop-ph-label">Foto volgt</span>
                 <span class="sc-shop-badge">&#10003;</span>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Zijdebloemen</span><span class="sc-shop-price">€7,95/bos<span class="sc-shop-stock">Nog 2 beschikbaar</span></span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Zijdebloemen (boeket)</span><span class="sc-shop-price">€7,95/bos<span class="sc-shop-stock">Max. 2 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="2" value="1"></div>
           </div>
@@ -284,9 +318,21 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
                 </button>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Kandelaar</span><span class="sc-shop-price">€1,95/stuk<span class="sc-shop-stock">Nog 4 beschikbaar</span></span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Kandelaar</span><span class="sc-shop-price">€1,95/stuk<span class="sc-shop-stock">Max. 4 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
+          </div>
+          <div class="sc-shop-item" data-key="kaarsen">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24"><path d="M12 3c1.5 2 1.5 3.5 0 5-1.5-1.5-1.5-3 0-5zM9 9h6v12H9z"/></svg>
+                <span class="sc-shop-ph-label">Foto volgt</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Kaarsen (te koop)</span><span class="sc-shop-price">€0,40/stuk</span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" value="1"></div>
           </div>
           <div class="sc-shop-item" data-key="kleine-vaasjes">
             <label class="sc-shop-card">
@@ -298,7 +344,7 @@
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
                 </button>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Kleine vaasjes</span><span class="sc-shop-price">€6,00/set van 3<span class="sc-shop-stock">Nog 3 beschikbaar</span></span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Kleine vaasjes</span><span class="sc-shop-price">€6,00/set van 3<span class="sc-shop-stock">Max. 3 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="3" value="1"></div>
           </div>
@@ -310,7 +356,7 @@
                 <span class="sc-shop-ph-label">Foto volgt</span>
                 <span class="sc-shop-badge">&#10003;</span>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Cilindervazen</span><span class="sc-shop-price">Prijs volgt</span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Cilindervazen</span><span class="sc-shop-price">€4,50/set van 3<span class="sc-shop-stock">Max. 4 per aanvraag</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
           </div>
@@ -322,10 +368,10 @@
                 <span class="sc-shop-ph-label">Foto volgt</span>
                 <span class="sc-shop-badge">&#10003;</span>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">Prijs in overleg</span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">vanaf €1,25/stuk</span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
-              <input type="number" class="sc-shop-qty-input" min="1" max="4" value="1">
+              <input type="number" class="sc-shop-qty-input" min="1" value="1">
               <input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menu-, naam-, welkom- of bedankkaarten">
             </div>
           </div>
@@ -357,7 +403,7 @@
       <p class="footer-blurb">Stijlvolle tafelaankleding voor bijzondere momenten: servies, glaswerk, linnen en decoratie, verhuurd en gestyled vanuit Wageningen.</p>
     </div>
     <div class="footer-col">
-      <h4>Navigatie</h4>
+      <h2>Navigatie</h2>
       <ul>
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html">Reserveren</a></li>
@@ -366,7 +412,7 @@
         <li><a href="contact.html">Contact</a></li>      </ul>
     </div>
     <div class="footer-col">
-      <h4>Gelegenheden</h4>
+      <h2>Gelegenheden</h2>
       <ul>
         <li><a href="21-diner.html">21-diner</a></li>
         <li><a href="verjaardagsjubileum.html">Verjaardagsjubileum</a></li>
@@ -375,7 +421,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Contact</h4>
+      <h2>Contact</h2>
       <ul>
         <li><a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></li>
         <li><a href="https://www.instagram.com/studio.convivio" rel="noopener">Instagram</a></li>
@@ -404,9 +450,9 @@
   </div>
 </div>
 
-<script src="js/site.js?v=4"></script>
-<script src="js/extras-catalog.js?v=7"></script>
-<script src="js/extras-shop.js?v=3"></script>
+<script src="js/site.js?v=5"></script>
+<script src="js/extras-catalog.js?v=9"></script>
+<script src="js/extras-shop.js?v=5"></script>
 <script>
 (function () {
   var root = document.querySelector('.xt-wrap');
@@ -430,7 +476,7 @@
       return '<div class="xt-summary-line"><span>' + line.label + '</span><span>' + line.priceLabel + '</span></div>';
     }).join('');
     summaryTotalEl.style.display = 'flex';
-    summaryTotalPriceEl.textContent = ScExtrasShop.fmt(s.subtotal) + (s.lines.some(function (l) { return l.overleg; }) ? ' + in overleg' : '');
+    summaryTotalPriceEl.textContent = (s.hasFrom ? 'vanaf ' : '') + ScExtrasShop.fmt(s.subtotal) + (s.lines.some(function (l) { return l.overleg; }) ? ' + nog te bepalen' : '');
     summaryVatNoteEl.style.display = 'block';
   }
 
@@ -467,7 +513,7 @@
     ],
     'kleine-vaasjes': [
       { src: 'images/img-c12e54f6.webp', alt: 'Set kleine glazen vaasjes, leeg' },
-      { src: 'images/img-cfa2e677.webp', alt: 'Dezelfde kleine vaasjes met verse bloemen' }
+      { src: 'images/img-cfa2e677.webp', alt: 'Dezelfde kleine vaasjes met bloemen' }
     ]
   };
 

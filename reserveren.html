@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reserveren | Studio Convivio</title>
-<meta name="description" content="Reserveer je tafelsetting bij Studio Convivio: kies je collectie, aantal personen en eventuele extra's, en ontvang direct een prijsindicatie.">
+<meta name="description" content="Dien je reserveringsaanvraag in bij Studio Convivio: kies je collectie, aantal personen en eventuele extra's, en zie direct een prijsindicatie.">
 <link rel="canonical" href="https://www.studio-convivio.nl/reserveren.html">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Studio Convivio">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:title" content="Reserveren | Studio Convivio">
-<meta property="og:description" content="Reserveer je tafelsetting bij Studio Convivio: kies je collectie, aantal personen en eventuele extra's, en ontvang direct een prijsindicatie.">
+<meta property="og:description" content="Dien je reserveringsaanvraag in bij Studio Convivio: kies je collectie, aantal personen en eventuele extra's, en zie direct een prijsindicatie.">
 <meta property="og:url" content="https://www.studio-convivio.nl/reserveren.html">
-<meta property="og:image" content="https://www.studio-convivio.nl/images/img-25e2bb73.webp">
-<meta property="og:image:width" content="1000">
-<meta property="og:image:height" content="667">
+<meta property="og:image" content="https://www.studio-convivio.nl/images/og-25e2bb73.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="images/favicon-32.png" sizes="32x32">
@@ -24,19 +24,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
-<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/site.css?v=2">
 
-<!--
-  De kleurtokens hieronder verwijzen naar css/site.css, zodat er
-  maar een plek is waar de huisstijlkleuren staan.
-
-  De reserveringscalculator hieronder is functioneel 1-op-1 overgenomen uit
-  reserveringsformulier.html (dezelfde IDs, classes en JS-logica, inclusief
-  de Web3Forms-koppeling en de gratis afstandsberekening via Nominatim).
-  Alleen de CSS-tokens (kleuren/radius/font) zijn aangepast aan het nieuwe
-  sitebrede ontwerp. Pas je iets aan de rekenlogica aan? Doe dat ook in
-  reserveringsformulier.html, of andersom, zodat beide niet uit elkaar lopen.
--->
 <style>
   .sc-form-wrap {
     --sc-ink: var(--ink);
@@ -55,26 +44,36 @@
   .sc-form-wrap * { box-sizing: border-box; }
 
   .sc-section { margin-bottom: 26px; }
-  .sc-section label.sc-label {
+  .sc-section .sc-label {
     display: block;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--sc-mocha);
+    color: var(--mocha-dark);
     margin-bottom: 10px;
   }
+  /* De echte keuzerondjes/vinkjes zijn onzichtbaar; toon de toetsenbordfocus
+     daarom op de zichtbare kaart ernaast. */
+  .sc-form-wrap input:focus-visible + .sc-mode-card,
+  .sc-form-wrap input:focus-visible + .sc-package-card,
+  .sc-form-wrap input:focus-visible + .sc-item-tile-card,
+  .sc-shop-card:has(input:focus-visible) {
+    outline: 2px solid var(--mocha-dark); outline-offset: 2px;
+  }
+  /* Keuzerondjes (één keuze) rond tonen, vinkjes (meerdere) vierkant. */
+  .sc-item-tile input[type="radio"] + .sc-item-tile-card .sc-item-check-icon { border-radius: 50%; }
   .sc-hint { font-size: 13px; color: var(--ink-soft); margin: -4px 0 14px; }
   .sc-hint a { color: var(--sc-moss-dark); }
   .sc-shop-category + .sc-shop-category { margin-top: 22px; }
   .sc-shop-category-label { display: block; font-size: 12px; font-weight: 600; color: var(--sc-ink); margin-bottom: 10px; }
   .sc-sublabel {
     display: block;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--sc-mocha);
+    color: var(--mocha-dark);
     margin: 20px 0 10px;
   }
 
@@ -202,7 +201,7 @@
   }
   .sc-shop-card--flat input:checked ~ .sc-shop-body .sc-shop-check-icon { background: var(--sc-moss); border-color: var(--sc-moss); }
   .sc-shop-card--flat input:checked ~ .sc-shop-body .sc-shop-check-icon::after { content: "\2713"; }
-  .sc-shop-stock { display: block; font-size: 12px; color: var(--sc-mocha); margin-top: 1px; }
+  .sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); margin-top: 1px; }
   .sc-shop-item.is-soldout .sc-shop-card--flat { opacity: 0.5; cursor: default; }
   .sc-shop-item.is-soldout .sc-shop-price { font-style: italic; }
 
@@ -249,7 +248,7 @@
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 
 <div class="announce-bar" id="announceBar">
-  <p class="announce-bar-text">Nu ook losse extra's bestellen &mdash; <a href="extras.html">bekijk het assortiment</a></p>
+  <p class="announce-bar-text">Nu losse extra's bestellen &mdash; <a href="extras.html">bekijk het assortiment</a></p>
   <button type="button" class="announce-bar-close" aria-label="Melding sluiten">&times;</button>
 </div>
 
@@ -277,8 +276,8 @@
 <main id="inhoud">
   <section class="section" style="padding-bottom:40px;">
     <div class="wrap" style="max-width:720px;">
-      <h1 style="font-size:clamp(30px,3.8vw,44px);margin-top:14px;">Dien je reservering in</h1>
-      <p class="lede" style="margin-top:16px;">Heb je een collectie gevonden die perfect past bij jouw gelegenheid? Vul onderstaand formulier in. Je ziet direct een prijsindicatie, en na ontvangst sturen we je een voorlopig akkoord.</p>
+      <h1 style="font-size:clamp(30px,3.8vw,44px);margin-top:14px;">Dien je reserveringsaanvraag in</h1>
+      <p class="lede" style="margin-top:16px;">Heb je een collectie gevonden die perfect past bij jouw gelegenheid? Vul onderstaand formulier in en je ziet direct een prijsindicatie. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
     </div>
   </section>
 
@@ -286,14 +285,14 @@
     <div class="wrap">
 
       <!-- ============================================================ -->
-      <!-- Reserveringscalculator (functioneel ongewijzigd)               -->
+      <!-- Reserveringscalculator                                      -->
       <!-- ============================================================ -->
       <div class="sc-form-wrap">
         <form id="scReserveForm" action="https://api.web3forms.com/submit" method="POST">
 
           <div class="sc-section">
-            <label class="sc-label">1. Standaardpakket of maatwerk?</label>
-            <div class="sc-mode-toggle" role="group" aria-label="Standaardpakket of maatwerk?">
+            <span class="sc-label" id="scStep1Label">1. Standaardpakket of maatwerk?</span>
+            <div class="sc-mode-toggle" role="radiogroup" aria-labelledby="scStep1Label">
               <label>
                 <input type="radio" name="mode" value="standard" checked>
                 <div class="sc-mode-card">Standaardpakket</div>
@@ -314,8 +313,8 @@
                       <strong>Moss &amp; Mist</strong>
                       <span class="sc-price-tag">€16,75 p.p.<span class="vat-note">Incl. btw</span></span>
                       <ul class="sc-included-list">
-                        <li>Dinerborden</li><li>Voorgerecht bord</li><li>Voorgerechtbestek</li><li>Bestek</li>
-                        <li>Waterglazen</li><li>Wijnglazen</li><li>Stoffen servetten</li>
+                        <li>Dinerborden</li><li>Voorgerechtborden</li><li>Voorgerechtbestek</li><li>Bestek</li>
+                        <li>Waterglazen</li><li>Wijnglazen</li><li>Dessertcoupe</li><li>Katoenen servetten</li><li>Tafelkleden (250 × 160 cm)</li>
                       </ul>
                     </div>
                   </div>
@@ -328,8 +327,8 @@
                       <strong>Mocha Sky</strong>
                       <span class="sc-price-tag">€17,75 p.p.<span class="vat-note">Incl. btw</span></span>
                       <ul class="sc-included-list">
-                        <li>Dinerborden</li><li>Voorgerecht bord</li><li>Voorgerechtbestek</li><li>Bestek</li>
-                        <li>Waterglazen</li><li>Wijnglazen</li><li>Stoffen servetten</li><li>Placemats</li>
+                        <li>Dinerborden</li><li>Voorgerechtborden</li><li>Voorgerechtbestek</li><li>Bestek</li>
+                        <li>Waterglazen</li><li>Wijnglazen</li><li>Dessertcoupe</li><li>Katoenen servetten</li><li>Placemats</li><li>Tafelkleden (250 × 160 cm)</li>
                       </ul>
                     </div>
                   </div>
@@ -340,7 +339,7 @@
             <div id="scCustomBlock" style="display:none;">
               <span class="sc-sublabel" style="margin-top:0;">Kies je tafelitems</span>
               <p style="font-size:13px;color:var(--ink-soft);margin:0 0 12px;">
-                Vink de tafelitems en producten aan die je wilt toevoegen. Tafelitems worden per persoon berekend. Producten zoals tafellampen, zijdebloemen, verse bloemen en kaarten reken je apart per stuk.
+                Vink de tafelitems aan die je nodig hebt. Tafelitems worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Decoratie zoals tafellampen, zijdebloemen en kaarten voeg je hieronder per stuk toe bij de extra's.
               </p>
               <div class="sc-tafelitems-box">
                 <span class="sc-sublabel" style="margin-top:0;">Standaard tafelitems</span>
@@ -366,12 +365,12 @@
                     <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Wijnglazen</span><span class="sc-item-price">€3,00</span></span>
                   </label>
                   <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Champagneglazen" data-price="2.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Champagneglazen</span><span class="sc-item-price">€2,00</span></span>
+                    <input type="checkbox" class="sc-item-check" value="Champagneglazen" data-price="0.75">
+                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Champagneglazen</span><span class="sc-item-price">€0,75</span></span>
                   </label>
                   <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Dessert coupe" data-price="2.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dessert coupe</span><span class="sc-item-price">€2,00</span></span>
+                    <input type="checkbox" class="sc-item-check" value="Dessertcoupe" data-price="2.00">
+                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dessertcoupe</span><span class="sc-item-price">€2,00</span></span>
                   </label>
                   <label class="sc-item-tile">
                     <input type="checkbox" class="sc-item-check" value="Placemats" data-price="1.50">
@@ -382,8 +381,8 @@
                     <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Katoenen servetten</span><span class="sc-item-price">€2,00</span></span>
                   </label>
                   <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Servetringen" data-price="1.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Servetringen</span><span class="sc-item-price">€1,00</span></span>
+                    <input type="checkbox" class="sc-item-check" value="Servetringen" data-price="0.50">
+                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Servetringen</span><span class="sc-item-price">€0,50</span></span>
                   </label>
                 </div>
                 <span class="vat-note" style="margin-top:12px;">Incl. btw</span>
@@ -410,7 +409,7 @@
             </div>
             <div>
               <label class="sc-label" for="scDays">3. Aantal huurdagen</label>
-              <p style="font-size:13px;color:var(--ink-soft);margin:0 0 10px;">Standaard huurperiode: <strong>3 dagen</strong></p>
+              <p style="font-size:13px;color:var(--ink-soft);margin:0 0 10px;">Standaard huurperiode: <strong>3 dagen</strong>. Elke extra dag kost €35.</p>
               <label class="sc-item-tile">
                 <input type="checkbox" id="scLongerRentalCheck">
                 <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Ik wil langer dan 3 dagen huren</span></span>
@@ -424,8 +423,8 @@
             </div>
           </div>
 
-          <div class="sc-section">
-            <label class="sc-label">4. Extra's</label>
+          <div class="sc-section" role="group" aria-labelledby="scStep4Label">
+            <span class="sc-label" id="scStep4Label">4. Extra's</span>
 
             <span class="sc-sublabel" style="margin-top:0;">Bezorgen &amp; styling</span>
             <div class="sc-flat-items" role="group" aria-label="Bezorgen &amp; styling">
@@ -448,14 +447,14 @@
                 </label>
               </div>
             </div>
-            <p style="font-size:11px;color:var(--ink-faint);margin:6px 0 0;">Tafelstyling op locatie is inclusief bezorgen en ophalen.</p>
+            <p style="font-size:12px;color:var(--ink-faint);margin:6px 0 0;">Tafelstyling op locatie is inclusief bezorgen en ophalen. De kilometerprijs geldt voor alle vier de ritten: heen en terug om te bezorgen, en heen en terug om na afloop op te halen (4 × de enkele reis vanaf Wageningen).</p>
             <span class="vat-note">Incl. btw</span>
 
             <div class="sc-address-field" id="scAddressField">
               <input type="text" id="scDeliveryAddress" placeholder="Straat, huisnummer, postcode, plaats (bijv. Hoofdstraat 12, 6701AA Wageningen)">
               <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap;">
                 <button type="button" id="scCalcDistanceBtn" class="sc-btn-secondary">Bereken afstand</button>
-                <p class="sc-address-status" id="scAddressStatus" style="margin:0;"></p>
+                <p class="sc-address-status" id="scAddressStatus" role="status" style="margin:0;"></p>
               </div>
               <div class="sc-qty-field" id="scManualKmField">
                 <div style="width:100%;">
@@ -472,13 +471,15 @@
           </div>
 
           <div class="sc-summary">
-            <div class="sc-summary-line"><span id="scLinePackage">Moss &amp; Mist × 2 personen × 3 dagen</span><span id="scLinePackagePrice">€100,50</span></div>
+            <div class="sc-summary-line"><span id="scLinePackage">Moss &amp; Mist × 2 personen (3 dagen)</span><span id="scLinePackagePrice">€33,50</span></div>
+            <div class="sc-summary-line" id="scLineDays" style="display:none;"><span id="scLineDaysLabel"></span><span id="scLineDaysPrice"></span></div>
             <div id="scXtraSummaryLines"></div>
             <div class="sc-summary-line" id="scLineDelivery" style="display:none;"><span id="scLineDeliveryLabel">Bezorging</span><span id="scLineDeliveryPrice"></span></div>
-            <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€100,50</strong></div>
+            <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€33,50</strong></div>
             <p class="vat-note">Incl. btw</p>
             <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
             <p class="sc-summary-note sc-deposit-note" style="margin-top:8px;">Let op: naast dit bedrag rekenen we een <strong>borg van €150,00</strong>. Je krijgt deze borg volledig terug zodra alle gehuurde spullen in goede staat zijn geretourneerd.</p>
+            <p class="sc-summary-note" style="margin-top:8px;">Na de definitieve bevestiging betaal je een aanbetaling van 25%. Het restbedrag voldoe je uiterlijk 7 dagen voor de huurdatum. Pas na ontvangst van de aanbetaling is je reservering definitief.</p>
           </div>
 
           <div class="sc-section sc-row">
@@ -488,22 +489,31 @@
 
           <div class="sc-section sc-row">
             <div><label class="sc-label" for="scPhone">Telefoonnummer</label><input type="tel" id="scPhone" name="phone"></div>
-            <div><label class="sc-label" for="scDate">Gewenste datum</label><input type="date" id="scDate" name="date" required></div>
+            <div><label class="sc-label" for="scDate">Gewenste datum</label><input type="date" id="scDate" name="date" required aria-describedby="scDateHint"><p class="sc-hint" id="scDateHint" style="margin:8px 0 0;">Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p></div>
           </div>
 
           <div class="sc-section">
             <label class="sc-label" for="scNotes">Opmerkingen of maatwerkwensen</label>
-            <textarea id="scNotes" name="notes" placeholder="Bijv. specifieke kleurstijl, bijzondere gelegenheid..."></textarea>
+            <textarea id="scNotes" name="notes" placeholder="Bijv. afmetingen van je tafel(s), specifieke kleurstijl, bijzondere gelegenheid..."></textarea>
           </div>
 
           <input type="hidden" name="access_key" value="e6783a84-f79f-4dd4-9175-5f2933b2b387">
           <input type="hidden" name="subject" value="Studio Convivio: nieuwe reserveringsaanvraag">
           <input type="hidden" name="from_name" value="Studio Convivio website">
 
+          <input type="checkbox" name="botcheck" class="sc-botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;">
+
+          <div class="sc-section">
+            <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-soft);">
+              <input type="checkbox" id="scTermsCheck" name="akkoord_voorwaarden" value="Ja" required style="margin-top:3px;">
+              <span>Ik ga akkoord met de <a href="algemene-voorwaarden.html" target="_blank" rel="noopener">algemene voorwaarden</a> en heb de <a href="privacy-van-gegevens.html" target="_blank" rel="noopener">privacyverklaring</a> gelezen.</span>
+            </label>
+          </div>
+
           <div class="h-captcha" data-captcha="true"></div>
 
           <button type="submit" class="sc-submit" id="scSubmitBtn">Verstuur aanvraag</button>
-          <p class="sc-status" id="scStatus"></p>
+          <p class="sc-status" id="scStatus" role="status"></p>
         </form>
       </div>
 
@@ -528,7 +538,7 @@
       <p class="footer-blurb">Stijlvolle tafelaankleding voor bijzondere momenten: servies, glaswerk, linnen en decoratie, verhuurd en gestyled vanuit Wageningen.</p>
     </div>
     <div class="footer-col">
-      <h4>Navigatie</h4>
+      <h2>Navigatie</h2>
       <ul>
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html">Reserveren</a></li>
@@ -537,7 +547,7 @@
         <li><a href="contact.html">Contact</a></li>      </ul>
     </div>
     <div class="footer-col">
-      <h4>Gelegenheden</h4>
+      <h2>Gelegenheden</h2>
       <ul>
         <li><a href="21-diner.html">21-diner</a></li>
         <li><a href="verjaardagsjubileum.html">Verjaardagsjubileum</a></li>
@@ -546,7 +556,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Contact</h4>
+      <h2>Contact</h2>
       <ul>
         <li><a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></li>
         <li><a href="https://www.instagram.com/studio.convivio" rel="noopener">Instagram</a></li>
@@ -564,9 +574,9 @@
     </ul>
   </div>
 </footer>
-<script src="js/site.js?v=4"></script>
-<script src="js/extras-catalog.js?v=7"></script>
-<script src="js/extras-shop.js?v=3"></script>
+<script src="js/site.js?v=5"></script>
+<script src="js/extras-catalog.js?v=9"></script>
+<script src="js/extras-shop.js?v=5"></script>
 
 <script>
 (function () {
@@ -579,6 +589,9 @@
   var lineDeliveryPrice = document.getElementById('scLineDeliveryPrice');
   var summaryNote = document.getElementById('scSummaryNote');
   var totalPriceEl = document.getElementById('scTotalPrice');
+  var lineDays = document.getElementById('scLineDays');
+  var lineDaysLabel = document.getElementById('scLineDaysLabel');
+  var lineDaysPrice = document.getElementById('scLineDaysPrice');
 
   var guestsInput = document.getElementById('scGuests');
   var daysInput = document.getElementById('scDays');
@@ -639,6 +652,7 @@
   function getDeliveryMode() { var r = form.querySelector('input[name="deliveryMode"]:checked'); return r ? r : null; }
   function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
 
+  var EXTRA_DAY_PRICE = 35;
   var DELIVERY_ROUTE_FACTOR = 1.3;
   var ORIGIN_COORDS = { lat: 51.978175, lon: 5.674950 };
   var GEOCODE_RETRIES = 2;
@@ -792,6 +806,7 @@
       if (daysOverLimit) reasons.push('meer dan 7 huurdagen');
       linePackage.textContent = 'Aanvraag voor ' + reasons.join(' en ');
       linePackagePrice.textContent = '';
+      lineDays.style.display = 'none';
       xtraSummaryLinesEl.innerHTML = '';
       lineDelivery.style.display = 'none';
       totalPriceEl.textContent = 'Op aanvraag';
@@ -802,10 +817,10 @@
 
     var guests = Math.max(1, parseInt(guestsInput.value, 10) || 1);
     var days = longerRentalCheck.checked ? Math.max(4, parseInt(daysInput.value, 10) || 4) : 3;
-    // De p.p.-prijs dekt de hele standaard huurperiode van 3 dagen als één
-    // vast bedrag (dus geen 3x doorberekenen). Alleen dagen ná dag 3 tellen
-    // als extra dagprijs: dag 4 = +1x, dag 5 = +2x, enzovoort.
-    var dayFactor = days <= 3 ? 1 : 1 + (days - 3);
+    // De p.p.-prijs dekt de hele standaard huurperiode van 3 dagen. Elke dag
+    // daarna kost een vast bedrag per reservering, los van het aantal gasten.
+    var extraDays = Math.max(0, days - 3);
+    var extraDaysCost = extraDays * EXTRA_DAY_PRICE;
     var mode = getMode();
     var baseTableCost = 0;
     var labelName = '';
@@ -813,18 +828,23 @@
     if (mode === 'standard') {
       var pkg = getSelectedPackage();
       var pricePerPerson = pkg ? parseFloat(pkg.dataset.price) : 0;
-      baseTableCost = pricePerPerson * guests * dayFactor;
+      baseTableCost = pricePerPerson * guests;
       labelName = pkg ? pkg.value : '';
     } else {
       var checks = form.querySelectorAll('.sc-item-check:checked');
       var perPersonSum = 0;
       checks.forEach(function (el) { perPersonSum += parseFloat(el.dataset.price); });
-      baseTableCost = perPersonSum * guests * dayFactor;
+      baseTableCost = perPersonSum * guests;
       labelName = 'Maatwerkpakket (' + checks.length + ' tafel-items)';
     }
 
-    linePackage.textContent = labelName + ' × ' + guests + ' personen × ' + days + ' dag' + (days > 1 ? 'en' : '');
+    linePackage.textContent = labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)';
     linePackagePrice.textContent = fmt(baseTableCost);
+    if (extraDays > 0) {
+      lineDays.style.display = 'flex';
+      lineDaysLabel.textContent = 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')';
+      lineDaysPrice.textContent = fmt(extraDaysCost);
+    } else { lineDays.style.display = 'none'; }
 
     var xtraSummary = ScExtrasShop.summary();
     xtraSummaryLinesEl.innerHTML = xtraSummary.lines.map(function (line) {
@@ -836,15 +856,16 @@
     if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
       var base = parseFloat(dRadio.dataset.base);
       var perkm = parseFloat(dRadio.dataset.perkm);
+      // Vier ritten: heen en terug bij bezorgen, heen en terug bij ophalen.
       var totalDrivenKm = deliveryDistanceKm * 4;
       deliveryPrice = base + totalDrivenKm * perkm;
       lineDelivery.style.display = 'flex';
-      lineDeliveryLabel.textContent = dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorging';
+      lineDeliveryLabel.textContent = (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)';
       lineDeliveryPrice.textContent = fmt(deliveryPrice);
     } else { lineDelivery.style.display = 'none'; }
 
-    var total = baseTableCost + xtraSummary.subtotal + deliveryPrice;
-    totalPriceEl.textContent = fmt(total);
+    var total = baseTableCost + extraDaysCost + xtraSummary.subtotal + deliveryPrice;
+    totalPriceEl.textContent = (xtraSummary.hasFrom ? 'vanaf ' : '') + fmt(total);
     lastComputedTotal = total;
 
     summaryNote.textContent = (dRadio && dRadio.value !== 'geen')
@@ -866,10 +887,24 @@
     var statusEl = document.getElementById('scStatus');
     var btn = document.getElementById('scSubmitBtn');
 
+    if (getMode() === 'custom' && !form.querySelector('.sc-item-check:checked')) {
+      statusEl.textContent = 'Kies bij je maatwerkpakket minstens één tafelitem.';
+      statusEl.className = 'sc-status sc-err';
+      var firstItem = form.querySelector('.sc-item-check');
+      if (firstItem) firstItem.focus();
+      return;
+    }
+
     var dRadio = getDeliveryMode();
     if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null) {
       statusEl.textContent = 'Controleer het bezorgadres: klik op "Bereken afstand" of vul de afstand handmatig in.';
       statusEl.className = 'sc-status sc-err';
+      return;
+    }
+    if (!document.getElementById('scTermsCheck').checked) {
+      statusEl.textContent = 'Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.';
+      statusEl.className = 'sc-status sc-err';
+      document.getElementById('scTermsCheck').focus();
       return;
     }
     var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
@@ -922,17 +957,25 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data.success) {
-          statusEl.textContent = 'Bedankt! Je aanvraag is verstuurd. We nemen zo snel mogelijk contact met je op.';
+          statusEl.textContent = 'Bedankt! Je reserveringsaanvraag is verstuurd. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.';
           statusEl.className = 'sc-status sc-ok';
           form.reset();
+          // Alles terug naar de beginstand, inclusief het gedeelde mandje.
+          ScCart.clear();
+          xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
+          standardBlock.style.display = 'block'; customBlock.style.display = 'none';
+          daysWrap.classList.remove('sc-visible');
+          applyDeliveryModeVisibility('geen');
+          deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false;
+          addressStatus.textContent = '';
           recalc();
         } else {
-          statusEl.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct.';
+          statusEl.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.';
           statusEl.className = 'sc-status sc-err';
         }
       })
       .catch(function () {
-        statusEl.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct.';
+        statusEl.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.';
         statusEl.className = 'sc-status sc-err';
       })
       .finally(function () { btn.disabled = false; });

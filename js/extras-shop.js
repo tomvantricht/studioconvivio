@@ -21,8 +21,17 @@ window.ScExtrasShop = (function () {
   function isSoldOut(item) {
     return item.stock === 0;
   }
-  function isLowStock(item) {
-    return item.stock != null && item.stock > 0 && item.stock <= 5;
+  // Toont hoeveel stuks er maximaal per aanvraag te kiezen zijn. Dat is de
+  // totale voorraad, niet de beschikbaarheid op een specifieke datum; die
+  // bevestigen we pas na controle.
+  function stockLabel(item) {
+    return item.stock != null ? 'Max. ' + item.stock + ' per aanvraag' : '';
+  }
+  // Prijslabel zoals op de kaartjes: "€0,75/stuk", "vanaf €1,25/stuk" of
+  // de tekst uit `unit` wanneer er (nog) geen vaste prijs is.
+  function priceLabel(item) {
+    if (item.price === null) return item.unit;
+    return (item.priceFrom ? 'vanaf ' : '') + fmt(item.price) + '/' + item.unit;
   }
 
   // Bouwt de itemlijst (per categorie) als HTML-string, zonder foto's: een
@@ -35,21 +44,22 @@ window.ScExtrasShop = (function () {
       html += '<div class="sc-shop-category"><span class="sc-shop-category-label">' + group.category + '</span><div class="sc-shop-grid sc-shop-grid--flat">';
       group.items.forEach(function (item) {
         var soldOut = isSoldOut(item);
-        var priceLabel = soldOut ? 'Uitverkocht' : (item.price === null ? item.unit : fmt(item.price) + '/' + item.unit);
-        var stockNote = !soldOut && isLowStock(item) ? '<span class="sc-shop-stock">Nog ' + item.stock + ' beschikbaar</span>' : '';
+        var label = soldOut ? 'Uitverkocht' : priceLabel(item);
+        var stockNote = !soldOut && stockLabel(item) ? '<span class="sc-shop-stock">' + stockLabel(item) + '</span>' : '';
+        var max = effectiveMax(item);
         html += '' +
           '<div class="sc-shop-item' + (soldOut ? ' is-soldout' : '') + '" data-key="' + item.key + '">' +
             '<label class="sc-shop-card sc-shop-card--flat">' +
               '<input type="checkbox" class="sc-shop-check"' + (soldOut ? ' disabled' : '') + '>' +
               '<span class="sc-shop-body">' +
                 '<span class="sc-shop-name"><span class="sc-shop-check-icon"></span>' + item.name + '</span>' +
-                '<span class="sc-shop-price">' + priceLabel + stockNote + '</span>' +
+                '<span class="sc-shop-price">' + label + stockNote + '</span>' +
               '</span>' +
             '</label>' +
             (soldOut ? '' :
               '<div class="sc-qty-field sc-qty-field-flat sc-shop-qty">' +
-                '<input type="number" class="sc-shop-qty-input" min="1" max="' + effectiveMax(item) + '" value="1">' +
-                (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menu-, naam-, welkom- of bedankkaarten">' : '') +
+                '<input type="number" class="sc-shop-qty-input" min="1"' + (max != null ? ' max="' + max + '"' : '') + ' value="1">' +
+                (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="' + (item.typePlaceholder || '') + '">' : '') +
               '</div>') +
           '</div>';
       });
@@ -101,24 +111,27 @@ window.ScExtrasShop = (function () {
   }
 
   // Geeft de gekozen items terug als samenvattingsregels, plus het numerieke
-  // subtotaal (items "in overleg" tellen niet mee in het bedrag).
+  // subtotaal (items zonder vaste prijs tellen niet mee in het bedrag; bij
+  // "vanaf"-items telt de minimale prijs mee en is hasFrom true).
   function summary() {
     var cart = ScCart.read();
     var lines = [];
     var subtotal = 0;
+    var hasFrom = false;
     flatItems().forEach(function (item) {
       var entry = cart[item.key];
       if (!entry || entry.qty < 1) return;
       if (item.price === null) {
-        lines.push({ key: item.key, label: item.name + (entry.type ? ' (' + entry.type + ')' : '') + ' × ' + entry.qty, priceLabel: 'Prijs in overleg', overleg: true });
+        lines.push({ key: item.key, label: item.name + (entry.type ? ' (' + entry.type + ')' : '') + ' × ' + entry.qty, priceLabel: item.unit, overleg: true });
       } else {
         var linePrice = item.price * entry.qty;
         subtotal += linePrice;
-        lines.push({ key: item.key, label: item.name + ' × ' + entry.qty, priceLabel: fmt(linePrice), overleg: false });
+        if (item.priceFrom) hasFrom = true;
+        lines.push({ key: item.key, label: item.name + (entry.type ? ' (' + entry.type + ')' : '') + ' × ' + entry.qty, priceLabel: (item.priceFrom ? 'vanaf ' : '') + fmt(linePrice), overleg: false });
       }
     });
-    return { lines: lines, subtotal: subtotal };
+    return { lines: lines, subtotal: subtotal, hasFrom: hasFrom };
   }
 
-  return { fmt: fmt, flatItems: flatItems, renderCatalog: renderCatalog, wire: wire, summary: summary };
+  return { fmt: fmt, priceLabel: priceLabel, stockLabel: stockLabel, flatItems: flatItems, renderCatalog: renderCatalog, wire: wire, summary: summary };
 })();

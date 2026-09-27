@@ -38,7 +38,12 @@ window.ScCart = (function () {
   function getDeliveryMode() {
     try { return localStorage.getItem(DELIVERY_KEY); } catch (e) { return null; }
   }
-  return { read: read, setItem: setItem, getItem: getItem, count: count, setDeliveryMode: setDeliveryMode, getDeliveryMode: getDeliveryMode };
+  // Na een verstuurde aanvraag: mandje en bezorgkeuze leeg, zodat oude
+  // extra's niet ongemerkt in een volgende aanvraag terugkomen.
+  function clear() {
+    try { localStorage.removeItem(KEY); localStorage.removeItem(DELIVERY_KEY); } catch (e) {}
+  }
+  return { read: read, setItem: setItem, getItem: getItem, count: count, clear: clear, setDeliveryMode: setDeliveryMode, getDeliveryMode: getDeliveryMode };
 })();
 
 (function () {

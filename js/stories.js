@@ -119,6 +119,19 @@
   });
   document.addEventListener('keydown', function (e) {
     if (overlay.hidden) return;
+    // Houd Tab binnen het venster, zodat toetsenbordgebruikers niet in de
+    // (onzichtbare) pagina erachter belanden.
+    if (e.key === 'Tab') {
+      var focusables = Array.prototype.filter.call(
+        overlay.querySelectorAll('button, a[href]'),
+        function (el) { return !el.disabled && el.offsetParent !== null; }
+      );
+      if (!focusables.length) return;
+      var first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!overlay.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    }
     if (e.key === 'Escape') close();
     if (e.key === 'ArrowRight') next();
     if (e.key === 'ArrowLeft') prev();

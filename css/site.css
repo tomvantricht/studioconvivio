@@ -242,7 +242,7 @@ textarea:focus-visible,
 .story-row { padding: 20px 0 4px; }
 .story-row-scroll {
   display: flex; gap: 18px; overflow-x: auto;
-  padding: 2px var(--edge) 6px; margin: 0 calc(var(--edge) * -1);
+  padding: 2px var(--edge) 6px; margin: 0;
   scrollbar-width: none;
 }
 .story-row-scroll::-webkit-scrollbar { display: none; }
@@ -263,6 +263,22 @@ textarea:focus-visible,
 .story-avatar:hover .story-label { color: var(--ink); }
 .story-avatar:focus-visible { outline: none; }
 .story-avatar:focus-visible .story-ring { outline: 2px solid var(--moss-dark); outline-offset: 3px; border-radius: 50%; }
+/* Laptop/desktop: gecentreerde rij met iets grotere cirkels; mobiel blijft ongewijzigd. */
+@media (min-width: 768px) {
+  .story-row { padding: 32px 0 20px; }
+  .story-row-scroll { gap: 36px; }
+  /* auto-marges centreren de rij, maar laten scrollen van links beginnen als hij niet past */
+  .story-avatar:first-child { margin-left: auto; }
+  .story-avatar:last-child { margin-right: auto; }
+  .story-avatar { width: 96px; gap: 10px; }
+  .story-ring { width: 84px; height: 84px; transition: transform .25s ease; }
+  .story-avatar:hover .story-ring { transform: scale(1.05); }
+  .story-label { font-size: 12.5px; }
+}
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  .story-ring { transition: none; }
+  .story-avatar:hover .story-ring { transform: none; }
+}
 
 .story-overlay {
   position: fixed; inset: 0; z-index: 200;
@@ -399,9 +415,9 @@ body.gallery-open { overflow: hidden; }
   display: block;
   font-family: var(--sans);
   font-style: normal;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--moss-dark);
 }
@@ -411,14 +427,21 @@ body.gallery-open { overflow: hidden; }
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 34px;
-  height: 34px;
+  /* 44px klikvlak (duimvriendelijk); de streepjes blijven 34px breed. */
+  width: 44px;
+  height: 44px;
+  margin-right: -5px;
   border: none;
   background: none;
   cursor: pointer;
-  padding: 0;
+  padding: 0 5px;
 }
 .nav-toggle span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: transform 0.2s ease, opacity 0.2s ease; }
+/* Open menu: de drie streepjes worden een kruisje. */
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+@media (prefers-reduced-motion: reduce) { .nav-toggle span { transition: none; } }
 
 .site-nav ul {
   list-style: none;
@@ -723,7 +746,11 @@ body.gallery-open { overflow: hidden; }
 .occasion-card-body h3 {
   display: flex; align-items: center; gap: 8px;
   font-size: 16px; color: var(--paper); margin-bottom: 4px;
+  /* Lange woorden als "Verjaardagsjubileum" mogen afbreken i.p.v. de kaart
+     (en op mobiel de hele pagina) breder te duwen. */
+  -webkit-hyphens: auto; hyphens: auto; overflow-wrap: anywhere;
 }
+@media (max-width: 420px) { .occasion-card-body { padding: 16px 12px; } .occasion-card-body h3 { font-size: 15px; } }
 /* De kaarten zijn links; dit pijltje maakt dat zichtbaar zonder een knop
    of badge aan het ontwerp toe te voegen. */
 .occasion-card-body h3::after {
@@ -820,9 +847,11 @@ body.gallery-open { overflow: hidden; }
 @media (max-width: 560px) { .footer-main { grid-template-columns: 1fr; gap: 34px; } }
 .footer-main .brand small { color: var(--gold); }
 .footer-blurb { margin-top: 16px; font-size: 14px; color: rgba(248,246,239,0.65); max-width: 34ch; }
-.footer-col h4 { font-family: var(--sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 16px; }
-.footer-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.footer-col a { text-decoration: none; font-size: 14px; color: rgba(248,246,239,0.82); }
+.footer-col h2 { font-family: var(--sans); font-size: 11px; font-weight: 700; line-height: 1.4; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 12px; }
+.footer-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+/* Ruimer klikvlak (±31px hoog) zonder dat de lijst er anders uitziet. */
+.footer-col a { display: inline-block; padding: 5px 0; text-decoration: none; font-size: 14px; color: rgba(248,246,239,0.82); }
+.footer-bottom a { display: inline-block; padding: 4px 0; }
 .footer-col a:hover { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
 .footer-bottom {
   border-top: 1px solid rgba(248,246,239,0.14);
@@ -892,6 +921,10 @@ body.gallery-open { overflow: hidden; }
   color: var(--moss-dark);
 }
 .doc-table tbody th { font-weight: 700; color: var(--ink); width: 34%; }
+@media (max-width: 560px) {
+  .doc-table { font-size: 14px; }
+  .doc-table th, .doc-table td { padding-right: 10px; -webkit-hyphens: auto; hyphens: auto; overflow-wrap: anywhere; }
+}
 
 /* Nog in te vullen gegevens. Bewust opvallend, zodat een vergeten veld niet
    ongemerkt op een juridische pagina blijft staan. */
