@@ -394,18 +394,27 @@ body.gallery-open { overflow: hidden; }
 /* Header / navigatie                                                     */
 /* ---------------------------------------------------------------------- */
 .site-header {
-  border-top: 3px solid var(--ink);
   border-bottom: 1px solid var(--line);
   background: var(--paper);
 }
+/* Desktop: slogan links, logo in het midden, reserveerknop rechts. De
+   navigatie staat daaronder op een eigen, gecentreerde regel. */
 .site-header-inner {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 18px var(--edge);
-  display: flex;
+  padding: 22px var(--edge);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
+}
+.header-tagline {
+  justify-self: start;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--mocha-dark);
 }
 .brand {
   display: inline-flex;
@@ -420,10 +429,10 @@ body.gallery-open { overflow: hidden; }
   width: auto;
   display: block;
 }
-.site-header .logo-img { height: 54px; }
-@media (min-width: 700px) {
-  .site-header .logo-img { height: 64px; }
-}
+.site-header .brand { justify-self: center; }
+.site-header .logo-img { height: 68px; }
+/* In de header staat de slogan los links; alleen mobiel komt hij naast het logo. */
+.site-header .brand small { display: none; }
 /* Het logobestand is wit op transparant (gemaakt voor een donkere ondergrond).
    Op de lichte header keren we de kleur simpelweg om, zodat het exacte
    logo-ontwerp intact blijft maar wel leesbaar is op een lichte achtergrond. */
@@ -432,12 +441,28 @@ body.gallery-open { overflow: hidden; }
   display: block;
   font-family: var(--sans);
   font-style: normal;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--moss-dark);
 }
+.header-cta {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 13px 28px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.header-cta:hover, .header-cta[aria-current="page"] { background: var(--ink); color: var(--paper); }
 
 .nav-toggle {
   display: none;
@@ -460,21 +485,25 @@ body.gallery-open { overflow: hidden; }
 .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 @media (prefers-reduced-motion: reduce) { .nav-toggle span { transition: none; } }
 
+.site-nav { border-top: 1px solid var(--line-soft); }
 .site-nav ul {
   list-style: none;
   display: flex;
-  gap: 30px;
+  justify-content: center;
+  gap: clamp(28px, 4vw, 56px);
   margin: 0;
-  padding: 0;
+  padding: 16px var(--edge);
 }
+/* Reserveren staat op desktop als knop in de bovenste regel. */
+.site-nav .nav-item-reserve { display: none; }
 .site-nav a {
   position: relative;
   text-decoration: none;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink);
   padding-bottom: 4px;
 }
 .site-nav a::after {
@@ -485,10 +514,26 @@ body.gallery-open { overflow: hidden; }
   background: var(--mocha-dark);
   transition: left 0.2s ease, right 0.2s ease;
 }
-.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--ink); }
+.site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--mocha-dark); }
 .site-nav a:hover::after, .site-nav a[aria-current="page"]::after { left: 0; right: 0; }
 
-@media (max-width: 760px) {
+@media (max-width: 860px) {
+  /* Mobiel: logo met slogan ernaast, hamburger rechts. */
+  .site-header-inner { display: flex; justify-content: space-between; padding: 14px var(--edge); }
+  .header-tagline, .header-cta { display: none; }
+  .site-header .brand { flex-direction: row; align-items: center; gap: 14px; }
+  .site-header .logo-img { height: 46px; }
+  .site-header .brand small {
+    display: block;
+    padding-left: 14px;
+    border-left: 1px solid var(--line);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.16em;
+    white-space: normal;
+    max-width: 11em;
+    color: var(--ink-soft);
+  }
   .nav-toggle { display: flex; }
   .site-nav {
     position: fixed;
@@ -504,8 +549,9 @@ body.gallery-open { overflow: hidden; }
     border-top: 1px solid var(--line);
   }
   .site-nav.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
-  .site-nav ul { flex-direction: column; gap: 22px; }
-  .site-nav a { font-size: 17px; }
+  .site-nav ul { flex-direction: column; gap: 22px; padding: 0; }
+  .site-nav .nav-item-reserve { display: list-item; }
+  .site-nav a { font-size: 15px; letter-spacing: 0.14em; }
   body.nav-open { overflow: hidden; }
 }
 

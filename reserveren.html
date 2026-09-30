@@ -22,222 +22,274 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
 <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/site.css?v=3">
+<link rel="stylesheet" href="css/site.css?v=4">
 
 <style>
-  .sc-form-wrap {
-    --sc-ink: var(--ink);
-    --sc-cream: var(--paper);
-    --sc-moss: var(--moss);
-    --sc-moss-dark: var(--moss-dark);
-    --sc-mocha: var(--mocha);
-    --sc-line: var(--line);
-    --sc-radius-lg: 6px;
-    --sc-radius-md: 4px;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    max-width: 720px;
-    margin: 0 auto;
-    color: var(--sc-ink);
+  /* ==================================================================
+     Reserveringswizard: vier stappen in één kaart. Alle velden staan in
+     één <form>; de stappen tonen en verbergen alleen delen ervan, zodat
+     het versturen precies hetzelfde werkt als het oude lange formulier.
+     ================================================================== */
+  .rsv-main { background: var(--paper-alt); padding: clamp(28px, 5vw, 72px) 0 clamp(56px, 8vw, 110px); }
+  .rsv-layout {
+    max-width: var(--maxw); margin: 0 auto; padding: 0 var(--edge);
+    display: grid; gap: 28px; align-items: start;
   }
-  .sc-form-wrap * { box-sizing: border-box; }
-
-  .sc-section { margin-bottom: 26px; }
-  .sc-section .sc-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--mocha-dark);
-    margin-bottom: 10px;
+  @media (min-width: 960px) {
+    .rsv-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 560px); gap: clamp(48px, 7vw, 110px); }
+    .rsv-intro { position: sticky; top: 40px; padding-top: 24px; }
   }
-  /* De echte keuzerondjes/vinkjes zijn onzichtbaar; toon de toetsenbordfocus
-     daarom op de zichtbare kaart ernaast. */
-  .sc-form-wrap input:focus-visible + .sc-mode-card,
-  .sc-form-wrap input:focus-visible + .sc-package-card,
-  .sc-form-wrap input:focus-visible + .sc-item-tile-card,
-  .sc-shop-card:has(input:focus-visible) {
-    outline: 2px solid var(--mocha-dark); outline-offset: 2px;
-  }
-  /* Keuzerondjes (één keuze) rond tonen, vinkjes (meerdere) vierkant. */
-  .sc-item-tile input[type="radio"] + .sc-item-tile-card .sc-item-check-icon { border-radius: 50%; }
-  .sc-hint { font-size: 13px; color: var(--ink-soft); margin: -4px 0 14px; }
-  .sc-hint a { color: var(--sc-moss-dark); }
-  .sc-shop-category + .sc-shop-category { margin-top: 22px; }
-  .sc-shop-category-label { display: block; font-size: 12px; font-weight: 600; color: var(--sc-ink); margin-bottom: 10px; }
-  .sc-sublabel {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--mocha-dark);
-    margin: 20px 0 10px;
+  .rsv-intro h1 { font-size: clamp(32px, 4.2vw, 54px); font-weight: 400; letter-spacing: -0.02em; text-wrap: balance; }
+  .rsv-intro h1 em { font-weight: 400; }
+  .rsv-intro .lede { margin-top: 18px; color: var(--ink-soft); max-width: 40ch; }
+  .rsv-promises { list-style: none; margin: 34px 0 0; padding: 0; border-top: 1px solid var(--line); max-width: 420px; }
+  .rsv-promises li { display: grid; grid-template-columns: 2.4em 1fr; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
+  .rsv-promises b { font-family: var(--serif); font-weight: 400; font-size: 17px; color: var(--mocha-dark); }
+  @media (max-width: 959px) {
+    .rsv-intro .lede { font-size: 15px; }
+    .rsv-promises { display: none; }
   }
 
-  .sc-mode-toggle { display: flex; gap: 10px; margin-bottom: 18px; }
-  .sc-mode-toggle label { flex: 1; position: relative; }
-  .sc-mode-toggle input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-  .sc-mode-toggle .sc-mode-card {
-    text-align: center; padding: 12px; border: 1px solid var(--sc-line);
-    border-radius: var(--sc-radius-md); font-size: 13px; background: #fff;
+  /* ---- De kaart ---- */
+  .rsv-card {
+    background: var(--paper); border-radius: 22px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(43,44,36,0.06), 0 18px 40px -18px rgba(43,44,36,0.28);
+    font-family: var(--sans); color: var(--ink);
   }
-  .sc-mode-toggle input:checked + .sc-mode-card {
-    border-color: var(--sc-moss-dark); background: var(--sc-moss-dark); color: #fff;
+  .rsv-card * { box-sizing: border-box; }
+  .rsv-hero { position: relative; aspect-ratio: 5 / 2; background: var(--paper-deep); overflow: hidden; }
+  .rsv-hero img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.35s ease; }
+  .rsv-hero img.is-swapping { opacity: 0.25; }
+  .rsv-price-pill {
+    position: absolute; right: 14px; bottom: 14px;
+    background: var(--paper); color: var(--ink); border-radius: 999px;
+    padding: 8px 16px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+    box-shadow: 0 4px 14px -4px rgba(43,44,36,0.35);
   }
+  .rsv-body { padding: 22px clamp(18px, 4vw, 30px) clamp(22px, 4vw, 30px); }
+  .rsv-body[hidden] { display: none; }
 
-  .sc-package-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  @media (max-width: 620px) { .sc-package-options { grid-template-columns: 1fr; } }
-  .sc-package-option { position: relative; }
+  .rsv-progress { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .rsv-progress p { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+  .rsv-bars { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; margin: 0; padding: 0; }
+  .rsv-bars li { height: 3px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden; }
+  .rsv-bars li::after { content: ""; position: absolute; inset: 0; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+  .rsv-bars li.is-done::after { transform: scaleX(1); }
+
+  .rsv-step[hidden] { display: none; }
+  .rsv-step.is-entering { animation: rsvIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes rsvIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .rsv-title { font-family: var(--serif); font-weight: 400; font-size: clamp(25px, 3.4vw, 30px); line-height: 1.18; letter-spacing: -0.01em; margin: 0 0 22px; text-wrap: balance; }
+  .rsv-title:focus { outline: none; }
+  .rsv-muted { font-size: 13px; color: var(--ink-soft); }
+  .rsv-muted a, .rsv-textlink { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .rsv-textlink { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; cursor: pointer; }
+  .rsv-textlink:hover, .rsv-muted a:hover { color: var(--mocha-dark); }
+  .rsv-vat { display: block; margin-top: 14px; font-size: 12px; color: var(--ink-faint); }
+  .rsv-visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
+
+  /* ---- Stap 1: collecties ---- */
+  .sc-package-options { display: grid; gap: 14px; }
+  .sc-package-option { position: relative; display: block; cursor: pointer; }
   .sc-package-option input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
   .sc-package-card {
-    border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg);
-    background: var(--sc-cream); text-align: left; overflow: hidden;
-    transition: border-color 0.15s ease, background 0.15s ease; height: 100%;
+    border: 1px solid var(--line); background: #fffdf8; overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
-  .sc-package-photo { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
-  .sc-package-body { padding: 16px 14px; }
-  .sc-package-card strong { display: block; font-family: var(--serif); font-size: 18px; margin-bottom: 2px; text-align: center; }
-  .sc-package-body > span.sc-price-tag { display: block; font-size: 13px; color: var(--ink-soft); text-align: center; margin-bottom: 10px; }
-  .sc-package-option input:checked + .sc-package-card { border-color: var(--sc-moss); background: #eef1e9; }
-  .sc-included-list { list-style: none; margin: 0; padding: 0; font-size: 12px; color: #5c5c54; }
-  .sc-included-list li { padding: 2px 0; display: flex; gap: 6px; align-items: baseline; }
-  .sc-included-list li::before { content: "\2013"; color: var(--sc-moss); flex-shrink: 0; }
+  .sc-package-option:hover .sc-package-card { border-color: var(--ink-faint); }
+  .sc-package-option input:checked + .sc-package-card { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .sc-package-option input:focus-visible + .sc-package-card { outline: 2px solid var(--mocha-dark); outline-offset: 3px; }
+  .sc-package-photo { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; }
+  .sc-package-body { padding: 14px 16px 16px; }
+  .sc-package-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .sc-package-head strong { font-family: var(--serif); font-weight: 400; font-size: 20px; }
+  .sc-package-head span { font-size: 13px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .sc-package-body p { font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+  .rsv-alt { margin-top: 18px; font-size: 13.5px; }
 
-  .sc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 520px) { .sc-row { grid-template-columns: 1fr; } }
-
-  .sc-form-wrap input[type="text"], .sc-form-wrap input[type="email"], .sc-form-wrap input[type="tel"],
-  .sc-form-wrap input[type="number"], .sc-form-wrap input[type="date"], .sc-form-wrap select, .sc-form-wrap textarea {
-    width: 100%; font-family: inherit; font-size: 14px; padding: 11px 12px;
-    border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); background: #fff; color: var(--sc-ink);
-  }
-  .sc-form-wrap select { cursor: pointer; }
-  .sc-form-wrap textarea { resize: vertical; min-height: 80px; }
-
-  .sc-tafelitems-box { border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg); background: #fff; padding: 16px; }
-  #scFlatExtrasTemplate { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--sc-line); }
-  .sc-flat-items { display: flex; flex-direction: column; gap: 8px; }
-  .sc-flat-item-row { display: flex; align-items: center; gap: 8px; }
-  .sc-flat-item-row .sc-item-tile { flex: 1 1 50%; min-width: 0; }
-  @media (max-width: 480px) { .sc-flat-item-row { flex-direction: column; align-items: stretch; } }
-  .sc-qty-field.sc-qty-field-flat { margin: 0; flex: 1 1 50%; min-width: 0; }
-
+  /* Maatwerk: tafelitems per stuk aanvinken */
   .sc-item-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  @media (max-width: 480px) { .sc-item-tiles { grid-template-columns: 1fr; } }
-  .sc-item-tile { position: relative; }
+  @media (max-width: 440px) { .sc-item-tiles { grid-template-columns: 1fr; } }
+  .sc-item-tile { position: relative; display: block; }
   .sc-item-tile input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
   .sc-item-tile-card {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); padding: 10px 12px;
-    background: #fff; font-size: 13px; transition: border-color 0.15s ease, background 0.15s ease;
+    border: 1px solid var(--line); padding: 11px 12px; background: #fffdf8; font-size: 13px;
+    transition: border-color 0.15s ease;
   }
-  .sc-item-tile:hover .sc-item-tile-card { background: #faf9f5; }
-  .sc-item-tile input:checked + .sc-item-tile-card { border-color: var(--sc-moss); background: #eef1e9; }
-  .sc-item-name { display: flex; align-items: center; gap: 8px; }
-  .sc-item-check-icon {
-    width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--sc-line);
-    background: #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 10px; line-height: 1; color: #fff;
+  .sc-item-tile:hover .sc-item-tile-card { border-color: var(--ink-faint); }
+  .sc-item-tile input:checked + .sc-item-tile-card { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .sc-item-tile input:focus-visible + .sc-item-tile-card { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  .sc-item-name { display: flex; align-items: center; gap: 9px; }
+  .sc-item-check-icon, .sc-shop-check-icon {
+    width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--ink-faint); background: #fff;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
   }
-  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon { background: var(--sc-moss); border-color: var(--sc-moss); }
-  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon::after { content: "\2713"; }
-  .sc-item-price { color: var(--ink-soft); font-size: 12px; white-space: nowrap; }
+  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon,
+  .sc-shop-card input:checked ~ .sc-shop-body .sc-shop-check-icon { background: var(--ink); border-color: var(--ink); }
+  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon::after,
+  .sc-shop-card input:checked ~ .sc-shop-body .sc-shop-check-icon::after {
+    content: ""; width: 8px; height: 4px; border: solid var(--paper); border-width: 0 0 1.5px 1.5px; transform: translateY(-1px) rotate(-45deg);
+  }
+  .sc-item-price { color: var(--ink-soft); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-  /* ---- Extra tafelitems als "shop"-kaartjes met foto i.p.v. vinklijst ---- */
-  .sc-shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  @media (min-width: 480px) { .sc-shop-grid { grid-template-columns: repeat(3, 1fr); } }
+  /* ---- Stap 2: aantallen ---- */
+  .rsv-panel { border: 1px solid var(--line); background: #fffdf8; padding: 18px; }
+  .rsv-panel + .rsv-panel { margin-top: 14px; }
+  .rsv-panel-label { display: block; font-size: 14px; font-weight: 700; }
+  .rsv-panel .rsv-muted { font-size: 12.5px; margin-top: 3px; }
+  .rsv-stepper { display: flex; align-items: center; gap: 18px; margin-top: 16px; }
+  .rsv-stepper button {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink);
+    display: grid; place-items: center; cursor: pointer; transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  }
+  .rsv-stepper button:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .rsv-stepper button:disabled { opacity: 0.3; cursor: default; }
+  .rsv-stepper svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+  .rsv-stepper output { min-width: 2.6ch; text-align: center; font-family: var(--serif); font-size: 26px; font-variant-numeric: lining-nums tabular-nums; }
+  .rsv-after { margin-top: 14px; }
+
+  /* Extra's (uitklapbaar) */
+  .rsv-extras { margin-top: 14px; border: 1px solid var(--line); background: #fffdf8; }
+  .rsv-extras summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; }
+  .rsv-extras summary::-webkit-details-marker { display: none; }
+  .rsv-extras summary strong { font-size: 14px; }
+  .rsv-extras summary .rsv-muted { font-size: 12.5px; margin-top: 2px; }
+  .rsv-extras-count { font-size: 12px; font-weight: 700; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .rsv-extras-count[hidden] { display: none; }
+  .rsv-chevron { width: 12px; height: 12px; flex-shrink: 0; stroke: var(--ink); stroke-width: 1.6; fill: none; transition: transform 0.25s ease; }
+  .rsv-extras[open] .rsv-chevron { transform: rotate(180deg); }
+  .rsv-extras-body { padding: 4px 18px 18px; border-top: 1px solid var(--line-soft); }
+  .rsv-extras-body > .rsv-muted { margin: 14px 0 16px; }
+  .sc-shop-category + .sc-shop-category { margin-top: 20px; }
+  .sc-shop-category-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mocha-dark); margin-bottom: 10px; }
+  .sc-shop-grid--flat { display: grid; grid-template-columns: 1fr; gap: 8px; }
   .sc-shop-item { display: flex; flex-direction: column; }
-  .sc-shop-card {
-    position: relative; display: block; cursor: pointer;
-    border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg);
-    overflow: hidden; background: #fff;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .sc-shop-card:has(input:checked) { border-color: var(--sc-moss); box-shadow: inset 0 0 0 2px rgba(107,122,94,0.2); }
-  .sc-shop-card input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
-  .sc-shop-photo {
-    display: block; aspect-ratio: 1 / 1; position: relative;
-    background: linear-gradient(155deg, #eee7d8, #e3ded2);
-  }
-  .sc-shop-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .sc-shop-ph-icon {
-    position: absolute; inset: 0; margin: auto; width: 32%; height: 32%;
-    fill: none; stroke: var(--sc-mocha); stroke-width: 2.4;
-    stroke-linejoin: round; stroke-linecap: round; opacity: 0.55;
-  }
-  .sc-shop-ph-label {
-    position: absolute; left: 0; right: 0; bottom: 8px; text-align: center;
-    font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint);
-  }
-  .sc-shop-badge {
-    position: absolute; top: 6px; right: 6px; width: 22px; height: 22px;
-    border-radius: 50%; background: #fff; border: 1px solid var(--sc-line);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: transparent; transition: all 0.15s ease;
-  }
-  .sc-shop-card input:checked ~ .sc-shop-photo .sc-shop-badge { background: var(--sc-moss); border-color: var(--sc-moss); color: #fff; }
-  .sc-shop-body { display: block; padding: 8px 10px 10px; }
-  .sc-shop-name { display: block; font-size: 12.5px; color: var(--sc-ink); line-height: 1.3; }
-  .sc-shop-price { display: block; font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
-  .sc-shop-qty { margin: 6px 0 0 0 !important; }
-
-  /* Variant zonder foto: compacte vinklijst voor op reserveren.html. */
-  .sc-shop-grid--flat { grid-template-columns: 1fr 1fr; gap: 8px; }
-  @media (max-width: 480px) { .sc-shop-grid--flat { grid-template-columns: 1fr; } }
   .sc-shop-card--flat {
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    padding: 10px 12px; overflow: visible;
+    position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--paper); padding: 11px 12px; transition: border-color 0.15s ease;
   }
-  .sc-shop-card--flat .sc-shop-body { display: flex; align-items: baseline; gap: 8px; padding: 0; }
-  .sc-shop-card--flat .sc-shop-name { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-  .sc-shop-card--flat .sc-shop-price { font-size: 12px; margin-top: 0; white-space: nowrap; }
-  .sc-shop-check-icon {
-    width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--sc-line);
-    background: #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 10px; line-height: 1; color: #fff;
-  }
-  .sc-shop-card--flat input:checked ~ .sc-shop-body .sc-shop-check-icon { background: var(--sc-moss); border-color: var(--sc-moss); }
-  .sc-shop-card--flat input:checked ~ .sc-shop-body .sc-shop-check-icon::after { content: "\2713"; }
-  .sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); margin-top: 1px; }
+  .sc-shop-card--flat:hover { border-color: var(--ink-faint); }
+  .sc-shop-card--flat:has(input:checked) { border-color: var(--ink); }
+  .sc-shop-card--flat:has(input:focus-visible) { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  .sc-shop-card input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+  .sc-shop-card--flat .sc-shop-body { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; width: 100%; }
+  .sc-shop-card--flat .sc-shop-name { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+  .sc-shop-card--flat .sc-shop-price { font-size: 12px; color: var(--ink-soft); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+  .sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); }
   .sc-shop-item.is-soldout .sc-shop-card--flat { opacity: 0.5; cursor: default; }
   .sc-shop-item.is-soldout .sc-shop-price { font-style: italic; }
-
-  .sc-qty-field { margin: 4px 0 10px 28px; display: none; }
-  .sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sc-qty-field { display: none; }
+  .sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px 25px; }
   .sc-qty-field input[type="number"] { max-width: 90px; }
   .sc-qty-field input[type="text"] { flex: 1; min-width: 160px; }
 
-  .sc-address-field { margin-top: 8px; margin-left: 28px; display: none; }
+  /* ---- Stap 3: bezorging ---- */
+  .rsv-choices { display: grid; gap: 10px; }
+  .rsv-choice { position: relative; display: grid; grid-template-columns: 20px 1fr auto; gap: 4px 14px; align-items: start; padding: 16px; border: 1px solid var(--line); background: #fffdf8; cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+  .rsv-choice:hover { border-color: var(--ink-faint); }
+  .rsv-choice:has(input:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .rsv-choice input {
+    appearance: none; -webkit-appearance: none; margin: 1px 0 0; width: 20px; height: 20px; border-radius: 50%;
+    border: 1px solid var(--ink-faint); background: #fff; display: grid; place-items: center; cursor: pointer;
+  }
+  .rsv-choice input::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); transform: scale(0); transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1); }
+  .rsv-choice input:checked { border-color: var(--ink); }
+  .rsv-choice input:checked::before { transform: scale(1); }
+  .rsv-choice-title { font-size: 14.5px; font-weight: 700; line-height: 1.35; }
+  .rsv-choice-price { font-size: 13px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .rsv-choice-desc { grid-column: 2 / -1; font-size: 12.5px; color: var(--ink-soft); }
+  .rsv-choice-note { margin-top: 10px; font-size: 12px; color: var(--ink-faint); }
+
+  .sc-address-field { display: none; margin-top: 14px; background: var(--paper-alt); padding: 18px; }
   .sc-address-field.sc-visible { display: block; }
-  .sc-address-status { font-size: 12px; color: var(--ink-faint); margin-top: 6px; min-height: 16px; }
-  .sc-address-status.sc-ok { color: var(--sc-moss-dark); }
+  .rsv-address-head { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+  .rsv-address-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; margin-top: 12px; }
+  @media (max-width: 330px) { .rsv-address-grid { grid-template-columns: 1fr; } }
+  .rsv-estimate { margin-top: 16px; background: var(--paper); padding: 14px 16px; }
+  .rsv-estimate-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 2px 0; }
+  .rsv-estimate-row b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .rsv-estimate-note { margin-top: 8px; font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
+  .sc-address-status { font-size: 12px; color: var(--ink-soft); margin-top: 8px; min-height: 16px; }
+  .sc-address-status.sc-ok { color: var(--moss-dark); }
   .sc-address-status.sc-err { color: #a3402f; }
+  .rsv-estimate-actions { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-top: 10px; }
+  .rsv-estimate-actions .rsv-textlink { font-size: 12.5px; white-space: nowrap; }
+  .rsv-estimate-actions .rsv-textlink:disabled { opacity: 0.5; cursor: default; }
+  #scManualKmField { margin: 12px 0 0; }
+  #scManualKmField.sc-visible { display: block; }
+  #scManualKmField label { font-size: 12px; color: var(--ink-soft); display: block; margin-bottom: 6px; }
+  #scManualKmField input { max-width: 140px; }
 
-  .sc-btn-secondary {
-    font-family: inherit; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase;
-    padding: 9px 14px; border-radius: var(--sc-radius-md); border: 1px solid var(--sc-moss-dark);
-    background: #fff; color: var(--sc-moss-dark); cursor: pointer;
+  /* ---- Velden (stap 3 en 4) ---- */
+  .rsv-field { display: block; }
+  .rsv-field + .rsv-field { margin-top: 16px; }
+  .rsv-address-grid .rsv-field + .rsv-field { margin-top: 0; }
+  .rsv-field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+  .rsv-field label .rsv-opt { font-weight: 400; color: var(--ink-faint); }
+  .rsv-card input[type="text"], .rsv-card input[type="email"], .rsv-card input[type="tel"],
+  .rsv-card input[type="number"], .rsv-card input[type="date"], .rsv-card textarea {
+    width: 100%; font-family: inherit; font-size: 15px; color: var(--ink);
+    padding: 12px 13px; border: 1px solid var(--line); border-radius: 0; background: #fff;
+    transition: border-color 0.15s ease;
   }
-  .sc-btn-secondary:disabled { opacity: 0.6; cursor: default; }
+  .rsv-card input:hover, .rsv-card textarea:hover { border-color: var(--ink-faint); }
+  .rsv-card input:focus-visible, .rsv-card textarea:focus-visible { border-color: var(--ink); outline: 2px solid var(--mocha-dark); outline-offset: 1px; }
+  .rsv-card input::placeholder, .rsv-card textarea::placeholder { color: #85867a; }
+  .rsv-card textarea { resize: vertical; min-height: 96px; }
+  .sc-hint { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+  .sc-hint a { color: var(--ink); }
 
-  .sc-summary { background: var(--sc-cream); border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg); padding: 18px 20px; margin-bottom: 26px; }
-  .sc-summary-line { display: flex; justify-content: space-between; font-size: 13px; color: #5c5c54; padding: 4px 0; }
-  .sc-summary-total { display: flex; justify-content: space-between; font-size: 19px; font-family: var(--serif); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--sc-line); }
-  .sc-summary-total strong { color: var(--sc-moss-dark); }
-  .sc-summary-note { font-size: 12px; color: var(--ink-faint); margin-top: 10px; font-style: italic; }
+  /* ---- Samenvatting (stap 4) ---- */
+  .sc-summary { margin: 26px 0 20px; border-top: 1px solid var(--ink); padding-top: 16px; }
+  .rsv-summary-head { font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
+  .sc-summary-line { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; color: var(--ink-soft); padding: 4px 0; }
+  .sc-summary-line span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .sc-summary-total { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--serif); font-size: 21px; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .sc-summary-total strong { font-weight: 500; font-variant-numeric: tabular-nums; }
+  .sc-summary .vat-note { margin-top: 2px; text-align: right; }
+  .sc-summary-note { font-size: 12px; line-height: 1.55; color: var(--ink-soft); margin-top: 10px; }
 
-  .sc-submit {
-    width: 100%; background: var(--sc-ink); color: #fff; border: none; padding: 16px;
-    font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
-    border-radius: var(--sc-radius-md); cursor: pointer; transition: background 0.2s ease;
+  .rsv-terms { display: flex; gap: 11px; align-items: flex-start; font-size: 13px; color: var(--ink-soft); cursor: pointer; }
+  .rsv-terms input { appearance: none; -webkit-appearance: none; flex-shrink: 0; width: 18px; height: 18px; margin: 1px 0 0; border: 1px solid var(--ink-faint); background: #fff; display: grid; place-items: center; cursor: pointer; }
+  .rsv-terms input:checked { background: var(--ink); border-color: var(--ink); }
+  .rsv-terms input:checked::after { content: ""; width: 9px; height: 4.5px; border: solid var(--paper); border-width: 0 0 1.5px 1.5px; transform: translateY(-1px) rotate(-45deg); }
+  .rsv-terms a { color: var(--ink); text-underline-offset: 2px; }
+  .h-captcha { margin-top: 18px; }
+
+  /* ---- Navigatie onderaan ---- */
+  .rsv-nav { display: flex; gap: 12px; margin-top: 28px; }
+  .rsv-back {
+    flex-shrink: 0; width: 54px; height: 54px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink);
+    display: grid; place-items: center; cursor: pointer; transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
   }
-  .sc-submit:hover { background: var(--sc-moss-dark); }
-  .sc-submit:disabled { opacity: 0.6; cursor: default; }
-
-  .sc-status { margin-top: 14px; font-size: 14px; text-align: center; }
-  .sc-status.sc-ok { color: var(--sc-moss-dark); }
+  .rsv-back:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .rsv-back:disabled { opacity: 0.25; cursor: default; }
+  .rsv-back svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .rsv-next {
+    flex: 1; height: 54px; border-radius: 999px; border: 0; background: var(--ink); color: var(--paper);
+    font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: 0.02em; cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .rsv-next:hover { background: var(--moss-dark); }
+  .rsv-next:disabled { opacity: 0.6; cursor: default; }
+  .rsv-next[hidden] { display: none; }
+  .sc-status { margin-top: 14px; font-size: 13.5px; text-align: center; }
+  .sc-status:empty { margin-top: 0; }
+  .sc-status.sc-ok { color: var(--moss-dark); }
   .sc-status.sc-err { color: #a3402f; }
+
+  /* ---- Bedankt ---- */
+  .rsv-done { padding: clamp(28px, 6vw, 44px) clamp(18px, 4vw, 30px); text-align: center; }
+  .rsv-done[hidden] { display: none; }
+  .rsv-done h2 { font-weight: 400; font-size: 30px; margin-bottom: 12px; }
+  .rsv-done h2:focus { outline: none; }
+  .rsv-done p { color: var(--ink-soft); max-width: 36ch; margin: 0 auto; }
+  .rsv-done .rsv-next { flex: none; padding: 0 30px; margin-top: 26px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rsv-step.is-entering { animation: none; }
+  }
 </style>
 <script src="https://web3forms.com/client/script.js" async defer></script>
 </head>
@@ -252,278 +304,290 @@
 
 <header class="site-header">
   <div class="site-header-inner">
+    <p class="header-tagline">Tafelstyling &amp; verhuur</p>
     <a class="brand" href="index.html">
       <img class="logo-img logo-img--onlight" src="images/logo.webp" alt="Studio Convivio" width="911" height="369">
       <small>Tafelstyling &amp; verhuur</small>
     </a>
+    <a class="header-cta" href="reserveren.html" aria-current="page">Reserveren</a>
     <button class="nav-toggle" type="button" aria-label="Menu openen" aria-expanded="false" aria-controls="hoofdnavigatie">
       <span></span><span></span><span></span>
     </button>
-    <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
-      <ul>
-        <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
-        <li><a href="reserveren.html" aria-current="page">Reserveren</a></li>
-        <li><a href="extras.html">Extra's</a></li>
-        <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
   </div>
+  <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
+    <ul>
+      <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
+      <li class="nav-item-reserve"><a href="reserveren.html" aria-current="page">Reserveren</a></li>
+      <li><a href="extras.html">Extra's</a></li>
+      <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 </header>
 
-<main id="inhoud">
-  <section class="section" style="padding-bottom:40px;">
-    <div class="wrap" style="max-width:720px;">
-      <h1 style="font-size:clamp(30px,3.8vw,44px);margin-top:14px;">Dien je reserveringsaanvraag in</h1>
-      <p class="lede" style="margin-top:16px;">Heb je een collectie gevonden die perfect past bij jouw gelegenheid? Vul onderstaand formulier in en je ziet direct een prijsindicatie. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
+<main id="inhoud" class="rsv-main">
+  <div class="rsv-layout">
+
+    <div class="rsv-intro">
+      <h1>Reserveer <em>jouw tafel</em></h1>
+      <p class="lede">In vier korte stappen stel je je aanvraag samen en zie je meteen wat het kost. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
+      <ul class="rsv-promises">
+        <li><b>1</b><span>Voorlopige bevestiging binnen 2 dagen, nadat we de beschikbaarheid hebben gecontroleerd.</span></li>
+        <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% aanbetaling; dan staat je datum vast.</span></li>
+        <li><b>3</b><span>Borg van €150, die je volledig terugkrijgt na retour in goede staat.</span></li>
+      </ul>
     </div>
-  </section>
 
-  <section class="section" style="padding-top:0;">
-    <div class="wrap">
+    <div class="rsv-card">
+      <div class="rsv-hero">
+        <img id="rsvHeroImg" src="images/img-044ae929-800.webp" alt="" width="800" height="533" decoding="async" fetchpriority="high">
+        <span class="rsv-price-pill" id="rsvPricePill">€16,75 p.p.</span>
+      </div>
 
-      <!-- ============================================================ -->
-      <!-- Reserveringscalculator                                      -->
-      <!-- ============================================================ -->
-      <div class="sc-form-wrap">
+      <div class="rsv-body" id="rsvBody">
         <form id="scReserveForm" action="https://api.web3forms.com/submit" method="POST">
 
-          <div class="sc-section">
-            <span class="sc-label" id="scStep1Label">1. Standaardpakket of maatwerk?</span>
-            <div class="sc-mode-toggle" role="radiogroup" aria-labelledby="scStep1Label">
-              <label>
-                <input type="radio" name="mode" value="standard" checked>
-                <div class="sc-mode-card">Standaardpakket</div>
-              </label>
-              <label>
-                <input type="radio" name="mode" value="custom">
-                <div class="sc-mode-card">Maatwerkpakket samenstellen</div>
-              </label>
+          <div class="rsv-progress">
+            <p id="rsvStepLabel">Stap 1 van 4</p>
+            <ol class="rsv-bars" aria-hidden="true"><li class="is-done"></li><li></li><li></li><li></li></ol>
+          </div>
+
+          <!-- ====== Stap 1: collectie ====== -->
+          <section class="rsv-step" data-step="1" aria-labelledby="rsvTitle1">
+            <h2 class="rsv-title" id="rsvTitle1" tabindex="-1">Welke collectie past bij jouw moment?</h2>
+
+            <div class="rsv-visually-hidden" aria-hidden="true">
+              <input type="radio" name="mode" value="standard" checked tabindex="-1">
+              <input type="radio" name="mode" value="custom" tabindex="-1">
             </div>
 
             <div id="scStandardBlock">
-              <div class="sc-package-options" role="group" aria-label="Kies je collectie">
+              <div class="sc-package-options" role="radiogroup" aria-label="Kies je collectie">
                 <label class="sc-package-option">
-                  <input type="radio" name="package" value="Moss &amp; Mist" data-price="16.75" checked>
+                  <input type="radio" name="package" value="Moss &amp; Mist" data-price="16.75" data-photo="images/img-044ae929-800.webp" checked>
                   <div class="sc-package-card">
-                    <img class="sc-package-photo" src="images/img-044ae929.webp" alt="Gedekte tafel in de Moss &amp; Mist-collectie" loading="lazy" decoding="async">
+                    <img class="sc-package-photo" src="images/img-044ae929-800.webp" alt="Gedekte tafel in de Moss &amp; Mist-collectie" width="800" height="533" loading="lazy" decoding="async">
                     <div class="sc-package-body">
-                      <strong>Moss &amp; Mist</strong>
-                      <span class="sc-price-tag">€16,75 p.p.<span class="vat-note">Incl. btw</span></span>
-                      <ul class="sc-included-list">
-                        <li>Dinerborden</li><li>Voorgerechtborden</li><li>Voorgerechtbestek</li><li>Bestek</li>
-                        <li>Waterglazen</li><li>Wijnglazen</li><li>Dessertcoupe</li><li>Katoenen servetten</li><li>Tafelkleden (250 × 160 cm)</li>
-                      </ul>
+                      <div class="sc-package-head"><strong>Moss &amp; Mist</strong><span>€16,75 p.p.</span></div>
+                      <p>Dinerborden, voorgerechtborden, voorgerechtbestek, bestek, waterglazen, wijnglazen, dessertcoupe, katoenen servetten, tafelkleden (250 × 160 cm)</p>
                     </div>
                   </div>
                 </label>
                 <label class="sc-package-option">
-                  <input type="radio" name="package" value="Mocha Sky" data-price="17.75">
+                  <input type="radio" name="package" value="Mocha Sky" data-price="17.75" data-photo="images/img-beee9a1e.webp">
                   <div class="sc-package-card">
                     <img class="sc-package-photo" src="images/img-beee9a1e.webp" alt="Gedekte tafel in de Mocha Sky-collectie" loading="lazy" decoding="async">
                     <div class="sc-package-body">
-                      <strong>Mocha Sky</strong>
-                      <span class="sc-price-tag">€17,75 p.p.<span class="vat-note">Incl. btw</span></span>
-                      <ul class="sc-included-list">
-                        <li>Dinerborden</li><li>Voorgerechtborden</li><li>Voorgerechtbestek</li><li>Bestek</li>
-                        <li>Waterglazen</li><li>Wijnglazen</li><li>Dessertcoupe</li><li>Katoenen servetten</li><li>Placemats</li><li>Tafelkleden (250 × 160 cm)</li>
-                      </ul>
+                      <div class="sc-package-head"><strong>Mocha Sky</strong><span>€17,75 p.p.</span></div>
+                      <p>Dinerborden, voorgerechtborden, voorgerechtbestek, bestek, waterglazen, wijnglazen, dessertcoupe, katoenen servetten, placemats, tafelkleden (250 × 160 cm)</p>
                     </div>
                   </div>
                 </label>
               </div>
+              <p class="rsv-alt">Liever maatwerk? <button type="button" class="rsv-textlink" id="rsvToCustom">Stel je pakket per item samen</button></p>
             </div>
 
-            <div id="scCustomBlock" style="display:none;">
-              <span class="sc-sublabel" style="margin-top:0;">Kies je tafelitems</span>
-              <p style="font-size:13px;color:var(--ink-soft);margin:0 0 12px;">
-                Vink de tafelitems aan die je nodig hebt. Tafelitems worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Decoratie zoals tafellampen, zijdebloemen en kaarten voeg je hieronder per stuk toe bij de extra's.
-              </p>
-              <div class="sc-tafelitems-box">
-                <span class="sc-sublabel" style="margin-top:0;">Standaard tafelitems</span>
-                <div class="sc-item-tiles" id="scItemsGrid" role="group" aria-label="Kies je tafelitems">
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Dinerborden" data-price="3.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dinerborden</span><span class="sc-item-price">€3,00</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Bestek" data-price="2.50">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Bestek</span><span class="sc-item-price">€2,50</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Voorgerechtbestek" data-price="2.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Voorgerechtbestek</span><span class="sc-item-price">€2,00</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Waterglazen" data-price="2.50">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Waterglazen</span><span class="sc-item-price">€2,50</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Wijnglazen" data-price="3.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Wijnglazen</span><span class="sc-item-price">€3,00</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Champagneglazen" data-price="0.75">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Champagneglazen</span><span class="sc-item-price">€0,75</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Dessertcoupe" data-price="2.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dessertcoupe</span><span class="sc-item-price">€2,00</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Placemats" data-price="1.50">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Placemats</span><span class="sc-item-price">€1,50</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Katoenen servetten" data-price="2.00">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Katoenen servetten</span><span class="sc-item-price">€2,00</span></span>
-                  </label>
-                  <label class="sc-item-tile">
-                    <input type="checkbox" class="sc-item-check" value="Servetringen" data-price="0.50">
-                    <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Servetringen</span><span class="sc-item-price">€0,50</span></span>
-                  </label>
-                </div>
-                <span class="vat-note" style="margin-top:12px;">Incl. btw</span>
+            <div id="scCustomBlock" hidden>
+              <p class="rsv-muted" style="margin:-8px 0 16px;">Vink de tafelitems aan die je nodig hebt; ze worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Decoratie zoals tafellampen, zijdebloemen en kaarten voeg je in de volgende stap toe bij de extra's.</p>
+              <div class="sc-item-tiles" id="scItemsGrid" role="group" aria-label="Kies je tafelitems">
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Dinerborden" data-price="3.00">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dinerborden</span><span class="sc-item-price">€3,00</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Bestek" data-price="2.50">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Bestek</span><span class="sc-item-price">€2,50</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Voorgerechtbestek" data-price="2.00">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Voorgerechtbestek</span><span class="sc-item-price">€2,00</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Waterglazen" data-price="2.50">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Waterglazen</span><span class="sc-item-price">€2,50</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Wijnglazen" data-price="3.00">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Wijnglazen</span><span class="sc-item-price">€3,00</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Champagneglazen" data-price="0.75">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Champagneglazen</span><span class="sc-item-price">€0,75</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Dessertcoupe" data-price="2.00">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dessertcoupe</span><span class="sc-item-price">€2,00</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Placemats" data-price="1.50">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Placemats</span><span class="sc-item-price">€1,50</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Katoenen servetten" data-price="2.00">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Katoenen servetten</span><span class="sc-item-price">€2,00</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Servetringen" data-price="0.50">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Servetringen</span><span class="sc-item-price">€0,50</span></span>
+                </label>
+              </div>
+              <p class="rsv-alt">Toch een vaste collectie? <button type="button" class="rsv-textlink" id="rsvToStandard">Kies een standaardpakket</button></p>
+            </div>
+            <span class="rsv-vat">Alle prijzen zijn per persoon en inclusief btw.</span>
+          </section>
+
+          <!-- ====== Stap 2: personen, dagen en extra's ====== -->
+          <section class="rsv-step" data-step="2" aria-labelledby="rsvTitle2" hidden>
+            <h2 class="rsv-title" id="rsvTitle2" tabindex="-1">Voor hoeveel personen, en hoe lang?</h2>
+            <input type="hidden" name="guests" id="scGuests" value="2">
+            <input type="hidden" id="scDays" value="3">
+
+            <div class="rsv-panel" role="group" aria-labelledby="rsvGuestsLabel">
+              <span class="rsv-panel-label" id="rsvGuestsLabel">Aantal personen</span>
+              <p class="rsv-muted">Meer dan 30? Kies 30+ of mail naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></p>
+              <div class="rsv-stepper">
+                <button type="button" data-stepper="guests" data-dir="-1" aria-label="Eén persoon minder"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>
+                <output id="rsvGuestsOut" aria-live="polite">2</output>
+                <button type="button" data-stepper="guests" data-dir="1" aria-label="Eén persoon meer"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M7 2v10"/></svg></button>
               </div>
             </div>
-          </div>
 
-          <div class="sc-section sc-row">
-            <div>
-              <label class="sc-label" for="scGuests">2. Aantal personen</label>
-              <select id="scGuests" name="guests" required>
-                <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option>
-                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-                <option value="13">13</option><option value="14">14</option><option value="15">15</option>
-                <option value="16">16</option><option value="17">17</option><option value="18">18</option>
-                <option value="19">19</option><option value="20">20</option><option value="21">21</option>
-                <option value="22">22</option><option value="23">23</option><option value="24">24</option>
-                <option value="25">25</option><option value="26">26</option><option value="27">27</option>
-                <option value="28">28</option><option value="29">29</option><option value="30">30</option>
-                <option value="over30">Meer dan 30 personen</option>
-              </select>
+            <div class="rsv-panel" role="group" aria-labelledby="rsvDaysLabel">
+              <span class="rsv-panel-label" id="rsvDaysLabel">Aantal huurdagen</span>
+              <p class="rsv-muted">Standaard 3 dagen. Elke extra dag kost €35.</p>
+              <div class="rsv-stepper">
+                <button type="button" data-stepper="days" data-dir="-1" aria-label="Eén dag minder"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>
+                <output id="rsvDaysOut" aria-live="polite">3</output>
+                <button type="button" data-stepper="days" data-dir="1" aria-label="Eén dag meer"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M7 2v10"/></svg></button>
+              </div>
             </div>
-            <div>
-              <label class="sc-label" for="scDays">3. Aantal huurdagen</label>
-              <p style="font-size:13px;color:var(--ink-soft);margin:0 0 10px;">Standaard huurperiode: <strong>3 dagen</strong>. Elke extra dag kost €35.</p>
-              <label class="sc-item-tile">
-                <input type="checkbox" id="scLongerRentalCheck">
-                <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Ik wil langer dan 3 dagen huren</span></span>
+            <p class="rsv-muted rsv-after">Meer dan 7 dagen? Kies 7+ of neem even <a href="contact.html">contact</a> op.</p>
+
+            <details class="rsv-extras" id="rsvExtras">
+              <summary>
+                <span><strong>Extra's toevoegen</strong><span class="rsv-muted" style="display:block;">Optioneel: glaswerk, decoratie, kaarten en meer</span></span>
+                <span style="display:flex;align-items:center;gap:12px;">
+                  <span class="rsv-extras-count" id="rsvExtrasCount" hidden></span>
+                  <svg class="rsv-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4"/></svg>
+                </span>
+              </summary>
+              <div class="rsv-extras-body">
+                <p class="rsv-muted">Bekijk het volledige assortiment met foto's op de <a href="extras.html">extra's-pagina</a>. Wat je daar toevoegt, staat hier automatisch al klaar. Prijzen incl. btw.</p>
+                <div id="scXtraCatalog"></div>
+              </div>
+            </details>
+          </section>
+
+          <!-- ====== Stap 3: bezorging ====== -->
+          <section class="rsv-step" data-step="3" aria-labelledby="rsvTitle3" hidden>
+            <h2 class="rsv-title" id="rsvTitle3" tabindex="-1">Hoe komt de tafel bij je?</h2>
+            <div class="rsv-choices" role="radiogroup" aria-labelledby="rsvTitle3">
+              <label class="rsv-choice">
+                <input type="radio" name="deliveryMode" value="geen" checked>
+                <span class="rsv-choice-title">Zelf ophalen</span>
+                <span class="rsv-choice-price">Gratis</span>
+                <span class="rsv-choice-desc">Ik haal het zelf op en breng het zelf terug naar Wageningen.</span>
               </label>
-              <div class="sc-qty-field" id="scDaysWrap">
-                <select id="scDays">
-                  <option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
-                  <option value="7">7</option><option value="over7">Meer dan 7 dagen</option>
-                </select>
-              </div>
+              <label class="rsv-choice">
+                <input type="radio" name="deliveryMode" value="bezorgen" data-base="25" data-perkm="0.25">
+                <span class="rsv-choice-title">Bezorgen en ophalen</span>
+                <span class="rsv-choice-price">€25,00 + €0,25/km</span>
+              </label>
+              <label class="rsv-choice">
+                <input type="radio" name="deliveryMode" value="styling" data-base="59" data-perkm="0.25">
+                <span class="rsv-choice-title">Tafelstyling op locatie</span>
+                <span class="rsv-choice-price">€59,00 + €0,25/km</span>
+                <span class="rsv-choice-desc">Inclusief bezorgen en ophalen.</span>
+              </label>
             </div>
-          </div>
-
-          <div class="sc-section" role="group" aria-labelledby="scStep4Label">
-            <span class="sc-label" id="scStep4Label">4. Extra's</span>
-
-            <span class="sc-sublabel" style="margin-top:0;">Bezorgen &amp; styling</span>
-            <div class="sc-flat-items" role="group" aria-label="Bezorgen &amp; styling">
-              <div class="sc-flat-item-row">
-                <label class="sc-item-tile">
-                  <input type="radio" name="deliveryMode" value="geen" checked>
-                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Ik haal het zelf op en breng het zelf terug naar Wageningen.</span></span>
-                </label>
-              </div>
-              <div class="sc-flat-item-row">
-                <label class="sc-item-tile">
-                  <input type="radio" name="deliveryMode" value="bezorgen" data-base="25" data-perkm="0.25">
-                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Bezorgen en ophalen</span><span class="sc-item-price">€25,00 + €0,25/km</span></span>
-                </label>
-              </div>
-              <div class="sc-flat-item-row">
-                <label class="sc-item-tile">
-                  <input type="radio" name="deliveryMode" value="styling" data-base="59" data-perkm="0.25">
-                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Tafelstyling op locatie</span><span class="sc-item-price">€59,00 + €0,25/km</span></span>
-                </label>
-              </div>
-            </div>
-            <p style="font-size:12px;color:var(--ink-faint);margin:6px 0 0;">Tafelstyling op locatie is inclusief bezorgen en ophalen. De kilometerprijs geldt voor alle vier de ritten: heen en terug om te bezorgen, en heen en terug om na afloop op te halen (4 × de enkele reis vanaf Wageningen).</p>
-            <span class="vat-note">Incl. btw</span>
+            <p class="rsv-choice-note">Prijzen incl. btw.</p>
 
             <div class="sc-address-field" id="scAddressField">
-              <input type="text" id="scDeliveryAddress" placeholder="Straat, huisnummer, postcode, plaats (bijv. Hoofdstraat 12, 6701AA Wageningen)">
-              <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap;">
-                <button type="button" id="scCalcDistanceBtn" class="sc-btn-secondary">Bereken afstand</button>
-                <p class="sc-address-status" id="scAddressStatus" role="status" style="margin:0;"></p>
+              <p class="rsv-address-head">Afleveradres</p>
+              <div class="rsv-field">
+                <label for="scStreet">Straat en huisnummer</label>
+                <input type="text" id="scStreet" autocomplete="address-line1" placeholder="Bijv. Hoofdstraat 12">
               </div>
-              <div class="sc-qty-field" id="scManualKmField">
-                <div style="width:100%;">
-                  <label style="font-size:12px;color:var(--ink-faint);display:block;margin-bottom:6px;">
-                    Automatische berekening lukt niet. Vul hieronder het aantal kilometers voor de
-                    <strong>enkele reis naar Wageningen</strong> in (hele kilometers):
-                  </label>
+              <div class="rsv-address-grid">
+                <div class="rsv-field"><label for="scPostcode">Postcode</label><input type="text" id="scPostcode" autocomplete="postal-code" placeholder="6701 AA"></div>
+                <div class="rsv-field"><label for="scCity">Plaats</label><input type="text" id="scCity" autocomplete="address-level2" placeholder="Wageningen"></div>
+              </div>
+
+              <div class="rsv-estimate">
+                <div class="rsv-estimate-row"><span>Geschatte afstand</span><b id="rsvEstKm">&ndash;</b></div>
+                <div class="rsv-estimate-row"><span>Geschatte kosten</span><b id="rsvEstCost">&ndash;</b></div>
+                <p class="rsv-estimate-note" id="rsvEstNote">€25,00 + €0,25 per km × 4 ritten (bezorgen en ophalen, heen en terug). Het definitieve bedrag bevestigen we bij je aanvraag.</p>
+                <div class="rsv-estimate-actions">
+                  <p class="sc-address-status" id="scAddressStatus" role="status" style="margin:0;"></p>
+                  <button type="button" id="scCalcDistanceBtn" class="rsv-textlink">Bereken afstand</button>
+                </div>
+                <div class="sc-qty-field" id="scManualKmField">
+                  <label for="scManualKm">Automatische berekening lukt niet. Vul het aantal kilometers voor de <strong>enkele reis naar Wageningen</strong> in (hele kilometers):</label>
                   <input type="number" id="scManualKm" min="0" step="1" placeholder="bijv. 12">
                 </div>
               </div>
             </div>
+          </section>
 
-            <div id="scFlatExtrasStandardAnchor"></div>
-          </div>
+          <!-- ====== Stap 4: gegevens ====== -->
+          <section class="rsv-step" data-step="4" aria-labelledby="rsvTitle4" hidden>
+            <h2 class="rsv-title" id="rsvTitle4" tabindex="-1">Waar mogen we je aanvraag naartoe sturen?</h2>
+            <div class="rsv-field"><label for="scName">Naam</label><input type="text" id="scName" name="name" autocomplete="name" required></div>
+            <div class="rsv-field"><label for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" autocomplete="email" required></div>
+            <div class="rsv-field"><label for="scPhone">Telefoonnummer <span class="rsv-opt">(optioneel)</span></label><input type="tel" id="scPhone" name="phone" autocomplete="tel"></div>
+            <div class="rsv-field">
+              <label for="scDate">Gewenste datum</label>
+              <input type="date" id="scDate" name="date" required aria-describedby="scDateHint">
+              <p class="sc-hint" id="scDateHint">Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p>
+            </div>
+            <div class="rsv-field">
+              <label for="scNotes">Opmerkingen of maatwerkwensen <span class="rsv-opt">(optioneel)</span></label>
+              <textarea id="scNotes" name="notes" placeholder="Bijv. afmetingen van je tafel(s), specifieke kleurstijl, bijzondere gelegenheid..."></textarea>
+            </div>
 
-          <div class="sc-summary">
-            <div class="sc-summary-line"><span id="scLinePackage">Moss &amp; Mist × 2 personen (3 dagen)</span><span id="scLinePackagePrice">€33,50</span></div>
-            <div class="sc-summary-line" id="scLineDays" style="display:none;"><span id="scLineDaysLabel"></span><span id="scLineDaysPrice"></span></div>
-            <div id="scXtraSummaryLines"></div>
-            <div class="sc-summary-line" id="scLineDelivery" style="display:none;"><span id="scLineDeliveryLabel">Bezorging</span><span id="scLineDeliveryPrice"></span></div>
-            <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€33,50</strong></div>
-            <p class="vat-note">Incl. btw</p>
-            <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
-            <p class="sc-summary-note sc-deposit-note" style="margin-top:8px;">Let op: naast dit bedrag rekenen we een <strong>borg van €150,00</strong>. Je krijgt deze borg volledig terug zodra alle gehuurde spullen in goede staat zijn geretourneerd.</p>
-            <p class="sc-summary-note" style="margin-top:8px;">Na de definitieve bevestiging betaal je een aanbetaling van 25%. Het restbedrag voldoe je uiterlijk 7 dagen voor de huurdatum. Pas na ontvangst van de aanbetaling is je reservering definitief.</p>
-          </div>
+            <div class="sc-summary">
+              <p class="rsv-summary-head">Jouw aanvraag</p>
+              <div class="sc-summary-line"><span id="scLinePackage">Moss &amp; Mist × 2 personen (3 dagen)</span><span id="scLinePackagePrice">€33,50</span></div>
+              <div class="sc-summary-line" id="scLineDays" style="display:none;"><span id="scLineDaysLabel"></span><span id="scLineDaysPrice"></span></div>
+              <div id="scXtraSummaryLines"></div>
+              <div class="sc-summary-line" id="scLineDelivery" style="display:none;"><span id="scLineDeliveryLabel">Bezorging</span><span id="scLineDeliveryPrice"></span></div>
+              <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€33,50</strong></div>
+              <p class="vat-note">Incl. btw</p>
+              <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
+              <p class="sc-summary-note">Naast dit bedrag rekenen we een <strong>borg van €150,00</strong>. Je krijgt deze borg volledig terug zodra alle gehuurde spullen in goede staat zijn geretourneerd.</p>
+              <p class="sc-summary-note">Na de definitieve bevestiging betaal je een aanbetaling van 25%. Het restbedrag voldoe je uiterlijk 7 dagen voor de huurdatum. Pas na ontvangst van de aanbetaling is je reservering definitief.</p>
+            </div>
 
-          <div class="sc-section sc-row">
-            <div><label class="sc-label" for="scName">Naam</label><input type="text" id="scName" name="name" required></div>
-            <div><label class="sc-label" for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" required></div>
-          </div>
+            <label class="rsv-terms">
+              <input type="checkbox" id="scTermsCheck" name="akkoord_voorwaarden" value="Ja" required>
+              <span>Ik ga akkoord met de <a href="algemene-voorwaarden.html" target="_blank" rel="noopener">algemene voorwaarden</a> en heb de <a href="privacy-van-gegevens.html" target="_blank" rel="noopener">privacyverklaring</a> gelezen.</span>
+            </label>
 
-          <div class="sc-section sc-row">
-            <div><label class="sc-label" for="scPhone">Telefoonnummer</label><input type="tel" id="scPhone" name="phone"></div>
-            <div><label class="sc-label" for="scDate">Gewenste datum</label><input type="date" id="scDate" name="date" required aria-describedby="scDateHint"><p class="sc-hint" id="scDateHint" style="margin:8px 0 0;">Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p></div>
-          </div>
-
-          <div class="sc-section">
-            <label class="sc-label" for="scNotes">Opmerkingen of maatwerkwensen</label>
-            <textarea id="scNotes" name="notes" placeholder="Bijv. afmetingen van je tafel(s), specifieke kleurstijl, bijzondere gelegenheid..."></textarea>
-          </div>
+            <div class="h-captcha" data-captcha="true"></div>
+          </section>
 
           <input type="hidden" name="access_key" value="e6783a84-f79f-4dd4-9175-5f2933b2b387">
           <input type="hidden" name="subject" value="Studio Convivio: nieuwe reserveringsaanvraag">
           <input type="hidden" name="from_name" value="Studio Convivio website">
-
           <input type="checkbox" name="botcheck" class="sc-botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;">
 
-          <div class="sc-section">
-            <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-soft);">
-              <input type="checkbox" id="scTermsCheck" name="akkoord_voorwaarden" value="Ja" required style="margin-top:3px;">
-              <span>Ik ga akkoord met de <a href="algemene-voorwaarden.html" target="_blank" rel="noopener">algemene voorwaarden</a> en heb de <a href="privacy-van-gegevens.html" target="_blank" rel="noopener">privacyverklaring</a> gelezen.</span>
-            </label>
+          <div class="rsv-nav">
+            <button type="button" class="rsv-back" id="rsvBack" aria-label="Vorige stap" disabled><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M15 9H3M8 4L3 9l5 5"/></svg></button>
+            <button type="button" class="rsv-next" id="rsvNext">Volgende</button>
+            <button type="submit" class="rsv-next" id="scSubmitBtn" hidden>Verstuur aanvraag</button>
           </div>
-
-          <div class="h-captcha" data-captcha="true"></div>
-
-          <button type="submit" class="sc-submit" id="scSubmitBtn">Verstuur aanvraag</button>
           <p class="sc-status" id="scStatus" role="status"></p>
         </form>
       </div>
 
-      <div id="scFlatExtrasTemplate" style="display:none;">
-        <span class="sc-sublabel" style="margin-top:0;">Extra's</span>
-        <p class="sc-hint">Bekijk het volledige assortiment op de <a href="extras.html">extra's-pagina</a>. Wat je daar toevoegt, staat hier automatisch al klaar.</p>
-        <div id="scXtraCatalog"></div>
-        <span class="vat-note" style="margin-top:14px;">Incl. btw</span>
+      <div class="rsv-done" id="rsvDone" hidden>
+        <h2 tabindex="-1" id="rsvDoneTitle">Bedankt!</h2>
+        <p>Je reserveringsaanvraag is verstuurd. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
+        <button type="button" class="rsv-next" id="rsvRestart">Nieuwe aanvraag</button>
       </div>
-
     </div>
-  </section>
+
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -593,17 +657,27 @@
 
   var guestsInput = document.getElementById('scGuests');
   var daysInput = document.getElementById('scDays');
-  var longerRentalCheck = document.getElementById('scLongerRentalCheck');
-  var daysWrap = document.getElementById('scDaysWrap');
   var standardBlock = document.getElementById('scStandardBlock');
   var customBlock = document.getElementById('scCustomBlock');
   var addressField = document.getElementById('scAddressField');
-  var addressInput = document.getElementById('scDeliveryAddress');
+  var streetInput = document.getElementById('scStreet');
+  var postcodeInput = document.getElementById('scPostcode');
+  var cityInput = document.getElementById('scCity');
+  var addressInputs = [streetInput, postcodeInput, cityInput];
   var addressStatus = document.getElementById('scAddressStatus');
   var calcBtn = document.getElementById('scCalcDistanceBtn');
   var manualKmField = document.getElementById('scManualKmField');
   var manualKmInput = document.getElementById('scManualKm');
   var usingManualKm = false;
+
+  var statusEl = document.getElementById('scStatus');
+  var heroImg = document.getElementById('rsvHeroImg');
+  var pricePill = document.getElementById('rsvPricePill');
+  var estKm = document.getElementById('rsvEstKm');
+  var estCost = document.getElementById('rsvEstCost');
+  var estNote = document.getElementById('rsvEstNote');
+  var extrasDetails = document.getElementById('rsvExtras');
+  var extrasCount = document.getElementById('rsvExtrasCount');
 
   var dateInput = document.getElementById('scDate');
   var MIN_LEAD_DAYS = 3;
@@ -612,33 +686,120 @@
   var todayStr = minDateObj.getFullYear() + '-' + String(minDateObj.getMonth() + 1).padStart(2, '0') + '-' + String(minDateObj.getDate()).padStart(2, '0');
   dateInput.min = todayStr;
 
-  var flatExtrasTemplate = document.getElementById('scFlatExtrasTemplate');
-  var standardAnchor = document.getElementById('scFlatExtrasStandardAnchor');
   var xtraCatalogEl = document.getElementById('scXtraCatalog');
   var xtraSummaryLinesEl = document.getElementById('scXtraSummaryLines');
-  flatExtrasTemplate.style.display = 'block';
-  standardAnchor.parentNode.insertBefore(flatExtrasTemplate, standardAnchor.nextSibling);
   xtraCatalogEl.innerHTML = ScExtrasShop.renderCatalog();
   ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); });
+  // Staan er al extra's klaar vanaf de extra's-pagina, klap de lijst dan open.
+  if (ScExtrasShop.summary().lines.length) extrasDetails.open = true;
 
-  function bindFlatToggle(check, wrap) {
-    check.addEventListener('change', function () {
-      if (check.checked) { wrap.classList.add('sc-visible'); } else { wrap.classList.remove('sc-visible'); }
-      recalc();
-    });
+  // ---------------------------------------------------------------
+  // Stappen
+  // ---------------------------------------------------------------
+  var TOTAL_STEPS = 4;
+  var currentStep = 1;
+  var steps = form.querySelectorAll('.rsv-step');
+  var bars = form.querySelectorAll('.rsv-bars li');
+  var stepLabel = document.getElementById('rsvStepLabel');
+  var backBtn = document.getElementById('rsvBack');
+  var nextBtn = document.getElementById('rsvNext');
+  var submitBtn = document.getElementById('scSubmitBtn');
+  var card = document.querySelector('.rsv-card');
+
+  function showError(msg, focusEl) {
+    statusEl.textContent = msg;
+    statusEl.className = 'sc-status sc-err';
+    if (focusEl) focusEl.focus();
   }
-  bindFlatToggle(longerRentalCheck, daysWrap);
+  function clearStatus() { statusEl.textContent = ''; statusEl.className = 'sc-status'; }
 
-  var modeRadios = form.querySelectorAll('input[name="mode"]');
-  modeRadios.forEach(function (r) {
-    r.addEventListener('change', function () {
-      if (r.value === 'custom' && r.checked) {
-        standardBlock.style.display = 'none'; customBlock.style.display = 'block';
-      } else if (r.value === 'standard' && r.checked) {
-        standardBlock.style.display = 'block'; customBlock.style.display = 'none';
-      }
-      recalc();
+  function goTo(n, moveFocus) {
+    currentStep = n;
+    steps.forEach(function (s) {
+      var isCurrent = parseInt(s.getAttribute('data-step'), 10) === n;
+      s.hidden = !isCurrent;
+      s.classList.toggle('is-entering', isCurrent && moveFocus);
     });
+    bars.forEach(function (b, i) { b.classList.toggle('is-done', i < n); });
+    stepLabel.textContent = 'Stap ' + n + ' van ' + TOTAL_STEPS;
+    backBtn.disabled = n === 1;
+    nextBtn.hidden = n === TOTAL_STEPS;
+    submitBtn.hidden = n !== TOTAL_STEPS;
+    clearStatus();
+    recalc();
+    if (moveFocus) {
+      var title = form.querySelector('.rsv-step[data-step="' + n + '"] .rsv-title');
+      // Na een lange stap sta je onderaan; begin de volgende stap bovenaan de kaart.
+      if (card.getBoundingClientRect().top < 0) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (title) title.focus({ preventScroll: true });
+    }
+  }
+
+  // Per stap controleren wat vroeger pas bij het versturen werd gecontroleerd.
+  function validateStep(n) {
+    if (n === 1 && getMode() === 'custom' && !form.querySelector('.sc-item-check:checked')) {
+      showError('Kies bij je maatwerkpakket minstens één tafelitem.', form.querySelector('.sc-item-check'));
+      return false;
+    }
+    if (n === 2) {
+      var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
+      if (cardsEntry && cardsEntry.qty > 0 && !(cardsEntry.type || '').trim()) {
+        extrasDetails.open = true;
+        showError('Vul aan welk soort kaarten je wilt (bijv. menukaarten, naamkaarten).', xtraCatalogEl.querySelector('[data-key="handgemaakte-kaarten"] .sc-shop-type-input'));
+        return false;
+      }
+    }
+    if (n === 3) {
+      var dRadio = getDeliveryMode();
+      if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null) {
+        if (!streetInput.value.trim()) {
+          showError('Vul je afleveradres in, zodat we de bezorgkosten kunnen berekenen.', streetInput);
+        } else {
+          showError('Controleer het bezorgadres: klik op "Bereken afstand" of vul de afstand handmatig in.');
+        }
+        return false;
+      }
+    }
+    return true;
+  }
+
+  nextBtn.addEventListener('click', function () {
+    if (validateStep(currentStep)) goTo(currentStep + 1, true);
+  });
+  backBtn.addEventListener('click', function () {
+    if (currentStep > 1) goTo(currentStep - 1, true);
+  });
+  // Enter in een veld van stap 1-3 gaat naar de volgende stap in plaats van
+  // het (nog onvolledige) formulier te versturen.
+  form.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || currentStep === TOTAL_STEPS) return;
+    var t = e.target;
+    if (t.tagName === 'TEXTAREA' || t.tagName === 'BUTTON' || t.tagName === 'A') return;
+    e.preventDefault();
+    if (addressInputs.indexOf(t) !== -1) { lastCalculatedAddress = null; calculateDelivery(); return; }
+    if (t.type === 'radio' || t.type === 'checkbox') return;
+    nextBtn.click();
+  });
+
+  // ---------------------------------------------------------------
+  // Stap 1: standaard of maatwerk
+  // ---------------------------------------------------------------
+  function setMode(mode) {
+    form.querySelector('input[name="mode"][value="' + mode + '"]').checked = true;
+    standardBlock.hidden = mode !== 'standard';
+    customBlock.hidden = mode !== 'custom';
+    clearStatus();
+    recalc();
+  }
+  document.getElementById('rsvToCustom').addEventListener('click', function () {
+    setMode('custom');
+    var first = form.querySelector('.sc-item-check');
+    if (first) first.focus();
+  });
+  document.getElementById('rsvToStandard').addEventListener('click', function () {
+    setMode('standard');
+    var pkg = getSelectedPackage();
+    if (pkg) pkg.focus();
   });
 
   function getMode() { var r = form.querySelector('input[name="mode"]:checked'); return r ? r.value : 'standard'; }
@@ -650,6 +811,44 @@
   function getDeliveryMode() { var r = form.querySelector('input[name="deliveryMode"]:checked'); return r ? r : null; }
   function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
 
+  // ---------------------------------------------------------------
+  // Stap 2: aantallen via plus/min. 30+ en 7+ zijn de oude opties
+  // "Meer dan 30 personen" en "Meer dan 7 dagen" (prijs op aanvraag).
+  // ---------------------------------------------------------------
+  var STEPPERS = {
+    guests: { input: guestsInput, out: document.getElementById('rsvGuestsOut'), min: 1, max: 30, over: 'over30' },
+    days: { input: daysInput, out: document.getElementById('rsvDaysOut'), min: 3, max: 7, over: 'over7' }
+  };
+  function renderStepper(key) {
+    var st = STEPPERS[key];
+    var v = st.input.value;
+    st.out.textContent = v === st.over ? st.max + '+' : v;
+    form.querySelector('[data-stepper="' + key + '"][data-dir="-1"]').disabled = v !== st.over && parseInt(v, 10) <= st.min;
+    form.querySelector('[data-stepper="' + key + '"][data-dir="1"]').disabled = v === st.over;
+  }
+  form.querySelectorAll('[data-stepper]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var key = btn.getAttribute('data-stepper');
+      var st = STEPPERS[key];
+      var dir = parseInt(btn.getAttribute('data-dir'), 10);
+      var v = st.input.value;
+      if (v === st.over) { if (dir < 0) st.input.value = String(st.max); }
+      else {
+        var n = parseInt(v, 10) + dir;
+        st.input.value = n > st.max ? st.over : String(Math.max(st.min, n));
+      }
+      renderStepper(key);
+      // Blijf op een bruikbare knop staan als deze net uitgeschakeld werd.
+      if (btn.disabled) form.querySelector('[data-stepper="' + key + '"][data-dir="' + (-dir) + '"]').focus();
+      recalc();
+    });
+  });
+  renderStepper('guests');
+  renderStepper('days');
+
+  // ---------------------------------------------------------------
+  // Stap 3: bezorging en afstand
+  // ---------------------------------------------------------------
   var EXTRA_DAY_PRICE = 35;
   var DELIVERY_ROUTE_FACTOR = 1.3;
   var ORIGIN_COORDS = { lat: 51.978175, lon: 5.674950 };
@@ -658,6 +857,12 @@
   var deliveryDistanceKm = null;
   var resolvedAddressLabel = null;
   var calcRequestId = 0;
+  var lastCalculatedAddress = null;
+
+  function getAddress() {
+    var place = [postcodeInput.value.trim(), cityInput.value.trim()].filter(Boolean).join(' ');
+    return [streetInput.value.trim(), place].filter(Boolean).join(', ');
+  }
 
   function sleep(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
   function toRad(deg) { return deg * Math.PI / 180; }
@@ -706,7 +911,7 @@
       usingManualKm = true;
       resolvedAddressLabel = null;
       deliveryDistanceKm = Math.round(kmRaw);
-      addressStatus.textContent = deliveryDistanceKm + ' km enkele reis (handmatig ingevuld).';
+      addressStatus.textContent = 'Afstand handmatig ingevuld.';
       addressStatus.className = 'sc-address-status sc-ok';
     }
     recalc();
@@ -714,19 +919,23 @@
   manualKmInput.addEventListener('input', applyManualKm);
 
   function calculateDelivery() {
-    var address = addressInput.value.trim();
+    var address = getAddress();
+    // Niets veranderd sinds de vorige berekening: geen nieuwe opvraag.
+    if (address === lastCalculatedAddress && (deliveryDistanceKm !== null || usingManualKm)) return;
     manualKmField.classList.remove('sc-visible');
     manualKmInput.value = '';
     usingManualKm = false;
 
-    if (!address) {
+    if (!streetInput.value.trim()) {
       addressStatus.textContent = '';
       deliveryDistanceKm = null;
       resolvedAddressLabel = null;
+      lastCalculatedAddress = null;
       recalc();
       return;
     }
 
+    lastCalculatedAddress = address;
     var myRequestId = ++calcRequestId;
     calcBtn.disabled = true;
     addressStatus.textContent = 'Afstand berekenen...';
@@ -738,8 +947,7 @@
         var straightKm = haversineKm(ORIGIN_COORDS.lat, ORIGIN_COORDS.lon, dest.lat, dest.lon);
         deliveryDistanceKm = Math.round(straightKm * DELIVERY_ROUTE_FACTOR);
         resolvedAddressLabel = dest.label || null;
-        var foundLabel = dest.label ? ', gevonden adres: ' + dest.label : '';
-        addressStatus.textContent = '≈ ' + deliveryDistanceKm + ' km enkele reis (geschat' + foundLabel + '). Klopt dit niet? Pas het adres aan.';
+        addressStatus.textContent = dest.label ? 'Gevonden: ' + dest.label + '. Klopt dit niet? Pas het adres aan.' : 'Adres gevonden.';
         addressStatus.className = 'sc-address-status sc-ok';
         recalc();
       })
@@ -747,6 +955,7 @@
         if (myRequestId !== calcRequestId) return;
         deliveryDistanceKm = null;
         resolvedAddressLabel = null;
+        lastCalculatedAddress = null;
         if (err && err.type === 'not_found') {
           showManualFallback('Adres niet gevonden. Controleer de invoer of vul de afstand handmatig in.');
         } else {
@@ -758,10 +967,15 @@
         if (myRequestId === calcRequestId) calcBtn.disabled = false;
       });
   }
-  calcBtn.addEventListener('click', calculateDelivery);
-  addressInput.addEventListener('blur', calculateDelivery);
-  addressInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { e.preventDefault(); calculateDelivery(); }
+  calcBtn.addEventListener('click', function () { lastCalculatedAddress = null; calculateDelivery(); });
+  // Berekenen zodra je het adresblok verlaat, niet bij elk tussenliggend
+  // veld waarin je nog aan het typen bent.
+  addressInputs.forEach(function (el) {
+    el.addEventListener('blur', function () {
+      setTimeout(function () {
+        if (addressInputs.indexOf(document.activeElement) === -1) calculateDelivery();
+      }, 0);
+    });
   });
 
   var deliveryModeRadios = form.querySelectorAll('input[name="deliveryMode"]');
@@ -777,6 +991,7 @@
     r.addEventListener('change', function () {
       applyDeliveryModeVisibility(r.value);
       ScCart.setDeliveryMode(r.value);
+      clearStatus();
       recalc();
     });
   });
@@ -792,11 +1007,60 @@
     }
   }
 
+  // ---------------------------------------------------------------
+  // Prijsberekening (zelfde regels als voorheen) + de prijs op de foto
+  // ---------------------------------------------------------------
   var lastComputedTotal = null;
+  var currentPhoto = heroImg.getAttribute('src');
+
+  function setHeroPhoto(src) {
+    if (src === currentPhoto) return;
+    currentPhoto = src;
+    heroImg.classList.add('is-swapping');
+    var pre = new Image();
+    pre.onload = pre.onerror = function () {
+      if (currentPhoto !== src) return;
+      heroImg.src = src;
+      heroImg.classList.remove('is-swapping');
+    };
+    pre.src = src;
+  }
+
+  function updateEstimate(deliveryPrice) {
+    var dRadio = getDeliveryMode();
+    var base = dRadio && dRadio.value !== 'geen' ? parseFloat(dRadio.dataset.base) : 25;
+    estNote.textContent = fmt(base) + ' + €0,25 per km × 4 ritten (bezorgen en ophalen, heen en terug). Het definitieve bedrag bevestigen we bij je aanvraag.';
+    if (deliveryDistanceKm === null) {
+      estKm.textContent = '–';
+      estCost.textContent = '–';
+    } else {
+      estKm.textContent = deliveryDistanceKm + ' km enkele reis';
+      estCost.textContent = deliveryPrice !== null ? fmt(deliveryPrice) : '–';
+    }
+  }
 
   function recalc() {
     var guestsOverLimit = guestsInput.value === 'over30';
-    var daysOverLimit = longerRentalCheck.checked && daysInput.value === 'over7';
+    var daysOverLimit = daysInput.value === 'over7';
+    var mode = getMode();
+    var pkg = getSelectedPackage();
+
+    // Foto en prijs per persoon volgen de gekozen collectie.
+    var perPerson = 0;
+    var checkedItems = form.querySelectorAll('.sc-item-check:checked');
+    if (mode === 'standard') {
+      perPerson = pkg ? parseFloat(pkg.dataset.price) : 0;
+      if (pkg) setHeroPhoto(pkg.dataset.photo);
+    } else {
+      checkedItems.forEach(function (el) { perPerson += parseFloat(el.dataset.price); });
+      setHeroPhoto('images/img-728b3f21-800.webp');
+    }
+
+    var xtraSummary = ScExtrasShop.summary();
+    extrasCount.hidden = xtraSummary.lines.length === 0;
+    extrasCount.textContent = xtraSummary.lines.length + ' gekozen';
+
+    var dRadio = getDeliveryMode();
 
     if (guestsOverLimit || daysOverLimit) {
       var reasons = [];
@@ -810,31 +1074,23 @@
       totalPriceEl.textContent = 'Op aanvraag';
       lastComputedTotal = null;
       summaryNote.textContent = 'Voor ' + reasons.join(' en ') + ' stellen we in overleg een passende prijs samen. We nemen na ontvangst van je aanvraag contact met je op.';
+      pricePill.textContent = currentStep <= 2 ? fmt(perPerson) + ' p.p.' : 'Op aanvraag';
+      var overBase = dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null
+        ? parseFloat(dRadio.dataset.base) + deliveryDistanceKm * 4 * parseFloat(dRadio.dataset.perkm) : null;
+      updateEstimate(overBase);
       return;
     }
 
     var guests = Math.max(1, parseInt(guestsInput.value, 10) || 1);
-    var days = longerRentalCheck.checked ? Math.max(4, parseInt(daysInput.value, 10) || 4) : 3;
+    var days = Math.max(3, parseInt(daysInput.value, 10) || 3);
     // De p.p.-prijs dekt de hele standaard huurperiode van 3 dagen. Elke dag
     // daarna kost een vast bedrag per reservering, los van het aantal gasten.
     var extraDays = Math.max(0, days - 3);
     var extraDaysCost = extraDays * EXTRA_DAY_PRICE;
-    var mode = getMode();
-    var baseTableCost = 0;
-    var labelName = '';
-
-    if (mode === 'standard') {
-      var pkg = getSelectedPackage();
-      var pricePerPerson = pkg ? parseFloat(pkg.dataset.price) : 0;
-      baseTableCost = pricePerPerson * guests;
-      labelName = pkg ? pkg.value : '';
-    } else {
-      var checks = form.querySelectorAll('.sc-item-check:checked');
-      var perPersonSum = 0;
-      checks.forEach(function (el) { perPersonSum += parseFloat(el.dataset.price); });
-      baseTableCost = perPersonSum * guests;
-      labelName = 'Maatwerkpakket (' + checks.length + ' tafel-items)';
-    }
+    var baseTableCost = perPerson * guests;
+    var labelName = mode === 'standard'
+      ? (pkg ? pkg.value : '')
+      : 'Maatwerkpakket (' + checkedItems.length + ' tafel-items)';
 
     linePackage.textContent = labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)';
     linePackagePrice.textContent = fmt(baseTableCost);
@@ -844,12 +1100,10 @@
       lineDaysPrice.textContent = fmt(extraDaysCost);
     } else { lineDays.style.display = 'none'; }
 
-    var xtraSummary = ScExtrasShop.summary();
     xtraSummaryLinesEl.innerHTML = xtraSummary.lines.map(function (line) {
       return '<div class="sc-summary-line"><span>' + line.label + '</span><span>' + line.priceLabel + '</span></div>';
     }).join('');
 
-    var dRadio = getDeliveryMode();
     var deliveryPrice = 0;
     if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
       var base = parseFloat(dRadio.dataset.base);
@@ -860,11 +1114,18 @@
       lineDelivery.style.display = 'flex';
       lineDeliveryLabel.textContent = (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)';
       lineDeliveryPrice.textContent = fmt(deliveryPrice);
-    } else { lineDelivery.style.display = 'none'; }
+      updateEstimate(deliveryPrice);
+    } else {
+      lineDelivery.style.display = 'none';
+      updateEstimate(null);
+    }
 
     var total = baseTableCost + extraDaysCost + xtraSummary.subtotal + deliveryPrice;
     totalPriceEl.textContent = (xtraSummary.hasFrom ? 'vanaf ' : '') + fmt(total);
     lastComputedTotal = total;
+
+    // Stap 1-2: prijs per persoon van de gekozen tafel; stap 3-4: het totaal.
+    pricePill.textContent = currentStep <= 2 ? fmt(perPerson) + ' p.p.' : totalPriceEl.textContent;
 
     summaryNote.textContent = (dRadio && dRadio.value !== 'geen')
       ? 'Dit is een indicatie (bezorgafstand is een schatting). De definitieve prijs bevestigen we samen met de beschikbaarheid.'
@@ -872,49 +1133,34 @@
   }
 
   form.addEventListener('input', function (e) {
-    if (e.target.id === 'scDeliveryAddress' || e.target.id === 'scManualKm') return;
+    if (addressInputs.indexOf(e.target) !== -1 || e.target.id === 'scManualKm') return;
     recalc();
   });
   form.addEventListener('change', recalc);
-  recalc();
 
+  // ---------------------------------------------------------------
+  // Versturen: dezelfde velden naar Web3Forms als voorheen
+  // ---------------------------------------------------------------
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     recalc();
 
-    var statusEl = document.getElementById('scStatus');
-    var btn = document.getElementById('scSubmitBtn');
-
-    if (getMode() === 'custom' && !form.querySelector('.sc-item-check:checked')) {
-      statusEl.textContent = 'Kies bij je maatwerkpakket minstens één tafelitem.';
-      statusEl.className = 'sc-status sc-err';
-      var firstItem = form.querySelector('.sc-item-check');
-      if (firstItem) firstItem.focus();
-      return;
-    }
-
-    var dRadio = getDeliveryMode();
-    if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null) {
-      statusEl.textContent = 'Controleer het bezorgadres: klik op "Bereken afstand" of vul de afstand handmatig in.';
-      statusEl.className = 'sc-status sc-err';
-      return;
+    // Vangnet: de stapcontroles nogmaals, voor het geval er in een
+    // eerdere stap iets is veranderd.
+    for (var s = 1; s < TOTAL_STEPS; s++) {
+      if (!validateStep(s)) {
+        var msg = statusEl.textContent;
+        goTo(s, true);
+        showError(msg);
+        return;
+      }
     }
     if (!document.getElementById('scTermsCheck').checked) {
-      statusEl.textContent = 'Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.';
-      statusEl.className = 'sc-status sc-err';
-      document.getElementById('scTermsCheck').focus();
-      return;
-    }
-    var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
-    if (cardsEntry && cardsEntry.qty > 0 && !(cardsEntry.type || '').trim()) {
-      statusEl.textContent = 'Vul aan welk soort kaarten je wilt (bijv. menukaarten, naamkaarten).';
-      statusEl.className = 'sc-status sc-err';
-      var cardsTypeInput = xtraCatalogEl.querySelector('[data-key="handgemaakte-kaarten"] .sc-shop-type-input');
-      if (cardsTypeInput) cardsTypeInput.focus();
+      showError('Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.', document.getElementById('scTermsCheck'));
       return;
     }
 
-    btn.disabled = true;
+    submitBtn.disabled = true;
     statusEl.textContent = 'Versturen...';
     statusEl.className = 'sc-status';
 
@@ -922,7 +1168,7 @@
     var mode = getMode();
     formData.append('modus', mode === 'standard' ? 'Standaardpakket' : 'Maatwerkpakket');
     if (guestsInput.value === 'over30') formData.set('guests', 'Meer dan 30 personen');
-    var effectiveDays = !longerRentalCheck.checked ? '3' : (daysInput.value === 'over7' ? 'Meer dan 7 dagen' : daysInput.value);
+    var effectiveDays = daysInput.value === 'over7' ? 'Meer dan 7 dagen' : daysInput.value;
     formData.append('days', effectiveDays);
 
     if (mode === 'custom') {
@@ -940,9 +1186,10 @@
     });
     formData.append('extra_items', xtraLines.length ? xtraLines.join(', ') : 'Geen');
 
+    var dRadio = getDeliveryMode();
     if (dRadio && dRadio.value !== 'geen') {
       formData.append('bezorgmodus', dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen');
-      formData.append('bezorgadres', addressInput.value);
+      formData.append('bezorgadres', getAddress());
       formData.append('bezorgadres_genormaliseerd', resolvedAddressLabel || '(niet automatisch gevonden)');
       formData.append('afstand_enkele_reis_km', deliveryDistanceKm !== null ? deliveryDistanceKm : '');
       formData.append('afstand_bron', usingManualKm ? 'Handmatig ingevuld' : 'Automatisch berekend');
@@ -955,29 +1202,43 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data.success) {
-          statusEl.textContent = 'Bedankt! Je reserveringsaanvraag is verstuurd. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.';
-          statusEl.className = 'sc-status sc-ok';
-          form.reset();
-          // Alles terug naar de beginstand, inclusief het gedeelde mandje.
-          ScCart.clear();
-          xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
-          standardBlock.style.display = 'block'; customBlock.style.display = 'none';
-          daysWrap.classList.remove('sc-visible');
-          applyDeliveryModeVisibility('geen');
-          deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false;
-          addressStatus.textContent = '';
-          recalc();
+          resetAll();
+          document.getElementById('rsvBody').hidden = true;
+          document.getElementById('rsvDone').hidden = false;
+          document.getElementById('rsvDoneTitle').focus();
         } else {
-          statusEl.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.';
-          statusEl.className = 'sc-status sc-err';
+          showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
         }
       })
       .catch(function () {
-        statusEl.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.';
-        statusEl.className = 'sc-status sc-err';
+        showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
       })
-      .finally(function () { btn.disabled = false; });
+      .finally(function () { submitBtn.disabled = false; });
   });
+
+  // Alles terug naar de beginstand, inclusief het gedeelde mandje.
+  function resetAll() {
+    form.reset();
+    ScCart.clear();
+    xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
+    guestsInput.value = '2';
+    daysInput.value = '3';
+    renderStepper('guests');
+    renderStepper('days');
+    setMode('standard');
+    extrasDetails.open = false;
+    applyDeliveryModeVisibility('geen');
+    deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false; lastCalculatedAddress = null;
+    addressStatus.textContent = '';
+    goTo(1, false);
+  }
+  document.getElementById('rsvRestart').addEventListener('click', function () {
+    document.getElementById('rsvDone').hidden = true;
+    document.getElementById('rsvBody').hidden = false;
+    goTo(1, true);
+  });
+
+  goTo(1, false);
 })();
 </script>
 </body>
