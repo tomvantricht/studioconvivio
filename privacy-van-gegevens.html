@@ -21,10 +21,8 @@
 <link rel="icon" href="images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=2">
+<link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/site.css?v=3">
 </head>
 <body>
 
@@ -63,7 +61,7 @@
       <p class="eyebrow">Juridisch</p>
       <h1 style="font-size:clamp(30px,3.6vw,44px);margin-top:14px;">Privacy van gegevens</h1>
       <p class="lede" style="margin-top:18px;">Welke gegevens Studio Convivio verzamelt via deze website, waarom dat gebeurt, hoe lang ze bewaard worden en welke rechten je hebt.</p>
-      <p style="margin-top:14px;font-size:13px;color:var(--ink-faint);">Laatst bijgewerkt: 27-09-2026.</p>
+      <p style="margin-top:14px;font-size:13px;color:var(--ink-faint);">Laatst bijgewerkt: 30-09-2026.</p>
     </div>
   </section>
 
@@ -120,12 +118,8 @@
             <td>Zet het adres dat je invult om in coördinaten, zodat de website de afstand tot Wageningen kan berekenen. Dit gebeurt alleen wanneer je zelf op "Bereken afstand" klikt of het adresveld verlaat.</td>
           </tr>
           <tr>
-            <td>Google Fonts</td>
-            <td>Levert het lettertype van de website. Daarbij wordt je IP-adres naar een server van Google gestuurd.</td>
-          </tr>
-          <tr>
-            <td>Netlify</td>
-            <td>Hosting van de website. Verwerkt standaard logbestanden met technische gegevens zoals IP-adres en opgevraagde pagina.</td>
+            <td>Cloudflare</td>
+            <td>Hosting en beveiliging van de website. Verwerkt daarbij technische gegevens zoals je IP-adres en de opgevraagde pagina.</td>
           </tr>
         </tbody>
       </table>
