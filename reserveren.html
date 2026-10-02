@@ -79,6 +79,9 @@
   .rsv-restored { margin: -6px 0 16px; font-size: 13px; color: var(--ink-soft); }
   .rsv-restored[hidden] { display: none; }
   .rsv-restored .rsv-textlink + .rsv-textlink { margin-left: 12px; }
+  /* Zonder melding alleen een bescheiden link rechts onder de voortgang. */
+  .rsv-restored.is-plain { text-align: right; margin: -14px 0 2px; font-size: 12.5px; line-height: 1.3; }
+  .rsv-restored.is-plain .rsv-textlink { font-weight: 400; color: var(--ink-soft); }
   .rsv-body[hidden] { display: none; }
 
   .rsv-progress {
@@ -208,6 +211,17 @@
     .sc-shop-card--flat .sc-shop-body { flex-wrap: wrap; }
     .sc-shop-card--flat .sc-shop-body .sc-shop-price { text-align: left; padding-left: 74px; }
   }
+  .sc-shop-zoom {
+    position: relative; flex-shrink: 0; padding: 0; border: 0; background: none;
+    border-radius: 4px; line-height: 0; cursor: zoom-in;
+  }
+  .sc-shop-zoom:focus-visible { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  .sc-shop-zoom-icon {
+    position: absolute; right: -5px; bottom: -5px; width: 18px; height: 18px; padding: 2px;
+    background: var(--paper); border-radius: 50%; box-shadow: 0 1px 3px rgba(43,44,36,0.3);
+    fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round;
+  }
+  .sc-shop-zoom:hover .sc-shop-thumb { opacity: 0.85; }
   .sc-shop-thumb { width: 40px; height: 40px; flex-shrink: 0; object-fit: cover; border-radius: 4px; background: var(--paper-deep); }
   .sc-shop-card--flat .sc-shop-price { font-size: 12px; color: var(--ink-soft); white-space: normal; text-align: right; font-variant-numeric: tabular-nums; }
   .sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); }
@@ -326,6 +340,7 @@
   }
   .rsv-back:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
   .rsv-back:disabled { opacity: 0.25; cursor: default; }
+  .rsv-back[hidden] { display: none; }
   .rsv-back svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
   .rsv-next {
     flex: 1; height: 54px; border-radius: 999px; border: 0; background: var(--ink); color: var(--paper);
@@ -761,9 +776,19 @@
     </ul>
   </div>
 </footer>
+<div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Foto's" hidden>
+  <button type="button" class="gallery-close" id="galleryClose" aria-label="Sluiten">&times;</button>
+  <button type="button" class="gallery-nav gallery-nav--prev" id="galleryPrev" aria-label="Vorige foto">&#8249;</button>
+  <button type="button" class="gallery-nav gallery-nav--next" id="galleryNext" aria-label="Volgende foto">&#8250;</button>
+  <div class="gallery-lightbox-media">
+    <img id="galleryImg" src="" alt="">
+    <div class="gallery-dots" id="galleryDots"></div>
+  </div>
+</div>
+
 <script src="js/site.js?v=5"></script>
-<script src="js/extras-catalog.js?v=9"></script>
-<script src="js/extras-shop.js?v=6"></script>
+<script src="js/extras-catalog.js?v=10"></script>
+<script src="js/extras-shop.js?v=7"></script>
 
 <script>
 (function () {
@@ -942,6 +967,7 @@
   // terugknop van de browser naar de vorige stap gaat in plaats van weg
   // van de pagina. historyDepth telt de stappen die wij zelf toevoegden.
   var historyDepth = 0;
+  var restoredMsg = '', currentStepShown = 0; // melding bij een teruggezet concept
   // Knoptekst die zegt waar je heen gaat (kort genoeg voor de mobiele balk).
   var NEXT_LABELS = { 1: 'Naar datum', 2: 'Naar bezorging', 3: 'Naar je gegevens' };
   function stepUrl(n) { return location.pathname + (n > 1 ? '#stap-' + n : ''); }
@@ -956,6 +982,10 @@
     bars.forEach(function (b, i) { b.classList.toggle('is-done', i < n); });
     stepLabel.textContent = 'Stap ' + n + ' van ' + TOTAL_STEPS;
     backBtn.disabled = n === 1;
+    backBtn.hidden = n === 1;
+    if (n !== currentStepShown) restoredMsg = currentStepShown ? '' : restoredMsg;
+    currentStepShown = n;
+    updateStartOver();
     // In stap 4 staat de samenvatting al in de kaart; links niet nog eens.
     document.getElementById('rsvSide').hidden = n === TOTAL_STEPS;
     if (n === TOTAL_STEPS) syncHomeFromDelivery();
@@ -1900,6 +1930,7 @@
     deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false; lastCalculatedAddress = null;
     addressStatus.textContent = '';
     restoredNote.hidden = true;
+    restoredMsg = '';
     homeSynced = false; homeAutoFilled = false;
     homeStatus.textContent = '';
     homeNote.textContent = HOME_NOTE_DEFAULT;
@@ -1912,10 +1943,27 @@
   var confirmingStartOver = false;
   function setStartOverConfirm(on) {
     confirmingStartOver = on;
-    restoredText.textContent = on ? 'Alles wissen, ook je gekozen extra\'s?' : RESTORED_TEXT;
     startOverBtn.textContent = on ? 'Ja, wis alles' : 'Opnieuw beginnen';
     startOverNo.hidden = !on;
+    updateStartOver();
   }
+  // "Opnieuw beginnen" staat er zodra er iets is ingevuld of gekozen. Na het
+  // terugzetten van een concept staat de melding erbij tot je verder klikt.
+  function hasAnyInput() {
+    return currentStep > 1 || !!dateInput.value || getMode() === 'custom' || guestsInput.value !== '1' ||
+      ScExtrasShop.summary().lines.length > 0 || !!document.getElementById('scName').value.trim() || !!document.getElementById('scEmail').value.trim();
+  }
+  function updateStartOver() {
+    if (!restoredText || !doneEl.hidden) return;
+    var text = confirmingStartOver ? 'Alles wissen, ook je gekozen extra\'s?' : restoredMsg;
+    restoredNote.hidden = !confirmingStartOver && !hasAnyInput();
+    restoredText.textContent = text;
+    restoredText.hidden = !text;
+    restoredNote.classList.toggle('is-plain', !text);
+  }
+  form.addEventListener('input', updateStartOver);
+  form.addEventListener('change', updateStartOver);
+  form.addEventListener('click', function (e) { if (e.target.closest('[data-stepper], #rsvToCustom, #rsvToStandard')) setTimeout(updateStartOver, 0); });
   startOverBtn.addEventListener('click', function () {
     if (!confirmingStartOver) { setStartOverConfirm(true); startOverBtn.focus(); return; }
     setStartOverConfirm(false);
@@ -1926,6 +1974,70 @@
     form.querySelector('.rsv-title').focus();
   });
   startOverNo.addEventListener('click', function () { setStartOverConfirm(false); startOverBtn.focus(); });
+
+  // ---------------------------------------------------------------
+  // Foto's van extra's vergroten: de miniatuur is een knop. De klik mag
+  // het vinkje niet omzetten, daarom preventDefault op de knop.
+  // ---------------------------------------------------------------
+  var galleryLightbox = document.getElementById('galleryLightbox');
+  var galleryImg = document.getElementById('galleryImg');
+  var galleryDots = document.getElementById('galleryDots');
+  var galleryClose = document.getElementById('galleryClose');
+  var galleryPrev = document.getElementById('galleryPrev');
+  var galleryNext = document.getElementById('galleryNext');
+  var galleryPhotos = [], galleryIndex = 0, galleryOpener = null;
+  function renderGallery() {
+    var photo = galleryPhotos[galleryIndex];
+    galleryImg.src = photo.src;
+    galleryImg.alt = photo.alt;
+    galleryDots.innerHTML = galleryPhotos.length > 1 ? galleryPhotos.map(function (_, i) {
+      return '<span' + (i === galleryIndex ? ' class="is-active"' : '') + '></span>';
+    }).join('') : '';
+    galleryPrev.hidden = galleryNext.hidden = galleryPhotos.length < 2;
+    galleryPrev.disabled = galleryIndex === 0;
+    galleryNext.disabled = galleryIndex === galleryPhotos.length - 1;
+  }
+  function openGallery(key, opener) {
+    var item = ScExtrasShop.findItem(key);
+    if (!item || !item.photos || !item.photos.length) return;
+    galleryPhotos = item.photos;
+    galleryIndex = 0;
+    galleryOpener = opener;
+    galleryLightbox.setAttribute('aria-label', 'Foto\'s van ' + item.name);
+    renderGallery();
+    galleryLightbox.hidden = false;
+    document.body.classList.add('gallery-open');
+    galleryClose.focus();
+  }
+  function closeGallery() {
+    galleryLightbox.hidden = true;
+    document.body.classList.remove('gallery-open');
+    if (galleryOpener) galleryOpener.focus();
+  }
+  xtraCatalogEl.addEventListener('click', function (e) {
+    var btn = e.target.closest('.sc-shop-zoom');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openGallery(btn.getAttribute('data-zoom'), btn);
+  });
+  galleryClose.addEventListener('click', closeGallery);
+  galleryPrev.addEventListener('click', function () { if (galleryIndex > 0) { galleryIndex--; renderGallery(); } });
+  galleryNext.addEventListener('click', function () { if (galleryIndex < galleryPhotos.length - 1) { galleryIndex++; renderGallery(); } });
+  galleryLightbox.addEventListener('click', function (e) { if (e.target === galleryLightbox) closeGallery(); });
+  document.addEventListener('keydown', function (e) {
+    if (galleryLightbox.hidden) return;
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowRight' && galleryIndex < galleryPhotos.length - 1) { galleryIndex++; renderGallery(); }
+    if (e.key === 'ArrowLeft' && galleryIndex > 0) { galleryIndex--; renderGallery(); }
+    if (e.key === 'Tab') {
+      // Focus binnen de viewer houden.
+      var f = [galleryClose, galleryPrev, galleryNext].filter(function (b) { return !b.hidden && !b.disabled; });
+      var i = f.indexOf(document.activeElement);
+      e.preventDefault();
+      f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+    }
+  });
 
   // Voortgangsbalk: schaduw zodra hij bovenin vastzit.
   var progressEl = form.querySelector('.rsv-progress');
@@ -1943,7 +2055,7 @@
   var draft = loadDraft();
   if (draft) {
     restoreDraft(draft);
-    if (hasContent(draft)) restoredNote.hidden = false;
+    if (hasContent(draft)) restoredMsg = RESTORED_TEXT;
     // Terug naar de bewaarde stap, maar niet voorbij een stap die nog niet klopt.
     var wanted = Math.min(Math.max(1, parseInt(draft.step, 10) || 1), TOTAL_STEPS);
     while (startStep < wanted && validateStep(startStep, true)) startStep++;

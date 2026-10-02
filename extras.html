@@ -461,8 +461,8 @@
 </div>
 
 <script src="js/site.js?v=5"></script>
-<script src="js/extras-catalog.js?v=9"></script>
-<script src="js/extras-shop.js?v=6"></script>
+<script src="js/extras-catalog.js?v=10"></script>
+<script src="js/extras-shop.js?v=7"></script>
 <script>
 (function () {
   var root = document.querySelector('.xt-wrap');
@@ -505,54 +505,14 @@
   });
 
   // Fotogalerij per product: meerdere foto's van hetzelfde item (andere hoek
-  // of variant) samen bekijken, los van het aan- of uitvinken van het item.
-  var GALLERY_IMAGES = {
-    'strikjes-bedrukt': [
-      { src: 'images/extra-strikje-bedrukt-1.webp', alt: 'Ivoorkleurig strikje met een gedrukte naam om de voet van een wijnglas' },
-      { src: 'images/extra-strikje-bedrukt-2.webp', alt: 'Vijf ivoorkleurige strikjes, elk bedrukt met een naam' }
-    ],
-    'cilindervazen': [
-      { src: 'images/extra-cilindervaas-1.webp', alt: 'Glazen cilindervazen met water en een drijvende kaars' },
-      { src: 'images/extra-cilindervaas-2.webp', alt: 'Gedekte tafel met een rij cilindervazen met drijvende kaarsen' }
-    ],
-    'kaarsen': [
-      { src: 'images/extra-kaars-1.webp', alt: 'Brandende drijfkaars in een glazen vaas met water' },
-      { src: 'images/extra-cilindervaas-2.webp', alt: 'Gedekte tafel met een rij cilindervazen met drijvende kaarsen' }
-    ],
-    'champagneglazen': [
-      { src: 'images/extra-champagneglas-1.webp', alt: 'Champagneglas met slanke kelk op houten tafel' },
-      { src: 'images/extra-champagneglas-2.webp', alt: 'Drie champagneglazen naast elkaar' }
-    ],
-    'strikjes': [
-      { src: 'images/extra-strikje-1.webp', alt: 'Ivoorkleurig satijnen strikje om de voet van een glas' },
-      { src: 'images/extra-strikje-2.webp', alt: 'Champagneglas met ivoorkleurig strikje' },
-      { src: 'images/extra-strikje-3.webp', alt: 'Rood satijnen strikje om de voet van een glas' },
-      { src: 'images/extra-strikje-4.webp', alt: 'Champagneglas met rood strikje, met een los strikje ernaast' }
-    ],
-    'broodmandjes': [
-      { src: 'images/extra-broodmandje-1.webp', alt: 'Metalen broodmandje met rotan hengsel' },
-      { src: 'images/extra-broodmandje-2.webp', alt: 'Twee metalen broodmandjes op elkaar gestapeld' }
-    ],
-    'servetringen': [
-      { src: 'images/img-ddd003eb.webp', alt: 'Unieke servetring, goudkleurige champagnedop' },
-      { src: 'images/img-a2ea5439.webp', alt: 'Unieke servetring, bruin-wit patroon' },
-      { src: 'images/img-2f8c3e29.webp', alt: 'Unieke servetring, rode Opera-dop' },
-      { src: 'images/img-0aedb310.webp', alt: 'Unieke servetring, zwarte dop' },
-      { src: 'images/extra-servetring-zilver.webp', alt: 'Unieke servetring, zilveren champagnedop om een katoenen servet' }
-    ],
-    'tafellampen': [
-      { src: 'images/img-2fb20330.webp', alt: 'Tafellamp, aan in het donker' },
-      { src: 'images/img-2b8e7039.webp', alt: 'Tafellamp op tafel bij daglicht' }
-    ],
-    'kandelaar': [
-      { src: 'images/img-c41acedc.webp', alt: 'Twee zilveren kandelaars met gedraaide kaarsen' },
-      { src: 'images/img-963e96bb.webp', alt: 'Zilveren kandelaar, close-up' }
-    ],
-    'kleine-vaasjes': [
-      { src: 'images/img-c12e54f6.webp', alt: 'Set kleine glazen vaasjes, leeg' },
-      { src: 'images/img-cfa2e677.webp', alt: 'Dezelfde kleine vaasjes met bloemen' }
-    ]
-  };
+  // of variant). De foto's staan in extras-catalog.js; hier alleen de items
+  // met meer dan één foto, zoals voorheen.
+  var GALLERY_IMAGES = {};
+  SC_EXTRAS_CATALOG.forEach(function (group) {
+    group.items.forEach(function (item) {
+      if (item.photos && item.photos.length > 1) GALLERY_IMAGES[item.key] = item.photos;
+    });
+  });
 
   var galleryLightbox = document.getElementById('galleryLightbox');
   var galleryImg = document.getElementById('galleryImg');

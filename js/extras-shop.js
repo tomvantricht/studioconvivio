@@ -36,10 +36,17 @@ window.ScExtrasShop = (function () {
 
   // Bouwt de itemlijst (per categorie) als HTML-string: een compacte
   // vinklijst met een kleine foto per item (images/thumb-<key>.webp, 112px
-  // vierkant). Gebruikt op reserveren.html. Ontbreekt een miniatuur, dan
-  // verdwijnt het lege vakje vanzelf.
+  // vierkant). Gebruikt op reserveren.html. Heeft het item foto's in de
+  // catalogus, dan is de miniatuur een knop die ze groot toont (de pagina
+  // vangt de klik af via data-zoom, zodat het vinkje niet omklapt).
+  // Ontbreekt een miniatuur, dan verdwijnt het lege vakje vanzelf.
   function thumbHtml(item) {
-    return '<img class="sc-shop-thumb" src="images/thumb-' + item.key + '.webp" alt="" width="40" height="40" loading="lazy" decoding="async" onerror="this.remove()">';
+    var img = '<img class="sc-shop-thumb" src="images/thumb-' + item.key + '.webp" alt="" width="40" height="40" loading="lazy" decoding="async" onerror="this.remove()">';
+    if (!item.photos || !item.photos.length) return img;
+    var n = item.photos.length;
+    var label = n > 1 ? 'Bekijk de ' + n + ' foto\'s van ' + item.name : 'Bekijk de foto van ' + item.name;
+    return '<button type="button" class="sc-shop-zoom" data-zoom="' + item.key + '" aria-label="' + label + '">' + img +
+      '<svg class="sc-shop-zoom-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg></button>';
   }
   function renderCatalog() {
     var html = '';
@@ -136,5 +143,9 @@ window.ScExtrasShop = (function () {
     return { lines: lines, subtotal: subtotal, hasFrom: hasFrom };
   }
 
-  return { fmt: fmt, priceLabel: priceLabel, stockLabel: stockLabel, flatItems: flatItems, renderCatalog: renderCatalog, wire: wire, summary: summary };
+  function findItem(key) {
+    return flatItems().filter(function (item) { return item.key === key; })[0] || null;
+  }
+
+  return { findItem: findItem, fmt: fmt, priceLabel: priceLabel, stockLabel: stockLabel, flatItems: flatItems, renderCatalog: renderCatalog, wire: wire, summary: summary };
 })();
