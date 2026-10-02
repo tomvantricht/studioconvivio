@@ -42,22 +42,30 @@
   .rsv-intro h1 { font-size: clamp(32px, 4.2vw, 54px); font-weight: 400; letter-spacing: -0.02em; text-wrap: balance; }
   .rsv-intro h1 em { font-weight: 400; }
   .rsv-intro .lede { margin-top: 18px; color: var(--ink-soft); max-width: 40ch; }
-  .rsv-promises { list-style: none; margin: 34px 0 0; padding: 0; border-top: 1px solid var(--line); max-width: 420px; }
+  .rsv-promises { list-style: none; margin: 28px 0 0; padding: 0; border-top: 1px solid var(--line); max-width: 420px; }
   .rsv-promises li { display: grid; grid-template-columns: 2.4em 1fr; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
   .rsv-promises b { font-family: var(--serif); font-weight: 400; font-size: 17px; color: var(--mocha-dark); }
   @media (max-width: 959px) {
     .rsv-intro .lede { font-size: 15px; }
-    .rsv-promises { display: none; }
+    .rsv-promises, .rsv-side { display: none; }
   }
+
+  /* Live samenvatting in de linkerkolom (alleen desktop) */
+  .rsv-side { margin-top: 30px; max-width: 420px; background: var(--paper); border-radius: 14px; padding: 18px 20px; }
+  .rsv-side-head { font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
+  .rsv-side .sc-summary-meta, .rsv-side .sc-summary-line { font-size: 13px; }
+  .rsv-side-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-family: var(--serif); font-size: 19px; }
+  .rsv-side-total strong { font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .rsv-side-note { margin-top: 4px; font-size: 12px; color: var(--ink-soft); text-align: right; }
 
   /* ---- De kaart ---- */
   .rsv-card {
-    background: var(--paper); border-radius: 22px; overflow: hidden;
+    background: var(--paper); border-radius: 22px;
     box-shadow: 0 1px 2px rgba(43,44,36,0.06), 0 18px 40px -18px rgba(43,44,36,0.28);
     font-family: var(--sans); color: var(--ink);
   }
   .rsv-card * { box-sizing: border-box; }
-  .rsv-hero { position: relative; aspect-ratio: 5 / 2; background: var(--paper-deep); overflow: hidden; }
+  .rsv-hero { position: relative; aspect-ratio: 5 / 2; background: var(--paper-deep); overflow: hidden; border-radius: 22px 22px 0 0; }
   .rsv-hero img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.35s ease; }
   .rsv-hero img.is-swapping { opacity: 0.25; }
   .rsv-price-pill {
@@ -66,7 +74,9 @@
     padding: 8px 16px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
     box-shadow: 0 4px 14px -4px rgba(43,44,36,0.35);
   }
-  .rsv-body { padding: 22px clamp(18px, 4vw, 30px) clamp(22px, 4vw, 30px); }
+  .rsv-body { --rsv-pad: clamp(18px, 4vw, 30px); padding: 22px var(--rsv-pad) var(--rsv-pad); }
+  .rsv-restored { margin: -6px 0 16px; font-size: 13px; color: var(--ink-soft); }
+  .rsv-restored[hidden] { display: none; }
   .rsv-body[hidden] { display: none; }
 
   .rsv-progress { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
@@ -99,7 +109,7 @@
   .sc-package-option:hover .sc-package-card { border-color: var(--ink-faint); }
   .sc-package-option input:checked + .sc-package-card { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
   .sc-package-option input:focus-visible + .sc-package-card { outline: 2px solid var(--mocha-dark); outline-offset: 3px; }
-  .sc-package-photo { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; }
+  .sc-package-photo { display: block; width: 100%; height: auto; aspect-ratio: 16 / 7; object-fit: cover; }
   .sc-package-body { padding: 14px 16px 16px; }
   .sc-package-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
   .sc-package-head strong { font-family: var(--serif); font-weight: 400; font-size: 20px; }
@@ -148,6 +158,15 @@
   .rsv-stepper svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
   .rsv-stepper output { min-width: 2.6ch; text-align: center; font-family: var(--serif); font-size: 26px; font-variant-numeric: lining-nums tabular-nums; }
   .rsv-after { margin-top: 14px; }
+  .rsv-panel .rsv-field label.rsv-panel-label { font-size: 14px; }
+  .rsv-period { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
+  .rsv-period[hidden] { display: none; }
+  .rsv-period-head { font-size: 14px; font-weight: 700; }
+  .rsv-period-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  @media (max-width: 400px) { .rsv-period-grid { grid-template-columns: 1fr; } }
+  .rsv-period-grid .rsv-field + .rsv-field { margin-top: 0; }
+  .rsv-period-sum { margin-top: 12px; font-size: 13px; font-weight: 700; }
+  .rsv-period-sum.is-err { color: #a3402f; }
 
   /* Extra's (uitklapbaar) */
   .rsv-extras { margin-top: 14px; border: 1px solid var(--line); background: #fffdf8; }
@@ -245,6 +264,8 @@
   .rsv-summary-head { font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
   .sc-summary-line { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; color: var(--ink-soft); padding: 4px 0; }
   .sc-summary-line span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .sc-summary-meta { font-size: 13px; color: var(--ink); padding: 2px 0; }
+  .sc-summary-meta + .sc-summary-line { margin-top: 6px; }
   .sc-summary-total { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--serif); font-size: 21px; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
   .sc-summary-total strong { font-weight: 500; font-variant-numeric: tabular-nums; }
   .sc-summary .vat-note { margin-top: 2px; text-align: right; }
@@ -274,6 +295,21 @@
   .rsv-next:hover { background: var(--moss-dark); }
   .rsv-next:disabled { opacity: 0.6; cursor: default; }
   .rsv-next[hidden] { display: none; }
+  .rsv-nav-total { display: none; }
+  @media (max-width: 959px) {
+    /* Op mobiel blijven totaalprijs en Volgende altijd in beeld. */
+    .rsv-nav {
+      position: sticky; bottom: 0; z-index: 5; align-items: center;
+      margin: 24px calc(-1 * var(--rsv-pad)) 0; padding: 12px var(--rsv-pad) calc(12px + env(safe-area-inset-bottom));
+      background: var(--paper); border-top: 1px solid var(--line-soft);
+      box-shadow: 0 -10px 24px -18px rgba(43,44,36,0.35);
+    }
+    .rsv-back { width: 48px; height: 48px; }
+    .rsv-next { height: 48px; }
+    .rsv-nav-total { display: flex; flex-direction: column; justify-content: center; min-width: 0; line-height: 1.2; }
+    .rsv-nav-total span { font-size: 11px; color: var(--ink-soft); letter-spacing: 0.04em; }
+    .rsv-nav-total strong { font-family: var(--serif); font-weight: 500; font-size: 18px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  }
   .sc-status { margin-top: 14px; font-size: 13.5px; text-align: center; }
   .sc-status:empty { margin-top: 0; }
   .sc-status.sc-ok { color: var(--moss-dark); }
@@ -285,7 +321,22 @@
   .rsv-done h2 { font-weight: 400; font-size: 30px; margin-bottom: 12px; }
   .rsv-done h2:focus { outline: none; }
   .rsv-done p { color: var(--ink-soft); max-width: 36ch; margin: 0 auto; }
-  .rsv-done .rsv-next { flex: none; padding: 0 30px; margin-top: 26px; }
+  .rsv-done-summary { text-align: left; max-width: 440px; margin: 26px auto 0; border-top: 1px solid var(--ink); padding-top: 14px; }
+  .rsv-done-summary .vat-note { text-align: right; font-size: 12px; color: var(--ink-soft); }
+  .rsv-done-steps { list-style: none; text-align: left; max-width: 440px; margin: 26px auto 0; padding: 0; border-top: 1px solid var(--line); }
+  .rsv-done-steps li { display: grid; grid-template-columns: 2em 1fr; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; color: var(--ink-soft); }
+  .rsv-done-steps b { font-family: var(--serif); font-weight: 400; font-size: 17px; color: var(--mocha-dark); }
+  .rsv-done-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 26px; }
+  .rsv-done .rsv-next { flex: none; display: inline-grid; place-items: center; padding: 0 30px; text-decoration: none; }
+  .rsv-done .rsv-ghost { flex: none; height: 54px; padding: 0 26px; border-radius: 999px; border: 1px solid var(--ink); background: transparent; color: var(--ink); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .rsv-done .rsv-ghost:hover { background: var(--ink); color: var(--paper); }
+
+  @media print {
+    .announce-bar, .site-header, .site-footer, .rsv-intro, .rsv-done-actions, .skip-link { display: none !important; }
+    .rsv-main { background: none; padding: 0; }
+    .rsv-layout { display: block; }
+    .rsv-card { box-shadow: none; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .rsv-step.is-entering { animation: none; }
@@ -331,6 +382,12 @@
     <div class="rsv-intro">
       <h1>Reserveer <em>jouw tafel</em></h1>
       <p class="lede">In vier korte stappen stel je je aanvraag samen en zie je meteen wat het kost. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
+      <div class="rsv-side" id="rsvSide">
+        <p class="rsv-side-head">Jouw aanvraag</p>
+        <div id="rsvSideLines"></div>
+        <div class="rsv-side-total"><span>Totaal</span><strong id="rsvSideTotal">€33,50</strong></div>
+        <p class="rsv-side-note">Indicatie incl. btw, exclusief borg</p>
+      </div>
       <ul class="rsv-promises">
         <li><b>1</b><span>Voorlopige bevestiging binnen 2 dagen, nadat we de beschikbaarheid hebben gecontroleerd.</span></li>
         <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% aanbetaling; dan staat je datum vast.</span></li>
@@ -351,6 +408,8 @@
             <p id="rsvStepLabel">Stap 1 van 4</p>
             <ol class="rsv-bars" aria-hidden="true"><li class="is-done"></li><li></li><li></li><li></li></ol>
           </div>
+          <p class="rsv-restored" id="rsvRestored" hidden>Je eerdere invoer staat nog klaar. <button type="button" class="rsv-textlink" id="rsvStartOver">Opnieuw beginnen</button></p>
+          <input type="hidden" name="gelegenheid" id="scOccasion" value="">
 
           <!-- ====== Stap 1: collectie ====== -->
           <section class="rsv-step" data-step="1" aria-labelledby="rsvTitle1">
@@ -376,7 +435,7 @@
                 <label class="sc-package-option">
                   <input type="radio" name="package" value="Mocha Sky" data-price="17.75" data-photo="images/img-beee9a1e.webp">
                   <div class="sc-package-card">
-                    <img class="sc-package-photo" src="images/img-beee9a1e.webp" alt="Gedekte tafel in de Mocha Sky-collectie" loading="lazy" decoding="async">
+                    <img class="sc-package-photo" src="images/img-beee9a1e.webp" alt="Gedekte tafel in de Mocha Sky-collectie" width="900" height="1600" loading="lazy" decoding="async">
                     <div class="sc-package-body">
                       <div class="sc-package-head"><strong>Mocha Sky</strong><span>€17,75 p.p.</span></div>
                       <p>Dinerborden, voorgerechtborden, voorgerechtbestek, bestek, waterglazen, wijnglazen, dessertcoupe, katoenen servetten, placemats, tafelkleden (250 × 160 cm)</p>
@@ -388,11 +447,15 @@
             </div>
 
             <div id="scCustomBlock" hidden>
-              <p class="rsv-muted" style="margin:-8px 0 16px;">Vink de tafelitems aan die je nodig hebt; ze worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Decoratie zoals tafellampen, zijdebloemen en kaarten voeg je in de volgende stap toe bij de extra's.</p>
+              <p class="rsv-muted" style="margin:-8px 0 16px;">Vink de tafelitems aan die je nodig hebt; ze worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Champagneglazen, servetringen en decoratie zoals tafellampen, zijdebloemen en kaarten voeg je in de volgende stap toe bij de extra's.</p>
               <div class="sc-item-tiles" id="scItemsGrid" role="group" aria-label="Kies je tafelitems">
                 <label class="sc-item-tile">
                   <input type="checkbox" class="sc-item-check" value="Dinerborden" data-price="3.00">
                   <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dinerborden</span><span class="sc-item-price">€3,00</span></span>
+                </label>
+                <label class="sc-item-tile">
+                  <input type="checkbox" class="sc-item-check" value="Voorgerechtborden" data-price="2.00">
+                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Voorgerechtborden</span><span class="sc-item-price">€2,00</span></span>
                 </label>
                 <label class="sc-item-tile">
                   <input type="checkbox" class="sc-item-check" value="Bestek" data-price="2.50">
@@ -411,10 +474,6 @@
                   <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Wijnglazen</span><span class="sc-item-price">€3,00</span></span>
                 </label>
                 <label class="sc-item-tile">
-                  <input type="checkbox" class="sc-item-check" value="Champagneglazen" data-price="0.75">
-                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Champagneglazen</span><span class="sc-item-price">€0,75</span></span>
-                </label>
-                <label class="sc-item-tile">
                   <input type="checkbox" class="sc-item-check" value="Dessertcoupe" data-price="2.00">
                   <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Dessertcoupe</span><span class="sc-item-price">€2,00</span></span>
                 </label>
@@ -426,10 +485,6 @@
                   <input type="checkbox" class="sc-item-check" value="Katoenen servetten" data-price="2.00">
                   <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Katoenen servetten</span><span class="sc-item-price">€2,00</span></span>
                 </label>
-                <label class="sc-item-tile">
-                  <input type="checkbox" class="sc-item-check" value="Servetringen" data-price="0.50">
-                  <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Servetringen</span><span class="sc-item-price">€0,50</span></span>
-                </label>
               </div>
               <p class="rsv-alt">Toch een vaste collectie? <button type="button" class="rsv-textlink" id="rsvToStandard">Kies een standaardpakket</button></p>
             </div>
@@ -438,9 +493,26 @@
 
           <!-- ====== Stap 2: personen, dagen en extra's ====== -->
           <section class="rsv-step" data-step="2" aria-labelledby="rsvTitle2" hidden>
-            <h2 class="rsv-title" id="rsvTitle2" tabindex="-1">Voor hoeveel personen, en hoe lang?</h2>
+            <h2 class="rsv-title" id="rsvTitle2" tabindex="-1">Wanneer is het, en voor hoeveel personen?</h2>
             <input type="hidden" name="guests" id="scGuests" value="2">
             <input type="hidden" id="scDays" value="3">
+
+            <div class="rsv-panel">
+              <div class="rsv-field">
+                <label class="rsv-panel-label" for="scDate">Datum van je diner of feest</label>
+                <input type="date" id="scDate" name="date" required aria-describedby="scDateHint">
+                <p class="sc-hint" id="scDateHint">Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p>
+              </div>
+              <div class="rsv-period" id="rsvPeriod" role="group" aria-labelledby="rsvPeriodHead" hidden>
+                <p class="rsv-period-head" id="rsvPeriodHead">Huurperiode</p>
+                <p class="rsv-muted">Standaard 3 dagen: de dag ervoor, de dag zelf en de dag erna. Langer nodig? Pas de data aan; elke extra dag kost €35.</p>
+                <div class="rsv-period-grid">
+                  <div class="rsv-field"><label for="scStart">Ophalen of bezorgen</label><input type="date" id="scStart" name="ophaaldatum"></div>
+                  <div class="rsv-field"><label for="scEnd">Terugbrengen of ophalen</label><input type="date" id="scEnd" name="retourdatum"></div>
+                </div>
+                <p class="rsv-period-sum" id="rsvPeriodSum" aria-live="polite"></p>
+              </div>
+            </div>
 
             <div class="rsv-panel" role="group" aria-labelledby="rsvGuestsLabel">
               <span class="rsv-panel-label" id="rsvGuestsLabel">Aantal personen</span>
@@ -452,16 +524,6 @@
               </div>
             </div>
 
-            <div class="rsv-panel" role="group" aria-labelledby="rsvDaysLabel">
-              <span class="rsv-panel-label" id="rsvDaysLabel">Aantal huurdagen</span>
-              <p class="rsv-muted">Standaard 3 dagen. Elke extra dag kost €35.</p>
-              <div class="rsv-stepper">
-                <button type="button" data-stepper="days" data-dir="-1" aria-label="Eén dag minder"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>
-                <output id="rsvDaysOut" aria-live="polite">3</output>
-                <button type="button" data-stepper="days" data-dir="1" aria-label="Eén dag meer"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M7 2v10"/></svg></button>
-              </div>
-            </div>
-            <p class="rsv-muted rsv-after">Meer dan 7 dagen? Kies 7+ of neem even <a href="contact.html">contact</a> op.</p>
 
             <details class="rsv-extras" id="rsvExtras">
               <summary>
@@ -536,21 +598,13 @@
             <div class="rsv-field"><label for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" autocomplete="email" required></div>
             <div class="rsv-field"><label for="scPhone">Telefoonnummer <span class="rsv-opt">(optioneel)</span></label><input type="tel" id="scPhone" name="phone" autocomplete="tel"></div>
             <div class="rsv-field">
-              <label for="scDate">Gewenste datum</label>
-              <input type="date" id="scDate" name="date" required aria-describedby="scDateHint">
-              <p class="sc-hint" id="scDateHint">Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p>
-            </div>
-            <div class="rsv-field">
               <label for="scNotes">Opmerkingen of maatwerkwensen <span class="rsv-opt">(optioneel)</span></label>
               <textarea id="scNotes" name="notes" placeholder="Bijv. afmetingen van je tafel(s), specifieke kleurstijl, bijzondere gelegenheid..."></textarea>
             </div>
 
             <div class="sc-summary">
               <p class="rsv-summary-head">Jouw aanvraag</p>
-              <div class="sc-summary-line"><span id="scLinePackage">Moss &amp; Mist × 2 personen (3 dagen)</span><span id="scLinePackagePrice">€33,50</span></div>
-              <div class="sc-summary-line" id="scLineDays" style="display:none;"><span id="scLineDaysLabel"></span><span id="scLineDaysPrice"></span></div>
-              <div id="scXtraSummaryLines"></div>
-              <div class="sc-summary-line" id="scLineDelivery" style="display:none;"><span id="scLineDeliveryLabel">Bezorging</span><span id="scLineDeliveryPrice"></span></div>
+              <div id="scSummaryLines"></div>
               <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€33,50</strong></div>
               <p class="vat-note">Incl. btw</p>
               <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
@@ -573,6 +627,7 @@
 
           <div class="rsv-nav">
             <button type="button" class="rsv-back" id="rsvBack" aria-label="Vorige stap" disabled><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M15 9H3M8 4L3 9l5 5"/></svg></button>
+            <div class="rsv-nav-total" aria-hidden="true"><span>Totaal</span><strong id="rsvNavTotal">€33,50</strong></div>
             <button type="button" class="rsv-next" id="rsvNext">Volgende</button>
             <button type="submit" class="rsv-next" id="scSubmitBtn" hidden>Verstuur aanvraag</button>
           </div>
@@ -582,8 +637,17 @@
 
       <div class="rsv-done" id="rsvDone" hidden>
         <h2 tabindex="-1" id="rsvDoneTitle">Bedankt!</h2>
-        <p>Je reserveringsaanvraag is verstuurd. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
-        <button type="button" class="rsv-next" id="rsvRestart">Nieuwe aanvraag</button>
+        <p>Je reserveringsaanvraag is verstuurd. Hieronder zie je wat we hebben ontvangen.</p>
+        <div class="rsv-done-summary" id="rsvDoneSummary"></div>
+        <ol class="rsv-done-steps">
+          <li><b>1</b><span id="rsvDoneStep1">We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail.</span></li>
+          <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% aanbetaling; dan staat je datum vast.</span></li>
+          <li><b>3</b><span>Het restbedrag betaal je uiterlijk 7 dagen voor de huurdatum. De borg van €150 betaal je vooraf; die krijg je binnen 7 werkdagen na retour terug.</span></li>
+        </ol>
+        <div class="rsv-done-actions">
+          <button type="button" class="rsv-ghost" id="rsvPrint">Bewaar of print</button>
+          <a class="rsv-next" href="index.html">Terug naar home</a>
+        </div>
       </div>
     </div>
 
@@ -644,19 +708,16 @@
 (function () {
   var form = document.getElementById('scReserveForm');
 
-  var linePackage = document.getElementById('scLinePackage');
-  var linePackagePrice = document.getElementById('scLinePackagePrice');
-  var lineDelivery = document.getElementById('scLineDelivery');
-  var lineDeliveryLabel = document.getElementById('scLineDeliveryLabel');
-  var lineDeliveryPrice = document.getElementById('scLineDeliveryPrice');
+  var summaryLinesEl = document.getElementById('scSummaryLines');
+  var sideLinesEl = document.getElementById('rsvSideLines');
+  var sideTotalEl = document.getElementById('rsvSideTotal');
+  var navTotalEl = document.getElementById('rsvNavTotal');
   var summaryNote = document.getElementById('scSummaryNote');
   var totalPriceEl = document.getElementById('scTotalPrice');
-  var lineDays = document.getElementById('scLineDays');
-  var lineDaysLabel = document.getElementById('scLineDaysLabel');
-  var lineDaysPrice = document.getElementById('scLineDaysPrice');
 
   var guestsInput = document.getElementById('scGuests');
   var daysInput = document.getElementById('scDays');
+  var occasionInput = document.getElementById('scOccasion');
   var standardBlock = document.getElementById('scStandardBlock');
   var customBlock = document.getElementById('scCustomBlock');
   var addressField = document.getElementById('scAddressField');
@@ -678,18 +739,78 @@
   var estNote = document.getElementById('rsvEstNote');
   var extrasDetails = document.getElementById('rsvExtras');
   var extrasCount = document.getElementById('rsvExtrasCount');
+  var restoredNote = document.getElementById('rsvRestored');
 
+  function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
+  function esc(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // Datums: datum van het feest plus een huurperiode van standaard
+  // 3 dagen (de dag ervoor, de dag zelf en de dag erna).
+  // ---------------------------------------------------------------
   var dateInput = document.getElementById('scDate');
+  var startInput = document.getElementById('scStart');
+  var endInput = document.getElementById('scEnd');
+  var periodBox = document.getElementById('rsvPeriod');
+  var periodSum = document.getElementById('rsvPeriodSum');
   var MIN_LEAD_DAYS = 3;
-  var minDateObj = new Date();
-  minDateObj.setDate(minDateObj.getDate() + MIN_LEAD_DAYS);
-  var todayStr = minDateObj.getFullYear() + '-' + String(minDateObj.getMonth() + 1).padStart(2, '0') + '-' + String(minDateObj.getDate()).padStart(2, '0');
-  dateInput.min = todayStr;
+  var EXTRA_DAY_PRICE = 35;
+
+  function addDays(d, n) { var r = new Date(d.getFullYear(), d.getMonth(), d.getDate()); r.setDate(r.getDate() + n); return r; }
+  function toISO(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function readDate(input) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input.value);
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+  }
+  function dayDiff(a, b) { return Math.round((b - a) / 864e5); }
+  var fmtShort = new Intl.DateTimeFormat('nl-NL', { weekday: 'short', day: 'numeric', month: 'short' });
+  var fmtLong = new Intl.DateTimeFormat('nl-NL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  function shortDate(d) { return fmtShort.format(d).replace('.', ''); }
+
+  var minDate = addDays(new Date(), MIN_LEAD_DAYS);
+  dateInput.min = toISO(minDate);
+  startInput.min = toISO(minDate);
+
+  // Nieuwe feestdatum: huurperiode terug naar de standaard rond die datum.
+  function applyDefaultPeriod() {
+    var ev = readDate(dateInput);
+    if (!ev) return;
+    var start = addDays(ev, -1);
+    if (start < minDate && ev >= minDate) start = ev;
+    startInput.value = toISO(start);
+    endInput.value = toISO(addDays(ev, 1));
+  }
+  dateInput.addEventListener('change', function () { applyDefaultPeriod(); recalc(); });
+
+  // Zet het aantal huurdagen (scDays) op basis van de gekozen data.
+  function updatePeriod() {
+    var ev = readDate(dateInput), s = readDate(startInput), e = readDate(endInput);
+    periodBox.hidden = !ev;
+    endInput.min = startInput.value || toISO(minDate);
+    periodSum.className = 'rsv-period-sum';
+    if (!ev || !s || !e) { daysInput.value = '3'; periodSum.textContent = ''; return; }
+    if (e < s) {
+      daysInput.value = '3';
+      periodSum.textContent = 'De retourdatum ligt vóór de ophaaldatum.';
+      periodSum.className = 'rsv-period-sum is-err';
+      return;
+    }
+    var n = dayDiff(s, e) + 1;
+    daysInput.value = n > 7 ? 'over7' : String(Math.max(3, n));
+    var range = shortDate(s) + ' t/m ' + shortDate(e) + ' · ' + n + (n === 1 ? ' dag' : ' dagen');
+    if (n > 7) range += ': prijs stemmen we samen af';
+    else if (n > 3) range += ': ' + (n - 3) + ' extra ' + (n - 3 === 1 ? 'dag' : 'dagen') + ' × ' + fmt(EXTRA_DAY_PRICE);
+    else range += ', inbegrepen';
+    periodSum.textContent = range;
+  }
 
   var xtraCatalogEl = document.getElementById('scXtraCatalog');
-  var xtraSummaryLinesEl = document.getElementById('scXtraSummaryLines');
   xtraCatalogEl.innerHTML = ScExtrasShop.renderCatalog();
-  ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); });
+  ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); saveDraft(); });
   // Staan er al extra's klaar vanaf de extra's-pagina, klap de lijst dan open.
   if (ScExtrasShop.summary().lines.length) extrasDetails.open = true;
 
@@ -705,6 +826,7 @@
   var nextBtn = document.getElementById('rsvNext');
   var submitBtn = document.getElementById('scSubmitBtn');
   var card = document.querySelector('.rsv-card');
+  var doneEl = document.getElementById('rsvDone');
 
   function showError(msg, focusEl) {
     statusEl.textContent = msg;
@@ -713,7 +835,13 @@
   }
   function clearStatus() { statusEl.textContent = ''; statusEl.className = 'sc-status'; }
 
-  function goTo(n, moveFocus) {
+  // Elke stap krijgt een eigen plek in de browsergeschiedenis, zodat de
+  // terugknop van de browser naar de vorige stap gaat in plaats van weg
+  // van de pagina. historyDepth telt de stappen die wij zelf toevoegden.
+  var historyDepth = 0;
+  function stepUrl(n) { return location.pathname + (n > 1 ? '#stap-' + n : ''); }
+
+  function goTo(n, moveFocus, histMode) {
     currentStep = n;
     steps.forEach(function (s) {
       var isCurrent = parseInt(s.getAttribute('data-step'), 10) === n;
@@ -727,6 +855,9 @@
     submitBtn.hidden = n !== TOTAL_STEPS;
     clearStatus();
     recalc();
+    if (histMode === 'push') { history.pushState({ rsvStep: n }, '', stepUrl(n)); historyDepth++; }
+    else if (histMode === 'replace') { history.replaceState({ rsvStep: n }, '', stepUrl(n)); }
+    saveDraft();
     if (moveFocus) {
       var title = form.querySelector('.rsv-step[data-step="' + n + '"] .rsv-title');
       // Na een lange stap sta je onderaan; begin de volgende stap bovenaan de kaart.
@@ -736,38 +867,60 @@
   }
 
   // Per stap controleren wat vroeger pas bij het versturen werd gecontroleerd.
-  function validateStep(n) {
+  // Met silent = true alleen het antwoord, zonder melding of focus.
+  function validateStep(n, silent) {
+    function fail(msg, el) { if (!silent) showError(msg, el); return false; }
     if (n === 1 && getMode() === 'custom' && !form.querySelector('.sc-item-check:checked')) {
-      showError('Kies bij je maatwerkpakket minstens één tafelitem.', form.querySelector('.sc-item-check'));
-      return false;
+      return fail('Kies bij je maatwerkpakket minstens één tafelitem.', form.querySelector('.sc-item-check'));
     }
     if (n === 2) {
+      var ev = readDate(dateInput), s = readDate(startInput), e = readDate(endInput);
+      if (!ev) return fail('Kies de datum van je diner of feest.', dateInput);
+      if (ev < minDate) return fail('Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar info@studio-convivio.nl.', dateInput);
+      if (!s) return fail('Vul in wanneer je de spullen wilt ophalen of laten bezorgen.', startInput);
+      if (!e) return fail('Vul in wanneer je de spullen terugbrengt of laat ophalen.', endInput);
+      if (s < minDate) return fail('Ophalen of bezorgen kan vanaf ' + shortDate(minDate) + '.', startInput);
+      if (e < s) return fail('De retourdatum ligt vóór de ophaaldatum.', endInput);
+      if (ev < s || ev > e) return fail('De datum van je feest moet binnen de huurperiode vallen.', startInput);
       var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
       if (cardsEntry && cardsEntry.qty > 0 && !(cardsEntry.type || '').trim()) {
-        extrasDetails.open = true;
-        showError('Vul aan welk soort kaarten je wilt (bijv. menukaarten, naamkaarten).', xtraCatalogEl.querySelector('[data-key="handgemaakte-kaarten"] .sc-shop-type-input'));
-        return false;
+        if (!silent) extrasDetails.open = true;
+        return fail('Vul aan welk soort kaarten je wilt (bijv. menukaarten, naamkaarten).', xtraCatalogEl.querySelector('[data-key="handgemaakte-kaarten"] .sc-shop-type-input'));
       }
     }
     if (n === 3) {
       var dRadio = getDeliveryMode();
       if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null) {
         if (!streetInput.value.trim()) {
-          showError('Vul je afleveradres in, zodat we de bezorgkosten kunnen berekenen.', streetInput);
-        } else {
-          showError('Controleer het bezorgadres: klik op "Bereken afstand" of vul de afstand handmatig in.');
+          return fail('Vul je afleveradres in, zodat we de bezorgkosten kunnen berekenen.', streetInput);
         }
-        return false;
+        return fail('Controleer het bezorgadres: klik op "Bereken afstand" of vul de afstand handmatig in.');
       }
     }
     return true;
   }
 
   nextBtn.addEventListener('click', function () {
-    if (validateStep(currentStep)) goTo(currentStep + 1, true);
+    if (validateStep(currentStep)) goTo(currentStep + 1, true, 'push');
   });
   backBtn.addEventListener('click', function () {
-    if (currentStep > 1) goTo(currentStep - 1, true);
+    if (currentStep <= 1) return;
+    if (historyDepth > 0) history.back();
+    else goTo(currentStep - 1, true, 'replace');
+  });
+  window.addEventListener('popstate', function (e) {
+    if (!doneEl.hidden) return;
+    var target = e.state && e.state.rsvStep ? e.state.rsvStep : 1;
+    if (target < currentStep) {
+      historyDepth = Math.max(0, historyDepth - 1);
+    } else if (target > currentStep) {
+      // Vooruit in de geschiedenis: alleen als de tussenliggende stappen nog kloppen.
+      for (var s = currentStep; s < target; s++) {
+        if (!validateStep(s)) { history.replaceState({ rsvStep: currentStep }, '', stepUrl(currentStep)); return; }
+      }
+      historyDepth++;
+    }
+    goTo(target, true, 'none');
   });
   // Enter in een veld van stap 1-3 gaat naar de volgende stap in plaats van
   // het (nog onvolledige) formulier te versturen.
@@ -793,63 +946,53 @@
   }
   document.getElementById('rsvToCustom').addEventListener('click', function () {
     setMode('custom');
+    saveDraft();
     var first = form.querySelector('.sc-item-check');
     if (first) first.focus();
   });
   document.getElementById('rsvToStandard').addEventListener('click', function () {
     setMode('standard');
+    saveDraft();
     var pkg = getSelectedPackage();
     if (pkg) pkg.focus();
   });
 
   function getMode() { var r = form.querySelector('input[name="mode"]:checked'); return r ? r.value : 'standard'; }
-  function getSelectedPackage() {
-    var radios = form.querySelectorAll('input[name="package"]');
-    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) return radios[i]; }
-    return null;
-  }
-  function getDeliveryMode() { var r = form.querySelector('input[name="deliveryMode"]:checked'); return r ? r : null; }
-  function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
+  function getSelectedPackage() { return form.querySelector('input[name="package"]:checked'); }
+  function getDeliveryMode() { return form.querySelector('input[name="deliveryMode"]:checked'); }
 
   // ---------------------------------------------------------------
-  // Stap 2: aantallen via plus/min. 30+ en 7+ zijn de oude opties
-  // "Meer dan 30 personen" en "Meer dan 7 dagen" (prijs op aanvraag).
+  // Stap 2: aantal personen via plus/min. 30+ is de oude optie
+  // "Meer dan 30 personen" (prijs op aanvraag).
   // ---------------------------------------------------------------
-  var STEPPERS = {
-    guests: { input: guestsInput, out: document.getElementById('rsvGuestsOut'), min: 1, max: 30, over: 'over30' },
-    days: { input: daysInput, out: document.getElementById('rsvDaysOut'), min: 3, max: 7, over: 'over7' }
-  };
-  function renderStepper(key) {
-    var st = STEPPERS[key];
-    var v = st.input.value;
-    st.out.textContent = v === st.over ? st.max + '+' : v;
-    form.querySelector('[data-stepper="' + key + '"][data-dir="-1"]').disabled = v !== st.over && parseInt(v, 10) <= st.min;
-    form.querySelector('[data-stepper="' + key + '"][data-dir="1"]').disabled = v === st.over;
+  var GUESTS = { min: 1, max: 30, over: 'over30', out: document.getElementById('rsvGuestsOut') };
+  function renderGuests() {
+    var v = guestsInput.value;
+    GUESTS.out.textContent = v === GUESTS.over ? GUESTS.max + '+' : v;
+    form.querySelector('[data-stepper="guests"][data-dir="-1"]').disabled = v !== GUESTS.over && parseInt(v, 10) <= GUESTS.min;
+    form.querySelector('[data-stepper="guests"][data-dir="1"]').disabled = v === GUESTS.over;
   }
-  form.querySelectorAll('[data-stepper]').forEach(function (btn) {
+  form.querySelectorAll('[data-stepper="guests"]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var key = btn.getAttribute('data-stepper');
-      var st = STEPPERS[key];
       var dir = parseInt(btn.getAttribute('data-dir'), 10);
-      var v = st.input.value;
-      if (v === st.over) { if (dir < 0) st.input.value = String(st.max); }
+      var v = guestsInput.value;
+      if (v === GUESTS.over) { if (dir < 0) guestsInput.value = String(GUESTS.max); }
       else {
         var n = parseInt(v, 10) + dir;
-        st.input.value = n > st.max ? st.over : String(Math.max(st.min, n));
+        guestsInput.value = n > GUESTS.max ? GUESTS.over : String(Math.max(GUESTS.min, n));
       }
-      renderStepper(key);
+      renderGuests();
       // Blijf op een bruikbare knop staan als deze net uitgeschakeld werd.
-      if (btn.disabled) form.querySelector('[data-stepper="' + key + '"][data-dir="' + (-dir) + '"]').focus();
+      if (btn.disabled) form.querySelector('[data-stepper="guests"][data-dir="' + (-dir) + '"]').focus();
       recalc();
+      saveDraft();
     });
   });
-  renderStepper('guests');
-  renderStepper('days');
+  renderGuests();
 
   // ---------------------------------------------------------------
   // Stap 3: bezorging en afstand
   // ---------------------------------------------------------------
-  var EXTRA_DAY_PRICE = 35;
   var DELIVERY_ROUTE_FACTOR = 1.3;
   var ORIGIN_COORDS = { lat: 51.978175, lon: 5.674950 };
   var GEOCODE_RETRIES = 2;
@@ -1008,8 +1151,15 @@
   }
 
   // ---------------------------------------------------------------
-  // Prijsberekening (zelfde regels als voorheen) + de prijs op de foto
+  // Prijsberekening + samenvatting (stap 4, linkerkolom en mobiele balk)
   // ---------------------------------------------------------------
+  var OCCASIONS = {
+    '21-diner': '21-diner',
+    'verjaardagsjubileum': 'Verjaardagsjubileum',
+    'huwelijksjubileum': 'Huwelijksjubileum',
+    'intieme-bruiloft': 'Intieme bruiloft'
+  };
+  var CUSTOM_PHOTO = 'images/img-728b3f21-800.webp';
   var lastComputedTotal = null;
   var currentPhoto = heroImg.getAttribute('src');
 
@@ -1039,7 +1189,25 @@
     }
   }
 
+  // Regels zonder prijs bovenaan de samenvatting: gelegenheid en datums.
+  function metaLines() {
+    var out = [];
+    if (OCCASIONS[occasionInput.value]) out.push('Gelegenheid: ' + OCCASIONS[occasionInput.value]);
+    var ev = readDate(dateInput), s = readDate(startInput), e = readDate(endInput);
+    if (ev) out.push('Datum: ' + shortDate(ev));
+    if (s && e && e >= s) out.push('Huur: ' + shortDate(s) + ' t/m ' + shortDate(e));
+    return out;
+  }
+  function renderLines(meta, lines) {
+    return meta.map(function (m) { return '<div class="sc-summary-meta">' + esc(m) + '</div>'; }).join('') +
+      lines.map(function (l) {
+        return '<div class="sc-summary-line"><span>' + esc(l.label) + '</span><span>' + esc(l.price) + '</span></div>';
+      }).join('');
+  }
+
+  var lastSummaryHtml = '';
   function recalc() {
+    updatePeriod();
     var guestsOverLimit = guestsInput.value === 'over30';
     var daysOverLimit = daysInput.value === 'over7';
     var mode = getMode();
@@ -1050,10 +1218,10 @@
     var checkedItems = form.querySelectorAll('.sc-item-check:checked');
     if (mode === 'standard') {
       perPerson = pkg ? parseFloat(pkg.dataset.price) : 0;
-      if (pkg) setHeroPhoto(pkg.dataset.photo);
+      if (pkg && doneEl.hidden) setHeroPhoto(pkg.dataset.photo);
     } else {
       checkedItems.forEach(function (el) { perPerson += parseFloat(el.dataset.price); });
-      setHeroPhoto('images/img-728b3f21-800.webp');
+      if (doneEl.hidden) setHeroPhoto(CUSTOM_PHOTO);
     }
 
     var xtraSummary = ScExtrasShop.summary();
@@ -1061,86 +1229,145 @@
     extrasCount.textContent = xtraSummary.lines.length + ' gekozen';
 
     var dRadio = getDeliveryMode();
+    var lines = [];
+    var totalText;
 
     if (guestsOverLimit || daysOverLimit) {
       var reasons = [];
       if (guestsOverLimit) reasons.push('meer dan 30 personen');
       if (daysOverLimit) reasons.push('meer dan 7 huurdagen');
-      linePackage.textContent = 'Aanvraag voor ' + reasons.join(' en ');
-      linePackagePrice.textContent = '';
-      lineDays.style.display = 'none';
-      xtraSummaryLinesEl.innerHTML = '';
-      lineDelivery.style.display = 'none';
-      totalPriceEl.textContent = 'Op aanvraag';
+      lines.push({ label: 'Aanvraag voor ' + reasons.join(' en '), price: '' });
+      totalText = 'Op aanvraag';
       lastComputedTotal = null;
       summaryNote.textContent = 'Voor ' + reasons.join(' en ') + ' stellen we in overleg een passende prijs samen. We nemen na ontvangst van je aanvraag contact met je op.';
-      pricePill.textContent = currentStep <= 2 ? fmt(perPerson) + ' p.p.' : 'Op aanvraag';
       var overBase = dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null
         ? parseFloat(dRadio.dataset.base) + deliveryDistanceKm * 4 * parseFloat(dRadio.dataset.perkm) : null;
       updateEstimate(overBase);
-      return;
-    }
-
-    var guests = Math.max(1, parseInt(guestsInput.value, 10) || 1);
-    var days = Math.max(3, parseInt(daysInput.value, 10) || 3);
-    // De p.p.-prijs dekt de hele standaard huurperiode van 3 dagen. Elke dag
-    // daarna kost een vast bedrag per reservering, los van het aantal gasten.
-    var extraDays = Math.max(0, days - 3);
-    var extraDaysCost = extraDays * EXTRA_DAY_PRICE;
-    var baseTableCost = perPerson * guests;
-    var labelName = mode === 'standard'
-      ? (pkg ? pkg.value : '')
-      : 'Maatwerkpakket (' + checkedItems.length + ' tafel-items)';
-
-    linePackage.textContent = labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)';
-    linePackagePrice.textContent = fmt(baseTableCost);
-    if (extraDays > 0) {
-      lineDays.style.display = 'flex';
-      lineDaysLabel.textContent = 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')';
-      lineDaysPrice.textContent = fmt(extraDaysCost);
-    } else { lineDays.style.display = 'none'; }
-
-    xtraSummaryLinesEl.innerHTML = xtraSummary.lines.map(function (line) {
-      return '<div class="sc-summary-line"><span>' + line.label + '</span><span>' + line.priceLabel + '</span></div>';
-    }).join('');
-
-    var deliveryPrice = 0;
-    if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
-      var base = parseFloat(dRadio.dataset.base);
-      var perkm = parseFloat(dRadio.dataset.perkm);
-      // Vier ritten: heen en terug bij bezorgen, heen en terug bij ophalen.
-      var totalDrivenKm = deliveryDistanceKm * 4;
-      deliveryPrice = base + totalDrivenKm * perkm;
-      lineDelivery.style.display = 'flex';
-      lineDeliveryLabel.textContent = (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)';
-      lineDeliveryPrice.textContent = fmt(deliveryPrice);
-      updateEstimate(deliveryPrice);
     } else {
-      lineDelivery.style.display = 'none';
-      updateEstimate(null);
+      var guests = Math.max(1, parseInt(guestsInput.value, 10) || 1);
+      var days = Math.max(3, parseInt(daysInput.value, 10) || 3);
+      // De p.p.-prijs dekt de hele standaard huurperiode van 3 dagen. Elke dag
+      // daarna kost een vast bedrag per reservering, los van het aantal gasten.
+      var extraDays = Math.max(0, days - 3);
+      var extraDaysCost = extraDays * EXTRA_DAY_PRICE;
+      var baseTableCost = perPerson * guests;
+      var labelName = mode === 'standard'
+        ? (pkg ? pkg.value : '')
+        : 'Maatwerkpakket (' + checkedItems.length + ' tafel-items)';
+
+      lines.push({ label: labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)', price: fmt(baseTableCost) });
+      if (extraDays > 0) {
+        lines.push({ label: 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')', price: fmt(extraDaysCost) });
+      }
+      xtraSummary.lines.forEach(function (line) { lines.push({ label: line.label, price: line.priceLabel }); });
+
+      var deliveryPrice = 0;
+      if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
+        // Vier ritten: heen en terug bij bezorgen, heen en terug bij ophalen.
+        deliveryPrice = parseFloat(dRadio.dataset.base) + deliveryDistanceKm * 4 * parseFloat(dRadio.dataset.perkm);
+        lines.push({ label: (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)', price: fmt(deliveryPrice) });
+        updateEstimate(deliveryPrice);
+      } else {
+        updateEstimate(null);
+      }
+
+      var total = baseTableCost + extraDaysCost + xtraSummary.subtotal + deliveryPrice;
+      totalText = (xtraSummary.hasFrom ? 'vanaf ' : '') + fmt(total);
+      lastComputedTotal = total;
+      summaryNote.textContent = (dRadio && dRadio.value !== 'geen')
+        ? 'Dit is een indicatie (bezorgafstand is een schatting). De definitieve prijs bevestigen we samen met de beschikbaarheid.'
+        : 'Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.';
     }
 
-    var total = baseTableCost + extraDaysCost + xtraSummary.subtotal + deliveryPrice;
-    totalPriceEl.textContent = (xtraSummary.hasFrom ? 'vanaf ' : '') + fmt(total);
-    lastComputedTotal = total;
+    lastSummaryHtml = renderLines(metaLines(), lines);
+    summaryLinesEl.innerHTML = lastSummaryHtml;
+    sideLinesEl.innerHTML = lastSummaryHtml;
+    totalPriceEl.textContent = totalText;
+    sideTotalEl.textContent = totalText;
+    navTotalEl.textContent = totalText;
 
     // Stap 1-2: prijs per persoon van de gekozen tafel; stap 3-4: het totaal.
-    pricePill.textContent = currentStep <= 2 ? fmt(perPerson) + ' p.p.' : totalPriceEl.textContent;
-
-    summaryNote.textContent = (dRadio && dRadio.value !== 'geen')
-      ? 'Dit is een indicatie (bezorgafstand is een schatting). De definitieve prijs bevestigen we samen met de beschikbaarheid.'
-      : 'Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.';
+    if (doneEl.hidden) pricePill.textContent = currentStep <= 2 ? fmt(perPerson) + ' p.p.' : totalText;
   }
 
   form.addEventListener('input', function (e) {
-    if (addressInputs.indexOf(e.target) !== -1 || e.target.id === 'scManualKm') return;
-    recalc();
+    if (addressInputs.indexOf(e.target) === -1 && e.target.id !== 'scManualKm') recalc();
+    saveDraft();
   });
-  form.addEventListener('change', recalc);
+  form.addEventListener('change', function () { recalc(); saveDraft(); });
+
+  // ---------------------------------------------------------------
+  // Concept bewaren: herladen of wegklikken kost je invoer niet.
+  // Alleen in deze browser; na versturen wordt het gewist.
+  // ---------------------------------------------------------------
+  var DRAFT_KEY = 'sc_reserve_draft_v1';
+  var DRAFT_MAX_AGE = 30 * 864e5;
+  var draftReady = false;
+  var DRAFT_FIELDS = { street: streetInput, postcode: postcodeInput, city: cityInput, name: document.getElementById('scName'), email: document.getElementById('scEmail'), phone: document.getElementById('scPhone'), notes: document.getElementById('scNotes'), date: dateInput, start: startInput, end: endInput };
+
+  function saveDraft() {
+    if (!draftReady || !doneEl.hidden) return;
+    var d = { t: Date.now(), step: currentStep, mode: getMode(), pkg: getSelectedPackage() ? getSelectedPackage().value : '', guests: guestsInput.value, occasion: occasionInput.value, manualKm: usingManualKm ? manualKmInput.value : '', items: [] };
+    form.querySelectorAll('.sc-item-check:checked').forEach(function (el) { d.items.push(el.value); });
+    for (var k in DRAFT_FIELDS) d[k] = DRAFT_FIELDS[k].value;
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch (e) {}
+  }
+  function loadDraft() {
+    try {
+      var d = JSON.parse(localStorage.getItem(DRAFT_KEY));
+      if (d && Date.now() - d.t < DRAFT_MAX_AGE) return d;
+    } catch (e) {}
+    return null;
+  }
+  function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+
+  function restoreDraft(d) {
+    setMode(d.mode === 'custom' ? 'custom' : 'standard');
+    var pkgRadio = form.querySelector('input[name="package"][value="' + (d.pkg || '').replace(/"/g, '') + '"]');
+    if (pkgRadio) pkgRadio.checked = true;
+    form.querySelectorAll('.sc-item-check').forEach(function (el) { el.checked = (d.items || []).indexOf(el.value) !== -1; });
+    if (d.guests === 'over30' || /^\d+$/.test(d.guests || '')) guestsInput.value = d.guests;
+    renderGuests();
+    if (OCCASIONS[d.occasion]) occasionInput.value = d.occasion;
+    for (var k in DRAFT_FIELDS) if (typeof d[k] === 'string') DRAFT_FIELDS[k].value = d[k];
+    var dRadio = getDeliveryMode();
+    if (dRadio && dRadio.value !== 'geen') {
+      if (d.manualKm) { manualKmField.classList.add('sc-visible'); manualKmInput.value = d.manualKm; applyManualKm(); lastCalculatedAddress = getAddress(); }
+      else if (streetInput.value.trim()) calculateDelivery();
+    }
+  }
+  function hasContent(d) {
+    return d.step > 1 || d.date || d.name || d.email || d.mode === 'custom';
+  }
+
+  // ---------------------------------------------------------------
+  // Vooraf invullen vanaf andere pagina's:
+  // ?collectie=moss-mist|mocha-sky|maatwerk en ?gelegenheid=21-diner enz.
+  // ---------------------------------------------------------------
+  var PACKAGE_PARAMS = { 'moss-mist': 'Moss & Mist', 'moss-and-mist': 'Moss & Mist', 'mocha-sky': 'Mocha Sky' };
+  function applyParams() {
+    var params = new URLSearchParams(location.search);
+    var col = (params.get('collectie') || '').toLowerCase();
+    var occ = (params.get('gelegenheid') || '').toLowerCase();
+    if (OCCASIONS[occ]) occasionInput.value = occ;
+    var picked = false;
+    if (col === 'maatwerk') { setMode('custom'); picked = true; }
+    else if (PACKAGE_PARAMS[col]) {
+      setMode('standard');
+      var r = form.querySelector('input[name="package"][value="' + PACKAGE_PARAMS[col] + '"]');
+      if (r) { r.checked = true; picked = true; }
+    }
+    return picked;
+  }
 
   // ---------------------------------------------------------------
   // Versturen: dezelfde velden naar Web3Forms als voorheen
   // ---------------------------------------------------------------
+  function longDate(input) {
+    var d = readDate(input);
+    return d ? fmtLong.format(d) + ' (' + input.value + ')' : '';
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     recalc();
@@ -1150,7 +1377,7 @@
     for (var s = 1; s < TOTAL_STEPS; s++) {
       if (!validateStep(s)) {
         var msg = statusEl.textContent;
-        goTo(s, true);
+        goTo(s, true, 'replace');
         showError(msg);
         return;
       }
@@ -1168,8 +1395,13 @@
     var mode = getMode();
     formData.append('modus', mode === 'standard' ? 'Standaardpakket' : 'Maatwerkpakket');
     if (guestsInput.value === 'over30') formData.set('guests', 'Meer dan 30 personen');
-    var effectiveDays = daysInput.value === 'over7' ? 'Meer dan 7 dagen' : daysInput.value;
-    formData.append('days', effectiveDays);
+    var daysCount = dayDiff(readDate(startInput), readDate(endInput)) + 1;
+    formData.append('days', daysCount + (daysInput.value === 'over7' ? ' (meer dan 7 dagen)' : ''));
+    formData.set('date', longDate(dateInput));
+    formData.set('ophaaldatum', longDate(startInput));
+    formData.set('retourdatum', longDate(endInput));
+    if (OCCASIONS[occasionInput.value]) formData.set('gelegenheid', OCCASIONS[occasionInput.value]);
+    else formData.delete('gelegenheid');
 
     if (mode === 'custom') {
       var items = [];
@@ -1201,14 +1433,8 @@
     fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
       .then(function (res) { return res.json(); })
       .then(function (data) {
-        if (data.success) {
-          resetAll();
-          document.getElementById('rsvBody').hidden = true;
-          document.getElementById('rsvDone').hidden = false;
-          document.getElementById('rsvDoneTitle').focus();
-        } else {
-          showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
-        }
+        if (data.success) showDone();
+        else showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
       })
       .catch(function () {
         showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
@@ -1216,29 +1442,73 @@
       .finally(function () { submitBtn.disabled = false; });
   });
 
-  // Alles terug naar de beginstand, inclusief het gedeelde mandje.
+  // Bedankt-scherm: wat er verstuurd is, met de foto van de bestelde collectie.
+  function showDone() {
+    var name = document.getElementById('scName').value.trim().split(/\s+/)[0];
+    var email = document.getElementById('scEmail').value.trim();
+    var sentPhoto = currentPhoto;
+    var sentTotal = totalPriceEl.textContent;
+    document.getElementById('rsvDoneSummary').innerHTML = lastSummaryHtml +
+      '<div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>' + esc(sentTotal) + '</strong></div>' +
+      '<p class="vat-note">Incl. btw, exclusief borg</p>';
+    document.getElementById('rsvDoneTitle').textContent = name ? 'Bedankt, ' + name + '!' : 'Bedankt!';
+    document.getElementById('rsvDoneStep1').textContent = 'We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail' + (email ? ' naar ' + email : '') + '.';
+
+    document.getElementById('rsvBody').hidden = true;
+    doneEl.hidden = false;
+    resetAll();
+    // resetAll zet de foto terug op de standaard; toon de bestelde collectie.
+    setHeroPhoto(sentPhoto);
+    pricePill.textContent = sentTotal;
+    history.replaceState(null, '', location.pathname);
+    historyDepth = 0;
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('rsvDoneTitle').focus({ preventScroll: true });
+  }
+  document.getElementById('rsvPrint').addEventListener('click', function () { window.print(); });
+
+  // Alles terug naar de beginstand, inclusief het gedeelde mandje en het concept.
   function resetAll() {
     form.reset();
     ScCart.clear();
+    clearDraft();
     xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
     guestsInput.value = '2';
     daysInput.value = '3';
-    renderStepper('guests');
-    renderStepper('days');
+    occasionInput.value = '';
+    renderGuests();
     setMode('standard');
     extrasDetails.open = false;
     applyDeliveryModeVisibility('geen');
     deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false; lastCalculatedAddress = null;
     addressStatus.textContent = '';
-    goTo(1, false);
+    restoredNote.hidden = true;
+    goTo(1, false, 'none');
   }
-  document.getElementById('rsvRestart').addEventListener('click', function () {
-    document.getElementById('rsvDone').hidden = true;
-    document.getElementById('rsvBody').hidden = false;
-    goTo(1, true);
+  document.getElementById('rsvStartOver').addEventListener('click', function () {
+    resetAll();
+    history.replaceState({ rsvStep: 1 }, '', stepUrl(1));
+    historyDepth = 0;
+    draftReady = true;
+    form.querySelector('.rsv-title').focus();
   });
 
-  goTo(1, false);
+  // ---------------------------------------------------------------
+  // Start: concept terugzetten, daarna eventuele link-parameters.
+  // ---------------------------------------------------------------
+  var startStep = 1;
+  var draft = loadDraft();
+  if (draft) {
+    restoreDraft(draft);
+    if (hasContent(draft)) restoredNote.hidden = false;
+    // Terug naar de bewaarde stap, maar niet voorbij een stap die nog niet klopt.
+    var wanted = Math.min(Math.max(1, parseInt(draft.step, 10) || 1), TOTAL_STEPS);
+    while (startStep < wanted && validateStep(startStep, true)) startStep++;
+  }
+  if (applyParams()) startStep = 1;
+  if (location.search) history.replaceState(null, '', location.pathname + location.hash);
+  draftReady = true;
+  goTo(startStep, false, 'replace');
 })();
 </script>
 </body>
