@@ -780,8 +780,7 @@
   <button type="button" class="gallery-close" id="galleryClose" aria-label="Sluiten">&times;</button>
   <button type="button" class="gallery-nav gallery-nav--prev" id="galleryPrev" aria-label="Vorige foto">&#8249;</button>
   <button type="button" class="gallery-nav gallery-nav--next" id="galleryNext" aria-label="Volgende foto">&#8250;</button>
-  <div class="gallery-lightbox-media">
-    <img id="galleryImg" src="" alt="">
+  <div class="gallery-lightbox-media" id="galleryMedia">
     <div class="gallery-dots" id="galleryDots"></div>
   </div>
 </div>
@@ -1980,8 +1979,11 @@
   // het vinkje niet omzetten, daarom preventDefault op de knop.
   // ---------------------------------------------------------------
   var galleryLightbox = document.getElementById('galleryLightbox');
-  var galleryImg = document.getElementById('galleryImg');
   var galleryDots = document.getElementById('galleryDots');
+  // De foto komt er pas bij het openen in, zodat er geen lege <img> in de pagina staat.
+  var galleryImg = document.createElement('img');
+  galleryImg.id = 'galleryImg';
+  document.getElementById('galleryMedia').insertBefore(galleryImg, galleryDots);
   var galleryClose = document.getElementById('galleryClose');
   var galleryPrev = document.getElementById('galleryPrev');
   var galleryNext = document.getElementById('galleryNext');
