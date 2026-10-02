@@ -51,6 +51,7 @@
   }
 
   /* Live samenvatting in de linkerkolom (alleen desktop) */
+  .rsv-side[hidden] { display: none; }
   .rsv-side { margin-top: 30px; max-width: 420px; background: var(--paper); border-radius: 14px; padding: 18px 20px; }
   .rsv-side-head { font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
   .rsv-side .sc-summary-meta, .rsv-side .sc-summary-line { font-size: 13px; }
@@ -77,9 +78,16 @@
   .rsv-body { --rsv-pad: clamp(18px, 4vw, 30px); padding: 22px var(--rsv-pad) var(--rsv-pad); }
   .rsv-restored { margin: -6px 0 16px; font-size: 13px; color: var(--ink-soft); }
   .rsv-restored[hidden] { display: none; }
+  .rsv-restored .rsv-textlink + .rsv-textlink { margin-left: 12px; }
   .rsv-body[hidden] { display: none; }
 
-  .rsv-progress { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .rsv-progress {
+    display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 6;
+    margin: -22px calc(-1 * var(--rsv-pad)) 22px; padding: 16px var(--rsv-pad) 14px;
+    background: var(--paper); transition: box-shadow 0.2s ease;
+  }
+  .rsv-progress.is-stuck { box-shadow: 0 10px 22px -18px rgba(43,44,36,0.45); }
   .rsv-progress p { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
   .rsv-bars { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; margin: 0; padding: 0; }
   .rsv-bars li { height: 3px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden; }
@@ -182,7 +190,7 @@
   .rsv-extras-body > .rsv-muted { margin: 14px 0 16px; }
   .sc-shop-category + .sc-shop-category { margin-top: 20px; }
   .sc-shop-category-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mocha-dark); margin-bottom: 10px; }
-  .sc-shop-grid--flat { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .sc-shop-grid--flat { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .sc-shop-item { display: flex; flex-direction: column; }
   .sc-shop-card--flat {
     position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer;
@@ -194,7 +202,14 @@
   .sc-shop-card input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
   .sc-shop-card--flat .sc-shop-body { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; width: 100%; }
   .sc-shop-card--flat .sc-shop-name { display: flex; align-items: center; gap: 9px; font-size: 13px; }
-  .sc-shop-card--flat .sc-shop-price { font-size: 12px; color: var(--ink-soft); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+  .sc-shop-card--flat .sc-shop-body > * { min-width: 0; }
+  /* Op smalle telefoons past naam + prijs niet naast vinkje en foto: prijs eronder. */
+  @media (max-width: 360px) {
+    .sc-shop-card--flat .sc-shop-body { flex-wrap: wrap; }
+    .sc-shop-card--flat .sc-shop-body .sc-shop-price { text-align: left; padding-left: 74px; }
+  }
+  .sc-shop-thumb { width: 40px; height: 40px; flex-shrink: 0; object-fit: cover; border-radius: 4px; background: var(--paper-deep); }
+  .sc-shop-card--flat .sc-shop-price { font-size: 12px; color: var(--ink-soft); white-space: normal; text-align: right; font-variant-numeric: tabular-nums; }
   .sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); }
   .sc-shop-item.is-soldout .sc-shop-card--flat { opacity: 0.5; cursor: default; }
   .sc-shop-item.is-soldout .sc-shop-price { font-style: italic; }
@@ -224,6 +239,12 @@
   .sc-address-field.sc-visible { display: block; }
   .rsv-address-head { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
   .rsv-address-intro { margin: -6px 0 12px; }
+  .rsv-home { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line-soft); }
+  .rsv-home .rsv-address-grid { margin-top: 0; }
+  .rsv-home .rsv-address-grid + .rsv-address-grid { margin-top: 12px; }
+  .rsv-home-note { margin: -6px 0 12px; }
+  .rsv-home-status { margin-top: 8px; font-size: 12px; color: var(--ink-soft); min-height: 16px; }
+  .rsv-home-status.sc-err { color: #a3402f; }
   .rsv-address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
   .rsv-address-grid + .rsv-address-grid { margin-top: 12px; }
   .rsv-address-grid--street { grid-template-columns: 1.3fr 1fr; }
@@ -315,14 +336,14 @@
   .rsv-next:disabled { opacity: 0.6; cursor: default; }
   .rsv-next[hidden] { display: none; }
   .rsv-nav-total { display: none; }
+  /* Terug, totaalprijs en Volgende blijven altijd in beeld. */
+  .rsv-nav {
+    position: sticky; bottom: 0; z-index: 5; align-items: center;
+    margin: 24px calc(-1 * var(--rsv-pad)) 0; padding: 12px var(--rsv-pad) calc(12px + env(safe-area-inset-bottom));
+    background: var(--paper); border-top: 1px solid var(--line-soft);
+    box-shadow: 0 -10px 24px -18px rgba(43,44,36,0.35);
+  }
   @media (max-width: 959px) {
-    /* Op mobiel blijven totaalprijs en Volgende altijd in beeld. */
-    .rsv-nav {
-      position: sticky; bottom: 0; z-index: 5; align-items: center;
-      margin: 24px calc(-1 * var(--rsv-pad)) 0; padding: 12px var(--rsv-pad) calc(12px + env(safe-area-inset-bottom));
-      background: var(--paper); border-top: 1px solid var(--line-soft);
-      box-shadow: 0 -10px 24px -18px rgba(43,44,36,0.35);
-    }
     .rsv-back { width: 48px; height: 48px; }
     .rsv-next { height: 48px; }
     .rsv-nav-total { display: flex; flex-direction: column; justify-content: center; min-width: 0; line-height: 1.2; }
@@ -347,6 +368,7 @@
   .rsv-done-steps b { font-family: var(--serif); font-weight: 400; font-size: 17px; color: var(--mocha-dark); }
   .rsv-done-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 26px; }
   .rsv-done .rsv-next { flex: none; display: inline-grid; place-items: center; padding: 0 30px; text-decoration: none; }
+  .rsv-done a.rsv-ghost { display: inline-grid; place-items: center; text-decoration: none; }
   .rsv-done .rsv-ghost { flex: none; height: 54px; padding: 0 26px; border-radius: 999px; border: 1px solid var(--ink); background: transparent; color: var(--ink); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
   .rsv-done .rsv-ghost:hover { background: var(--ink); color: var(--paper); }
 
@@ -427,7 +449,7 @@
             <p id="rsvStepLabel">Stap 1 van 4</p>
             <ol class="rsv-bars" aria-hidden="true"><li class="is-done"></li><li></li><li></li><li></li></ol>
           </div>
-          <p class="rsv-restored" id="rsvRestored" hidden>Je eerdere invoer staat nog klaar. <button type="button" class="rsv-textlink" id="rsvStartOver">Opnieuw beginnen</button></p>
+          <p class="rsv-restored" id="rsvRestored" hidden><span id="rsvRestoredText">Je eerdere invoer staat nog klaar.</span> <button type="button" class="rsv-textlink" id="rsvStartOver">Opnieuw beginnen</button><button type="button" class="rsv-textlink" id="rsvStartOverNo" hidden>Nee, laat staan</button></p>
           <input type="hidden" name="gelegenheid" id="scOccasion" value="">
 
           <!-- ====== Stap 1: collectie ====== -->
@@ -505,6 +527,7 @@
                   <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Katoenen servetten</span><span class="sc-item-price">€2,00</span></span>
                 </label>
               </div>
+              <p class="rsv-muted" style="margin-top:14px;">Wil je foto's zien van wat je aanvinkt? Servies, glazen en bestek zie je op de pagina's van <a href="moss-and-mist.html">Moss &amp; Mist</a> en <a href="mocha-sky.html">Mocha Sky</a>; champagneglazen, servetringen en decoratie op de <a href="extras.html">extra's-pagina</a>. Je keuzes hier blijven bewaard.</p>
               <p class="rsv-alt">Toch een vaste collectie? <button type="button" class="rsv-textlink" id="rsvToStandard">Kies een standaardpakket</button></p>
             </div>
             <span class="rsv-vat">Alle prijzen zijn per persoon en inclusief btw.</span>
@@ -553,7 +576,7 @@
                 </span>
               </summary>
               <div class="rsv-extras-body">
-                <p class="rsv-muted">Bekijk het volledige assortiment met foto's op de <a href="extras.html">extra's-pagina</a>. Wat je daar toevoegt, staat hier automatisch al klaar. Prijzen incl. btw.</p>
+                <p class="rsv-muted">Wil je meer foto's zien van wat je aanvinkt? Bekijk ze op de <a href="extras.html">extra's-pagina</a>. Wat je daar toevoegt, staat hier automatisch klaar en je keuzes hier blijven bewaard. Prijzen incl. btw.</p>
                 <div id="scXtraCatalog"></div>
               </div>
             </details>
@@ -618,6 +641,20 @@
             <div class="rsv-field"><label for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" autocomplete="email" required>
               <p class="rsv-email-hint" id="scEmailHint" hidden>Bedoel je <button type="button" class="rsv-textlink" id="scEmailFix"></button>?</p></div>
             <div class="rsv-field"><label for="scPhone">Telefoonnummer <span class="rsv-opt">(optioneel)</span></label><input type="tel" id="scPhone" name="phone" autocomplete="tel"></div>
+
+            <div class="rsv-home" role="group" aria-labelledby="rsvHomeHead">
+              <p class="rsv-address-head" id="rsvHomeHead">Je adres</p>
+              <p class="rsv-muted rsv-home-note" id="rsvHomeNote">Vul je postcode en huisnummer in; straat en plaats vullen we dan voor je aan.</p>
+              <div class="rsv-address-grid">
+                <div class="rsv-field"><label for="scHomePostcode">Postcode</label><input type="text" id="scHomePostcode" autocomplete="postal-code" autocapitalize="characters" maxlength="7"></div>
+                <div class="rsv-field"><label for="scHomeHouseNr">Huisnummer <span class="rsv-opt">+ toevoeging</span></label><input type="text" id="scHomeHouseNr" autocomplete="off" maxlength="10"></div>
+              </div>
+              <div class="rsv-address-grid rsv-address-grid--street">
+                <div class="rsv-field"><label for="scHomeStreet">Straat</label><input type="text" id="scHomeStreet" autocomplete="address-line1"></div>
+                <div class="rsv-field"><label for="scHomeCity">Plaats</label><input type="text" id="scHomeCity" autocomplete="address-level2"></div>
+              </div>
+              <p class="rsv-home-status" id="rsvHomeStatus" role="status"></p>
+            </div>
             <div class="rsv-field">
               <label for="scNotes">Opmerkingen of maatwerkwensen <span class="rsv-opt">(optioneel)</span></label>
               <textarea id="scNotes" name="notes" placeholder="Bijv. afmetingen van je tafel(s), specifieke kleurstijl, bijzondere gelegenheid..."></textarea>
@@ -668,6 +705,7 @@
           <li><b>3</b><span>Het restbedrag betaal je uiterlijk 7 dagen voor de huurdatum. De borg van €150 betaal je vooraf; die krijg je binnen 7 werkdagen na retour terug.</span></li>
         </ol>
         <div class="rsv-done-actions">
+          <a class="rsv-ghost" id="rsvMailCopy" href="#">Mail mezelf een kopie</a>
           <button type="button" class="rsv-ghost" id="rsvPrint">Bewaar of print</button>
           <a class="rsv-next" href="index.html">Terug naar home</a>
         </div>
@@ -725,7 +763,7 @@
 </footer>
 <script src="js/site.js?v=5"></script>
 <script src="js/extras-catalog.js?v=9"></script>
-<script src="js/extras-shop.js?v=5"></script>
+<script src="js/extras-shop.js?v=6"></script>
 
 <script>
 (function () {
@@ -918,6 +956,9 @@
     bars.forEach(function (b, i) { b.classList.toggle('is-done', i < n); });
     stepLabel.textContent = 'Stap ' + n + ' van ' + TOTAL_STEPS;
     backBtn.disabled = n === 1;
+    // In stap 4 staat de samenvatting al in de kaart; links niet nog eens.
+    document.getElementById('rsvSide').hidden = n === TOTAL_STEPS;
+    if (n === TOTAL_STEPS) syncHomeFromDelivery();
     nextBtn.hidden = n === TOTAL_STEPS;
     if (NEXT_LABELS[n]) nextBtn.textContent = NEXT_LABELS[n];
     submitBtn.hidden = n !== TOTAL_STEPS;
@@ -977,6 +1018,7 @@
       if (!nameEl.value.trim()) return fail('Vul je naam in.', nameEl);
       if (!emailEl.value.trim()) return fail('Vul je e-mailadres in.', emailEl);
       if (!EMAIL_RE.test(emailEl.value.trim())) return fail('Dit e-mailadres lijkt niet te kloppen. Controleer het even.', emailEl);
+      if (!validateHome(fail)) return false;
       if (captchaResp && !captchaResp.value) return fail('Vink "Ik ben een mens" aan.', form.querySelector('.h-captcha'));
       if (!termsEl.checked) return fail('Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.', termsEl);
     }
@@ -1493,31 +1535,133 @@
   form.addEventListener('change', function () { recalc(); saveDraft(); });
 
   // ---------------------------------------------------------------
+  // Adres van de klant (stap 4). Altijd verplicht. Is er een afleveradres
+  // ingevuld, dan nemen we dat over zolang de klant het hier niet zelf
+  // aanpast. Postcode + huisnummer vult straat en plaats aan via PDOK.
+  // ---------------------------------------------------------------
+  var home = {
+    postcode: document.getElementById('scHomePostcode'),
+    houseNr: document.getElementById('scHomeHouseNr'),
+    street: document.getElementById('scHomeStreet'),
+    city: document.getElementById('scHomeCity')
+  };
+  var homeStatus = document.getElementById('rsvHomeStatus');
+  var homeNote = document.getElementById('rsvHomeNote');
+  var HOME_NOTE_DEFAULT = homeNote.textContent;
+  var homeSynced = false;     // velden zijn een kopie van het afleveradres
+  var homeAutoFilled = false; // straat/plaats komen van PDOK
+  var homeTimer = null, homeRequestId = 0;
+
+  function homeEmpty() {
+    return !home.postcode.value.trim() && !home.houseNr.value.trim() && !home.street.value.trim() && !home.city.value.trim();
+  }
+  function getHomeAddress() {
+    var street = home.street.value.trim(), nr = home.houseNr.value.trim();
+    if (nr && !/\d/.test(street)) street = [street, nr].filter(Boolean).join(' ');
+    var place = [home.postcode.value.trim(), home.city.value.trim()].filter(Boolean).join(' ');
+    return [street, place].filter(Boolean).join(', ');
+  }
+  // Afleveradres overnemen als de klant hier nog niets eigens heeft ingevuld.
+  function syncHomeFromDelivery() {
+    var dRadio = getDeliveryMode();
+    var hasDelivery = dRadio && dRadio.value !== 'geen' && (postcodeInput.value.trim() || streetInput.value.trim());
+    if (!hasDelivery) {
+      if (homeSynced) { home.postcode.value = home.houseNr.value = home.street.value = home.city.value = ''; homeSynced = false; }
+      homeNote.textContent = HOME_NOTE_DEFAULT;
+      return;
+    }
+    if (!homeSynced && !homeEmpty()) return;
+    home.postcode.value = postcodeInput.value.trim();
+    home.houseNr.value = houseNrInput.value.trim();
+    home.street.value = streetInput.value.trim();
+    home.city.value = cityInput.value.trim();
+    homeSynced = true;
+    homeStatus.textContent = '';
+    homeNote.textContent = 'Overgenomen van je afleveradres. Woon je ergens anders? Pas het dan hier aan.';
+  }
+  function lookupHome() {
+    var m = /^\s*(\d{4})\s*([a-zA-Z]{2})\s*$/.exec(home.postcode.value);
+    var h = /^\s*(\d+)\s*[-\s]?\s*([a-zA-Z0-9]{0,6})\s*$/.exec(home.houseNr.value);
+    if (!m || !h) return;
+    var myId = ++homeRequestId;
+    homeStatus.className = 'rsv-home-status';
+    homeStatus.textContent = 'Adres zoeken...';
+    geocodePdok(m[1] + m[2].toUpperCase(), { nr: h[1], add: h[2].toUpperCase() })
+      .then(function (dest) {
+        if (myId !== homeRequestId) return;
+        home.street.value = dest.street || home.street.value;
+        home.city.value = dest.city || home.city.value;
+        homeAutoFilled = true;
+        clearFieldError(home.postcode); clearFieldError(home.street); clearFieldError(home.city);
+        homeStatus.textContent = 'Gevonden: ' + dest.label + '.';
+        saveDraft();
+      })
+      .catch(function () {
+        if (myId !== homeRequestId) return;
+        homeStatus.className = 'rsv-home-status sc-err';
+        homeStatus.textContent = 'Geen adres gevonden bij deze postcode en dit huisnummer. Controleer ze, of vul straat en plaats zelf in.';
+      });
+  }
+  [home.postcode, home.houseNr].forEach(function (el) {
+    el.addEventListener('input', function () {
+      homeSynced = false;
+      homeNote.textContent = HOME_NOTE_DEFAULT;
+      if (homeAutoFilled) { home.street.value = ''; home.city.value = ''; homeAutoFilled = false; }
+      clearTimeout(homeTimer);
+      homeTimer = setTimeout(lookupHome, 500);
+    });
+  });
+  [home.street, home.city].forEach(function (el) {
+    el.addEventListener('input', function () { homeSynced = false; homeAutoFilled = false; homeNote.textContent = HOME_NOTE_DEFAULT; });
+  });
+  function validateHome(fail) {
+    if (!home.postcode.value.trim()) return fail('Vul je postcode in.', home.postcode);
+    if (!home.houseNr.value.trim()) return fail('Vul je huisnummer in.', home.houseNr);
+    if (!home.street.value.trim()) return fail('Vul je straat in.', home.street);
+    if (!home.city.value.trim()) return fail('Vul je woonplaats in.', home.city);
+    return true;
+  }
+
+  // ---------------------------------------------------------------
   // Concept bewaren: herladen of wegklikken kost je invoer niet.
-  // Alleen in deze browser; na versturen wordt het gewist.
+  // Alleen in deze browser; na versturen wordt het gewist. Keuzes blijven
+  // 30 dagen staan, persoonsgegevens (naam, contact, adressen,
+  // opmerkingen) maar 24 uur, ook vanwege gedeelde computers.
   // ---------------------------------------------------------------
   var DRAFT_KEY = 'sc_reserve_draft_v1';
   var DRAFT_MAX_AGE = 30 * 864e5;
+  var PERSONAL_MAX_AGE = 864e5;
   var draftReady = false;
-  var DRAFT_FIELDS = { street: streetInput, postcode: postcodeInput, city: cityInput, name: document.getElementById('scName'), email: document.getElementById('scEmail'), phone: document.getElementById('scPhone'), notes: document.getElementById('scNotes'), houseNr: houseNrInput, date: dateInput, start: startInput, end: endInput };
+  var CHOICE_FIELDS = { date: dateInput, start: startInput, end: endInput };
+  var PERSONAL_FIELDS = {
+    street: streetInput, postcode: postcodeInput, city: cityInput, houseNr: houseNrInput,
+    name: document.getElementById('scName'), email: document.getElementById('scEmail'), phone: document.getElementById('scPhone'), notes: document.getElementById('scNotes'),
+    homePostcode: home.postcode, homeHouseNr: home.houseNr, homeStreet: home.street, homeCity: home.city
+  };
 
   function saveDraft() {
     if (!draftReady || !doneEl.hidden) return;
-    var d = { t: Date.now(), step: currentStep, mode: getMode(), pkg: getSelectedPackage() ? getSelectedPackage().value : '', guests: guestsInput.value, occasion: occasionInput.value, manualKm: usingManualKm ? manualKmInput.value : '', items: [] };
+    var d = { t: Date.now(), step: currentStep, mode: getMode(), pkg: getSelectedPackage() ? getSelectedPackage().value : '', guests: guestsInput.value, occasion: occasionInput.value, items: [] };
     form.querySelectorAll('.sc-item-check:checked').forEach(function (el) { d.items.push(el.value); });
-    for (var k in DRAFT_FIELDS) d[k] = DRAFT_FIELDS[k].value;
+    for (var k in CHOICE_FIELDS) d[k] = CHOICE_FIELDS[k].value;
+    var personal = { t: Date.now(), manualKm: usingManualKm ? manualKmInput.value : '', homeSynced: homeSynced };
+    for (var p in PERSONAL_FIELDS) personal[p] = PERSONAL_FIELDS[p].value;
+    d.personal = personal;
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch (e) {}
   }
   function loadDraft() {
     try {
       var d = JSON.parse(localStorage.getItem(DRAFT_KEY));
-      if (d && Date.now() - d.t < DRAFT_MAX_AGE) return d;
+      if (!d || Date.now() - d.t >= DRAFT_MAX_AGE) return null;
+      if (!d.personal || Date.now() - d.personal.t >= PERSONAL_MAX_AGE) d.personal = {};
+      return d;
     } catch (e) {}
     return null;
   }
   function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
 
   function restoreDraft(d) {
+    var personal = d.personal || {};
     setMode(d.mode === 'custom' ? 'custom' : 'standard');
     var pkgRadio = form.querySelector('input[name="package"][value="' + (d.pkg || '').replace(/"/g, '') + '"]');
     if (pkgRadio) pkgRadio.checked = true;
@@ -1525,15 +1669,19 @@
     if (d.guests === 'over30' || /^\d+$/.test(d.guests || '')) guestsInput.value = d.guests;
     renderGuests();
     if (OCCASIONS[d.occasion]) occasionInput.value = d.occasion;
-    for (var k in DRAFT_FIELDS) if (typeof d[k] === 'string') DRAFT_FIELDS[k].value = d[k];
+    var k;
+    for (k in CHOICE_FIELDS) if (typeof d[k] === 'string') CHOICE_FIELDS[k].value = d[k];
+    for (k in PERSONAL_FIELDS) if (typeof personal[k] === 'string') PERSONAL_FIELDS[k].value = personal[k];
+    homeSynced = !!personal.homeSynced;
     var dRadio = getDeliveryMode();
     if (dRadio && dRadio.value !== 'geen') {
-      if (d.manualKm) { manualKmField.classList.add('sc-visible'); manualKmInput.value = d.manualKm; applyManualKm(); lastCalculatedAddress = getAddress(); }
+      if (personal.manualKm) { manualKmField.classList.add('sc-visible'); manualKmInput.value = personal.manualKm; applyManualKm(); lastCalculatedAddress = getAddress(); }
       else if (hasAddressInput()) calculateDelivery();
     }
   }
   function hasContent(d) {
-    return d.step > 1 || d.date || d.name || d.email || d.mode === 'custom';
+    var personal = d.personal || {};
+    return d.step > 1 || d.date || personal.name || personal.email || d.mode === 'custom';
   }
 
   // ---------------------------------------------------------------
@@ -1609,6 +1757,7 @@
       xtraLines.push(item.name + ' × ' + entry.qty + (entry.type ? ' (' + entry.type + ')' : ''));
     });
     formData.append('extra_items', xtraLines.length ? xtraLines.join(', ') : 'Geen');
+    formData.append('adres', getHomeAddress());
 
     var dRadio = getDeliveryMode();
     if (dRadio && dRadio.value !== 'geen') {
@@ -1640,6 +1789,14 @@
     var email = document.getElementById('scEmail').value.trim();
     var sentPhoto = currentPhoto;
     var sentTotal = totalPriceEl.textContent;
+    var contactLines = [
+      'Naam: ' + document.getElementById('scName').value.trim(),
+      'E-mail: ' + email,
+      document.getElementById('scPhone').value.trim() ? 'Telefoon: ' + document.getElementById('scPhone').value.trim() : '',
+      'Adres: ' + getHomeAddress(),
+      getDeliveryMode() && getDeliveryMode().value !== 'geen' ? 'Afleveradres: ' + getAddress() : '',
+      document.getElementById('scNotes').value.trim() ? 'Opmerkingen: ' + document.getElementById('scNotes').value.trim() : ''
+    ].filter(Boolean);
     document.getElementById('rsvDoneSummary').innerHTML = lastSummaryHtml +
       '<div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>' + esc(sentTotal) + '</strong></div>' +
       '<p class="vat-note">Incl. btw, exclusief borg</p>' +
@@ -1649,6 +1806,21 @@
 
     document.getElementById('rsvBody').hidden = true;
     doneEl.hidden = false;
+
+    // Kopie per e-mail: opent het mailprogramma van de klant met de
+    // samenvatting al ingevuld, gericht aan het eigen adres. (Een
+    // automatische bevestiging vanuit Web3Forms vraagt een betaald abonnement.)
+    // Elke regel als "omschrijving: bedrag" in platte tekst.
+    var summaryText = [].map.call(document.getElementById('rsvDoneSummary').querySelectorAll('.sc-summary-meta, .sc-summary-line, .sc-summary-total, .rsv-pay-row, .rsv-pay-note'), function (row) {
+      var parts = [].map.call(row.children.length ? row.children : [row], function (c) { return c.textContent.trim(); }).filter(Boolean);
+      return parts.join(': ');
+    }).join('\n');
+    var body = 'Mijn reserveringsaanvraag bij Studio Convivio\n\n' + summaryText +
+      '\n\n' + contactLines.join('\n') +
+      '\n\nStudio Convivio bevestigt de aanvraag binnen 2 dagen voorlopig. Vragen? Mail naar info@studio-convivio.nl.';
+    document.getElementById('rsvMailCopy').href = 'mailto:' + encodeURIComponent(email) +
+      '?subject=' + encodeURIComponent('Mijn reserveringsaanvraag bij Studio Convivio') +
+      '&body=' + encodeURIComponent(body);
     resetAll();
     // resetAll zet de foto terug op de standaard; toon de bestelde collectie.
     setHeroPhoto(sentPhoto);
@@ -1728,15 +1900,40 @@
     deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false; lastCalculatedAddress = null;
     addressStatus.textContent = '';
     restoredNote.hidden = true;
+    homeSynced = false; homeAutoFilled = false;
+    homeStatus.textContent = '';
+    homeNote.textContent = HOME_NOTE_DEFAULT;
     goTo(1, false, 'none');
   }
-  document.getElementById('rsvStartOver').addEventListener('click', function () {
+  var startOverBtn = document.getElementById('rsvStartOver');
+  var startOverNo = document.getElementById('rsvStartOverNo');
+  var restoredText = document.getElementById('rsvRestoredText');
+  var RESTORED_TEXT = restoredText.textContent;
+  var confirmingStartOver = false;
+  function setStartOverConfirm(on) {
+    confirmingStartOver = on;
+    restoredText.textContent = on ? 'Alles wissen, ook je gekozen extra\'s?' : RESTORED_TEXT;
+    startOverBtn.textContent = on ? 'Ja, wis alles' : 'Opnieuw beginnen';
+    startOverNo.hidden = !on;
+  }
+  startOverBtn.addEventListener('click', function () {
+    if (!confirmingStartOver) { setStartOverConfirm(true); startOverBtn.focus(); return; }
+    setStartOverConfirm(false);
     resetAll();
     history.replaceState({ rsvStep: 1 }, '', stepUrl(1));
     historyDepth = 0;
     draftReady = true;
     form.querySelector('.rsv-title').focus();
   });
+  startOverNo.addEventListener('click', function () { setStartOverConfirm(false); startOverBtn.focus(); });
+
+  // Voortgangsbalk: schaduw zodra hij bovenin vastzit.
+  var progressEl = form.querySelector('.rsv-progress');
+  function updateProgressShadow() {
+    var top = progressEl.getBoundingClientRect().top;
+    progressEl.classList.toggle('is-stuck', top <= 0.5 && card.getBoundingClientRect().top < 0);
+  }
+  window.addEventListener('scroll', updateProgressShadow, { passive: true });
 
   // ---------------------------------------------------------------
   // Start: concept terugzetten, daarna eventuele link-parameters.

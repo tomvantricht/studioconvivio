@@ -34,10 +34,13 @@ window.ScExtrasShop = (function () {
     return (item.priceFrom ? 'vanaf ' : '') + fmt(item.price) + '/' + item.unit;
   }
 
-  // Bouwt de itemlijst (per categorie) als HTML-string, zonder foto's: een
-  // compacte vinklijst. Gebruikt op reserveren.html, waar de items alleen
-  // hoeven te worden aangevinkt en de foto's van de shop-kaartjes op
-  // extras.html geen meerwaarde hebben.
+  // Bouwt de itemlijst (per categorie) als HTML-string: een compacte
+  // vinklijst met een kleine foto per item (images/thumb-<key>.webp, 112px
+  // vierkant). Gebruikt op reserveren.html. Ontbreekt een miniatuur, dan
+  // verdwijnt het lege vakje vanzelf.
+  function thumbHtml(item) {
+    return '<img class="sc-shop-thumb" src="images/thumb-' + item.key + '.webp" alt="" width="40" height="40" loading="lazy" decoding="async" onerror="this.remove()">';
+  }
   function renderCatalog() {
     var html = '';
     SC_EXTRAS_CATALOG.forEach(function (group) {
@@ -52,7 +55,7 @@ window.ScExtrasShop = (function () {
             '<label class="sc-shop-card sc-shop-card--flat">' +
               '<input type="checkbox" class="sc-shop-check"' + (soldOut ? ' disabled' : '') + '>' +
               '<span class="sc-shop-body">' +
-                '<span class="sc-shop-name"><span class="sc-shop-check-icon"></span>' + item.name + '</span>' +
+                '<span class="sc-shop-name"><span class="sc-shop-check-icon"></span>' + thumbHtml(item) + item.name + '</span>' +
                 '<span class="sc-shop-price">' + label + stockNote + '</span>' +
               '</span>' +
             '</label>' +
