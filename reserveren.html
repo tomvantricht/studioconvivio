@@ -70,7 +70,7 @@
   .rsv-hero img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.35s ease; }
   .rsv-hero img.is-swapping { opacity: 0.25; }
   .rsv-price-pill {
-    position: absolute; right: 14px; bottom: 14px;
+    position: absolute; right: 14px; bottom: 14px; max-width: calc(100% - 28px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     background: var(--paper); color: var(--ink); border-radius: 999px;
     padding: 8px 16px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
     box-shadow: 0 4px 14px -4px rgba(43,44,36,0.35);
@@ -84,18 +84,50 @@
   .rsv-restored.is-plain .rsv-textlink { font-weight: 400; color: var(--ink-soft); }
   .rsv-body[hidden] { display: none; }
 
+  /* Voortgang: vijf benoemde stappen, waarvan "Start" al is afgevinkt.
+     Blijft bovenin staan tijdens het scrollen. */
   .rsv-progress {
-    display: flex; align-items: center; gap: 16px;
     position: sticky; top: 0; z-index: 6;
-    margin: -22px calc(-1 * var(--rsv-pad)) 22px; padding: 16px var(--rsv-pad) 14px;
+    margin: -22px calc(-1 * var(--rsv-pad)) 18px; padding: 18px var(--rsv-pad) 14px;
     background: var(--paper); transition: box-shadow 0.2s ease;
   }
-  .rsv-progress.is-stuck { box-shadow: 0 10px 22px -18px rgba(43,44,36,0.45); }
-  .rsv-progress p { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
-  .rsv-bars { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; margin: 0; padding: 0; }
-  .rsv-bars li { height: 3px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden; }
-  .rsv-bars li::after { content: ""; position: absolute; inset: 0; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
-  .rsv-bars li.is-done::after { transform: scaleX(1); }
+  .rsv-card.is-step1 .rsv-progress { border-radius: 22px 22px 0 0; }
+  .rsv-progress.is-stuck { box-shadow: 0 10px 22px -18px rgba(43,44,36,0.45); border-radius: 0; }
+  .rsv-steps {
+    --fill: 20%;
+    list-style: none; margin: 0; padding: 0; position: relative;
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  /* De lijn loopt van het midden van de eerste tot het midden van de laatste bol. */
+  .rsv-steps::before, .rsv-steps::after { content: ""; position: absolute; top: 13px; left: 10%; height: 2px; border-radius: 1px; }
+  .rsv-steps::before { right: 10%; background: var(--line); }
+  .rsv-steps::after { width: var(--fill); background: var(--moss); transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+  .rsv-steps li { position: relative; z-index: 1; display: grid; justify-items: center; }
+  .rsv-step-btn {
+    display: grid; justify-items: center; gap: 5px; padding: 0; border: 0; background: none;
+    font: inherit; color: var(--ink-faint); cursor: default; min-width: 0;
+  }
+  .rsv-step-btn:not(:disabled) { cursor: pointer; }
+  .rsv-step-btn:focus-visible { outline: 2px solid var(--mocha-dark); outline-offset: 3px; border-radius: 6px; }
+  .rsv-dot {
+    width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--paper); border: 1.5px solid var(--line); font-size: 12px; font-weight: 700;
+    color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  .rsv-dot svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; display: none; }
+  .rsv-step-name { font-size: 11.5px; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+  .rsv-steps li.is-done .rsv-dot { background: var(--moss); border-color: var(--moss); color: #fff; }
+  .rsv-steps li.is-done .rsv-dot svg { display: block; }
+  .rsv-steps li.is-done .rsv-dot b { display: none; }
+  .rsv-steps li.is-done .rsv-step-name { color: var(--moss-dark); }
+  .rsv-steps li.is-done .rsv-step-btn:not(:disabled):hover .rsv-step-name { text-decoration: underline; text-underline-offset: 2px; }
+  .rsv-steps li.is-now .rsv-dot { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .rsv-steps li.is-now .rsv-step-name { color: var(--ink); font-weight: 700; }
+  @media (max-width: 360px) { .rsv-step-name { font-size: 10.5px; } .rsv-dot { width: 26px; height: 26px; } }
+
+  /* Stap 1: geen grote foto, de collectiekaarten zijn de foto's. */
+  .rsv-card.is-step1 .rsv-hero { display: none; }
 
   .rsv-step[hidden] { display: none; }
   .rsv-step.is-entering { animation: rsvIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -451,7 +483,7 @@
       </ul>
     </div>
 
-    <div class="rsv-card">
+    <div class="rsv-card is-step1">
       <div class="rsv-hero">
         <img id="rsvHeroImg" src="images/img-044ae929-800.webp" alt="" width="800" height="533" decoding="async" fetchpriority="high">
         <span class="rsv-price-pill" id="rsvPricePill">€16,75 p.p.</span>
@@ -460,10 +492,16 @@
       <div class="rsv-body" id="rsvBody">
         <form id="scReserveForm" action="https://api.web3forms.com/submit" method="POST" novalidate>
 
-          <div class="rsv-progress">
-            <p id="rsvStepLabel">Stap 1 van 4</p>
-            <ol class="rsv-bars" aria-hidden="true"><li class="is-done"></li><li></li><li></li><li></li></ol>
-          </div>
+          <nav class="rsv-progress" aria-label="Voortgang van je aanvraag">
+            <p id="rsvStepLabel" class="rsv-visually-hidden" aria-live="polite">Stap 2 van 5: Collectie</p>
+            <ol class="rsv-steps" id="rsvSteps">
+              <li class="is-done"><button type="button" class="rsv-step-btn" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>1</b></span><span class="rsv-step-name">Start</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="1" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>2</b></span><span class="rsv-step-name">Collectie</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="2" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>3</b></span><span class="rsv-step-name">Datum</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="3" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>4</b></span><span class="rsv-step-name">Bezorging</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="4" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>5</b></span><span class="rsv-step-name">Gegevens</span></button></li>
+            </ol>
+          </nav>
           <p class="rsv-restored" id="rsvRestored" hidden><span id="rsvRestoredText">Je eerdere invoer staat nog klaar.</span> <button type="button" class="rsv-textlink" id="rsvStartOver">Opnieuw beginnen</button><button type="button" class="rsv-textlink" id="rsvStartOverNo" hidden>Nee, laat staan</button></p>
           <input type="hidden" name="gelegenheid" id="scOccasion" value="">
 
@@ -907,7 +945,11 @@
   var TOTAL_STEPS = 4;
   var currentStep = 1;
   var steps = form.querySelectorAll('.rsv-step');
-  var bars = form.querySelectorAll('.rsv-bars li');
+  // De klant begint bij stap 2 van 5: "Start" staat al afgevinkt. Intern
+  // blijven het vier stappen (collectie, datum, bezorging, gegevens).
+  var stepsList = document.getElementById('rsvSteps');
+  var stepItems = stepsList.querySelectorAll('li');
+  var STEP_NAMES = ['Collectie', 'Datum en personen', 'Bezorging', 'Gegevens'];
   var stepLabel = document.getElementById('rsvStepLabel');
   var backBtn = document.getElementById('rsvBack');
   var nextBtn = document.getElementById('rsvNext');
@@ -978,8 +1020,19 @@
       s.hidden = !isCurrent;
       s.classList.toggle('is-entering', isCurrent && moveFocus);
     });
-    bars.forEach(function (b, i) { b.classList.toggle('is-done', i < n); });
-    stepLabel.textContent = 'Stap ' + n + ' van ' + TOTAL_STEPS;
+    // Bol i (0 = Start) is klaar als hij vóór de huidige stap ligt.
+    stepItems.forEach(function (li, i) {
+      var done = i < n, now = i === n;
+      li.classList.toggle('is-done', done);
+      li.classList.toggle('is-now', now);
+      var btn = li.querySelector('.rsv-step-btn');
+      if (now) btn.setAttribute('aria-current', 'step'); else btn.removeAttribute('aria-current');
+      // Afgeronde stappen zijn klikbaar om terug te gaan; "Start" niet.
+      btn.disabled = !(done && i > 0);
+    });
+    stepsList.style.setProperty('--fill', (n * 20) + '%');
+    stepLabel.textContent = 'Stap ' + (n + 1) + ' van ' + (TOTAL_STEPS + 1) + ': ' + STEP_NAMES[n - 1];
+    card.classList.toggle('is-step1', n === 1);
     backBtn.disabled = n === 1;
     backBtn.hidden = n === 1;
     if (n !== currentStepShown) restoredMsg = currentStepShown ? '' : restoredMsg;
@@ -1056,6 +1109,11 @@
 
   nextBtn.addEventListener('click', function () {
     if (validateStep(currentStep)) goTo(currentStep + 1, true, 'push');
+  });
+  stepsList.addEventListener('click', function (e) {
+    var btn = e.target.closest('.rsv-step-btn[data-goto]');
+    if (!btn || btn.disabled) return;
+    goTo(parseInt(btn.getAttribute('data-goto'), 10), true, 'push');
   });
   backBtn.addEventListener('click', function () {
     if (currentStep <= 1) return;
@@ -1553,8 +1611,8 @@
     sideTotalEl.textContent = totalText;
     navTotalEl.textContent = totalText;
 
-    // Stap 1-2: prijs per persoon van de gekozen tafel; stap 3-4: het totaal.
-    if (doneEl.hidden) pricePill.textContent = currentStep <= 2 ? fmt(perPerson) + ' p.p.' : totalText;
+    // Op de foto: de gekozen collectie met de prijs per persoon (het totaal staat onderin).
+    if (doneEl.hidden) pricePill.textContent = (mode === 'standard' ? (pkg ? pkg.value : '') : 'Maatwerk') + ' · ' + fmt(perPerson) + ' p.p.';
   }
 
   form.addEventListener('input', function (e) {
@@ -1852,6 +1910,7 @@
       '&body=' + encodeURIComponent(body);
     resetAll();
     // resetAll zet de foto terug op de standaard; toon de bestelde collectie.
+    card.classList.remove('is-step1');
     setHeroPhoto(sentPhoto);
     pricePill.textContent = sentTotal;
     history.replaceState(null, '', location.pathname);
