@@ -33,7 +33,7 @@
   .rsv-main { background: var(--paper-alt); padding: clamp(28px, 5vw, 72px) 0 clamp(56px, 8vw, 110px); }
   .rsv-layout {
     max-width: var(--maxw); margin: 0 auto; padding: 0 var(--edge);
-    display: grid; gap: 28px; align-items: start;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start;
   }
   @media (min-width: 960px) {
     .rsv-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 560px); gap: clamp(48px, 7vw, 110px); }
@@ -223,7 +223,10 @@
   .sc-address-field { display: none; margin-top: 14px; background: var(--paper-alt); padding: 18px; }
   .sc-address-field.sc-visible { display: block; }
   .rsv-address-head { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-  .rsv-address-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; margin-top: 12px; }
+  .rsv-address-intro { margin: -6px 0 12px; }
+  .rsv-address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
+  .rsv-address-grid + .rsv-address-grid { margin-top: 12px; }
+  .rsv-address-grid--street { grid-template-columns: 1.3fr 1fr; }
   @media (max-width: 330px) { .rsv-address-grid { grid-template-columns: 1fr; } }
   .rsv-estimate { margin-top: 16px; background: var(--paper); padding: 14px 16px; }
   .rsv-estimate-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 2px 0; }
@@ -257,6 +260,10 @@
   .rsv-card input::placeholder, .rsv-card textarea::placeholder { color: #85867a; }
   .rsv-card textarea { resize: vertical; min-height: 96px; }
   .sc-hint { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+  .rsv-field-error { margin-top: 6px; font-size: 12.5px; font-weight: 700; color: #a3402f; }
+  .rsv-card [aria-invalid="true"] { border-color: #a3402f; }
+  .rsv-email-hint { margin-top: 6px; font-size: 12.5px; color: var(--ink-soft); }
+  .rsv-email-hint[hidden] { display: none; }
   .sc-hint a { color: var(--ink); }
 
   /* ---- Samenvatting (stap 4) ---- */
@@ -266,6 +273,12 @@
   .sc-summary-line span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .sc-summary-meta { font-size: 13px; color: var(--ink); padding: 2px 0; }
   .sc-summary-meta + .sc-summary-line { margin-top: 6px; }
+  .rsv-edit { background: none; border: 0; padding: 0 0 0 6px; font: inherit; font-size: 12px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; white-space: nowrap; }
+  .rsv-edit:hover { color: var(--mocha-dark); }
+  .rsv-pay { margin-top: 14px; padding: 12px 14px; background: var(--paper-alt); }
+  .rsv-pay-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 2px 0; }
+  .rsv-pay-row b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .rsv-pay-note { margin-top: 6px; font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
   .sc-summary-total { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--serif); font-size: 21px; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
   .sc-summary-total strong { font-weight: 500; font-variant-numeric: tabular-nums; }
   .sc-summary .vat-note { margin-top: 2px; text-align: right; }
@@ -276,7 +289,13 @@
   .rsv-terms input:checked { background: var(--ink); border-color: var(--ink); }
   .rsv-terms input:checked::after { content: ""; width: 9px; height: 4.5px; border: solid var(--paper); border-width: 0 0 1.5px 1.5px; transform: translateY(-1px) rotate(-45deg); }
   .rsv-terms a { color: var(--ink); text-underline-offset: 2px; }
-  .h-captcha { margin-top: 18px; }
+  /* De hCaptcha-widget is vast 302px breed; op smalle telefoons schalen we
+     hem mee zodat hij niet buiten de kaart steekt. */
+  .rsv-captcha { margin: 0 0 18px; container-type: inline-size; overflow: hidden; }
+  @container (max-width: 301px) { .h-captcha { zoom: 0.9; } }
+  @container (max-width: 271px) { .h-captcha { zoom: 0.8; } }
+  @container (max-width: 241px) { .h-captcha { zoom: 0.7; } }
+  .rsv-captcha-label { font-size: 12.5px; font-weight: 700; margin-bottom: 8px; }
 
   /* ---- Navigatie onderaan ---- */
   .rsv-nav { display: flex; gap: 12px; margin-top: 28px; }
@@ -385,7 +404,7 @@
       <div class="rsv-side" id="rsvSide">
         <p class="rsv-side-head">Jouw aanvraag</p>
         <div id="rsvSideLines"></div>
-        <div class="rsv-side-total"><span>Totaal</span><strong id="rsvSideTotal">€33,50</strong></div>
+        <div class="rsv-side-total"><span>Totaal</span><strong id="rsvSideTotal">€16,75</strong></div>
         <p class="rsv-side-note">Indicatie incl. btw, exclusief borg</p>
       </div>
       <ul class="rsv-promises">
@@ -402,7 +421,7 @@
       </div>
 
       <div class="rsv-body" id="rsvBody">
-        <form id="scReserveForm" action="https://api.web3forms.com/submit" method="POST">
+        <form id="scReserveForm" action="https://api.web3forms.com/submit" method="POST" novalidate>
 
           <div class="rsv-progress">
             <p id="rsvStepLabel">Stap 1 van 4</p>
@@ -494,7 +513,7 @@
           <!-- ====== Stap 2: personen, dagen en extra's ====== -->
           <section class="rsv-step" data-step="2" aria-labelledby="rsvTitle2" hidden>
             <h2 class="rsv-title" id="rsvTitle2" tabindex="-1">Wanneer is het, en voor hoeveel personen?</h2>
-            <input type="hidden" name="guests" id="scGuests" value="2">
+            <input type="hidden" name="guests" id="scGuests" value="1">
             <input type="hidden" id="scDays" value="3">
 
             <div class="rsv-panel">
@@ -519,7 +538,7 @@
               <p class="rsv-muted">Meer dan 30? Kies 30+ of mail naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></p>
               <div class="rsv-stepper">
                 <button type="button" data-stepper="guests" data-dir="-1" aria-label="Eén persoon minder"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>
-                <output id="rsvGuestsOut" aria-live="polite">2</output>
+                <output id="rsvGuestsOut" aria-live="polite">1</output>
                 <button type="button" data-stepper="guests" data-dir="1" aria-label="Eén persoon meer"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M7 2v10"/></svg></button>
               </div>
             </div>
@@ -548,7 +567,7 @@
                 <input type="radio" name="deliveryMode" value="geen" checked>
                 <span class="rsv-choice-title">Zelf ophalen</span>
                 <span class="rsv-choice-price">Gratis</span>
-                <span class="rsv-choice-desc">Ik haal het zelf op en breng het zelf terug naar Wageningen.</span>
+                <span class="rsv-choice-desc">Je haalt alles op in Wageningen en brengt het daar ook weer terug. Het adres en het tijdstip spreken we af bij de bevestiging.</span>
               </label>
               <label class="rsv-choice">
                 <input type="radio" name="deliveryMode" value="bezorgen" data-base="25" data-perkm="0.25">
@@ -566,13 +585,14 @@
 
             <div class="sc-address-field" id="scAddressField">
               <p class="rsv-address-head">Afleveradres</p>
-              <div class="rsv-field">
-                <label for="scStreet">Straat en huisnummer</label>
-                <input type="text" id="scStreet" autocomplete="address-line1" placeholder="Bijv. Hoofdstraat 12">
-              </div>
+              <p class="rsv-muted rsv-address-intro">Vul je postcode en huisnummer in; straat en plaats vullen we dan voor je aan.</p>
               <div class="rsv-address-grid">
-                <div class="rsv-field"><label for="scPostcode">Postcode</label><input type="text" id="scPostcode" autocomplete="postal-code" placeholder="6701 AA"></div>
-                <div class="rsv-field"><label for="scCity">Plaats</label><input type="text" id="scCity" autocomplete="address-level2" placeholder="Wageningen"></div>
+                <div class="rsv-field"><label for="scPostcode">Postcode</label><input type="text" id="scPostcode" autocomplete="postal-code" autocapitalize="characters" maxlength="7"></div>
+                <div class="rsv-field"><label for="scHouseNr">Huisnummer <span class="rsv-opt">+ toevoeging</span></label><input type="text" id="scHouseNr" autocomplete="off" maxlength="10"></div>
+              </div>
+              <div class="rsv-address-grid rsv-address-grid--street">
+                <div class="rsv-field"><label for="scStreet">Straat</label><input type="text" id="scStreet" autocomplete="address-line1"></div>
+                <div class="rsv-field"><label for="scCity">Plaats</label><input type="text" id="scCity" autocomplete="address-level2"></div>
               </div>
 
               <div class="rsv-estimate">
@@ -595,7 +615,8 @@
           <section class="rsv-step" data-step="4" aria-labelledby="rsvTitle4" hidden>
             <h2 class="rsv-title" id="rsvTitle4" tabindex="-1">Waar mogen we je aanvraag naartoe sturen?</h2>
             <div class="rsv-field"><label for="scName">Naam</label><input type="text" id="scName" name="name" autocomplete="name" required></div>
-            <div class="rsv-field"><label for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" autocomplete="email" required></div>
+            <div class="rsv-field"><label for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" autocomplete="email" required>
+              <p class="rsv-email-hint" id="scEmailHint" hidden>Bedoel je <button type="button" class="rsv-textlink" id="scEmailFix"></button>?</p></div>
             <div class="rsv-field"><label for="scPhone">Telefoonnummer <span class="rsv-opt">(optioneel)</span></label><input type="tel" id="scPhone" name="phone" autocomplete="tel"></div>
             <div class="rsv-field">
               <label for="scNotes">Opmerkingen of maatwerkwensen <span class="rsv-opt">(optioneel)</span></label>
@@ -605,19 +626,21 @@
             <div class="sc-summary">
               <p class="rsv-summary-head">Jouw aanvraag</p>
               <div id="scSummaryLines"></div>
-              <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€33,50</strong></div>
+              <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€16,75</strong></div>
               <p class="vat-note">Incl. btw</p>
               <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
-              <p class="sc-summary-note">Naast dit bedrag rekenen we een <strong>borg van €150,00</strong>. Je krijgt deze borg volledig terug zodra alle gehuurde spullen in goede staat zijn geretourneerd.</p>
-              <p class="sc-summary-note">Na de definitieve bevestiging betaal je een aanbetaling van 25%. Het restbedrag voldoe je uiterlijk 7 dagen voor de huurdatum. Pas na ontvangst van de aanbetaling is je reservering definitief.</p>
+              <div class="rsv-pay" id="rsvPay"></div>
+            </div>
+
+            <div class="rsv-captcha">
+              <p class="rsv-captcha-label">Even checken of je geen robot bent</p>
+              <div class="h-captcha" data-captcha="true"></div>
             </div>
 
             <label class="rsv-terms">
               <input type="checkbox" id="scTermsCheck" name="akkoord_voorwaarden" value="Ja" required>
               <span>Ik ga akkoord met de <a href="algemene-voorwaarden.html" target="_blank" rel="noopener">algemene voorwaarden</a> en heb de <a href="privacy-van-gegevens.html" target="_blank" rel="noopener">privacyverklaring</a> gelezen.</span>
             </label>
-
-            <div class="h-captcha" data-captcha="true"></div>
           </section>
 
           <input type="hidden" name="access_key" value="e6783a84-f79f-4dd4-9175-5f2933b2b387">
@@ -627,7 +650,7 @@
 
           <div class="rsv-nav">
             <button type="button" class="rsv-back" id="rsvBack" aria-label="Vorige stap" disabled><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M15 9H3M8 4L3 9l5 5"/></svg></button>
-            <div class="rsv-nav-total" aria-hidden="true"><span>Totaal</span><strong id="rsvNavTotal">€33,50</strong></div>
+            <div class="rsv-nav-total" aria-hidden="true"><span>Totaal</span><strong id="rsvNavTotal">€16,75</strong></div>
             <button type="button" class="rsv-next" id="rsvNext">Volgende</button>
             <button type="submit" class="rsv-next" id="scSubmitBtn" hidden>Verstuur aanvraag</button>
           </div>
@@ -724,7 +747,8 @@
   var streetInput = document.getElementById('scStreet');
   var postcodeInput = document.getElementById('scPostcode');
   var cityInput = document.getElementById('scCity');
-  var addressInputs = [streetInput, postcodeInput, cityInput];
+  var houseNrInput = document.getElementById('scHouseNr');
+  var addressInputs = [postcodeInput, houseNrInput, streetInput, cityInput];
   var addressStatus = document.getElementById('scAddressStatus');
   var calcBtn = document.getElementById('scCalcDistanceBtn');
   var manualKmField = document.getElementById('scManualKmField');
@@ -742,6 +766,7 @@
   var restoredNote = document.getElementById('rsvRestored');
 
   function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   function esc(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -828,17 +853,59 @@
   var card = document.querySelector('.rsv-card');
   var doneEl = document.getElementById('rsvDone');
 
+  // Foutmeldingen staan bij het veld zelf; de statusregel onder de knop
+  // verwijst ernaar. Zonder veld (bijv. bij het verzenden) staat de
+  // melding alleen in de statusregel.
+  function setFieldError(el, msg) {
+    clearFieldError(el);
+    var p = document.createElement('p');
+    p.className = 'rsv-field-error';
+    p.id = (el.id || 'rsvGroup' + Date.now()) + 'Err';
+    p.textContent = msg;
+    var field = el.closest('.rsv-field');
+    if (field) field.appendChild(p);
+    else (el.closest('.rsv-terms') || el.closest('.sc-item-tiles') || el.closest('.rsv-captcha') || el).insertAdjacentElement('afterend', p);
+    el.setAttribute('aria-invalid', 'true');
+    el.setAttribute('aria-describedby', ((el.getAttribute('aria-describedby') || '') + ' ' + p.id).trim());
+    el._rsvErr = p;
+  }
+  function clearFieldError(el) {
+    if (!el || !el._rsvErr) return;
+    var id = el._rsvErr.id;
+    el._rsvErr.remove();
+    el._rsvErr = null;
+    el.removeAttribute('aria-invalid');
+    var rest = (el.getAttribute('aria-describedby') || '').split(' ').filter(function (x) { return x && x !== id; }).join(' ');
+    if (rest) el.setAttribute('aria-describedby', rest); else el.removeAttribute('aria-describedby');
+  }
+  function clearAllFieldErrors() {
+    form.querySelectorAll('[aria-invalid="true"]').forEach(clearFieldError);
+  }
   function showError(msg, focusEl) {
-    statusEl.textContent = msg;
     statusEl.className = 'sc-status sc-err';
-    if (focusEl) focusEl.focus();
+    if (focusEl) {
+      setFieldError(focusEl, msg);
+      statusEl.textContent = 'Controleer het gemarkeerde veld hierboven.';
+      if (typeof focusEl.focus === 'function' && focusEl.tabIndex >= 0) focusEl.focus();
+      else focusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      statusEl.textContent = msg;
+    }
   }
   function clearStatus() { statusEl.textContent = ''; statusEl.className = 'sc-status'; }
+  form.addEventListener('input', function (e) { clearFieldError(e.target); });
+  form.addEventListener('change', function (e) {
+    clearFieldError(e.target);
+    if (e.target.classList.contains('sc-item-check')) clearFieldError(form.querySelector('.sc-item-check'));
+    if (!form.querySelector('[aria-invalid="true"]') && statusEl.classList.contains('sc-err')) clearStatus();
+  });
 
   // Elke stap krijgt een eigen plek in de browsergeschiedenis, zodat de
   // terugknop van de browser naar de vorige stap gaat in plaats van weg
   // van de pagina. historyDepth telt de stappen die wij zelf toevoegden.
   var historyDepth = 0;
+  // Knoptekst die zegt waar je heen gaat (kort genoeg voor de mobiele balk).
+  var NEXT_LABELS = { 1: 'Naar datum', 2: 'Naar bezorging', 3: 'Naar je gegevens' };
   function stepUrl(n) { return location.pathname + (n > 1 ? '#stap-' + n : ''); }
 
   function goTo(n, moveFocus, histMode) {
@@ -852,8 +919,10 @@
     stepLabel.textContent = 'Stap ' + n + ' van ' + TOTAL_STEPS;
     backBtn.disabled = n === 1;
     nextBtn.hidden = n === TOTAL_STEPS;
+    if (NEXT_LABELS[n]) nextBtn.textContent = NEXT_LABELS[n];
     submitBtn.hidden = n !== TOTAL_STEPS;
     clearStatus();
+    clearAllFieldErrors();
     recalc();
     if (histMode === 'push') { history.pushState({ rsvStep: n }, '', stepUrl(n)); historyDepth++; }
     else if (histMode === 'replace') { history.replaceState({ rsvStep: n }, '', stepUrl(n)); }
@@ -890,12 +959,26 @@
     }
     if (n === 3) {
       var dRadio = getDeliveryMode();
-      if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null) {
-        if (!streetInput.value.trim()) {
-          return fail('Vul je afleveradres in, zodat we de bezorgkosten kunnen berekenen.', streetInput);
+      // Bij het terugzetten van een concept loopt de adreszoektocht nog; dan telt het ingevulde adres.
+      if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null && !(restoringDraft && hasAddressInput())) {
+        if (!hasAddressInput()) {
+          if (!normPostcode()) return fail('Vul je postcode in, zodat we de bezorgkosten kunnen berekenen.', postcodeInput);
+          return fail('Vul je huisnummer in.', houseNrInput);
         }
-        return fail('Controleer het bezorgadres: klik op "Bereken afstand" of vul de afstand handmatig in.');
+        if (manualKmField.classList.contains('sc-visible')) return fail('Vul de afstand in kilometers in, of pas het adres aan.', manualKmInput);
+        return fail('We zijn het adres nog aan het zoeken. Klik op "Bereken afstand" als het niet lukt.');
       }
+    }
+    if (n === 4) {
+      var nameEl = document.getElementById('scName');
+      var emailEl = document.getElementById('scEmail');
+      var termsEl = document.getElementById('scTermsCheck');
+      var captchaResp = form.querySelector('[name="h-captcha-response"]');
+      if (!nameEl.value.trim()) return fail('Vul je naam in.', nameEl);
+      if (!emailEl.value.trim()) return fail('Vul je e-mailadres in.', emailEl);
+      if (!EMAIL_RE.test(emailEl.value.trim())) return fail('Dit e-mailadres lijkt niet te kloppen. Controleer het even.', emailEl);
+      if (captchaResp && !captchaResp.value) return fail('Vink "Ik ben een mens" aan.', form.querySelector('.h-captcha'));
+      if (!termsEl.checked) return fail('Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.', termsEl);
     }
     return true;
   }
@@ -1002,10 +1085,25 @@
   var calcRequestId = 0;
   var lastCalculatedAddress = null;
 
-  function getAddress() {
-    var place = [postcodeInput.value.trim(), cityInput.value.trim()].filter(Boolean).join(' ');
-    return [streetInput.value.trim(), place].filter(Boolean).join(', ');
+  // Postcode als "1234AB" en huisnummer als { nr, add }, of null als het
+  // (nog) geen geldige invoer is.
+  function normPostcode() {
+    var m = /^\s*(\d{4})\s*([a-zA-Z]{2})\s*$/.exec(postcodeInput.value);
+    return m ? m[1] + m[2].toUpperCase() : null;
   }
+  function parseHouseNr() {
+    var m = /^\s*(\d+)\s*[-\s]?\s*([a-zA-Z0-9]{0,6})\s*$/.exec(houseNrInput.value);
+    return m ? { nr: m[1], add: m[2].toUpperCase() } : null;
+  }
+  function getAddress() {
+    var street = streetInput.value.trim();
+    var nr = houseNrInput.value.trim();
+    // Vult de browser "Hoofdstraat 12" in het straatveld in, dan niet nog eens het nummer erachter.
+    if (nr && !/\d/.test(street)) street = [street, nr].filter(Boolean).join(' ');
+    var place = [postcodeInput.value.trim(), cityInput.value.trim()].filter(Boolean).join(' ');
+    return [street, place].filter(Boolean).join(', ');
+  }
+  function hasAddressInput() { return !!(normPostcode() && parseHouseNr()) || !!streetInput.value.trim(); }
 
   function sleep(ms) { return new Promise(function (res) { setTimeout(res, ms); }); }
   function toRad(deg) { return deg * Math.PI / 180; }
@@ -1029,6 +1127,29 @@
       .then(function (data) {
         if (!data || data.length === 0) throw { type: 'not_found' };
         return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), label: data[0].display_name };
+      });
+  }
+  // PDOK Locatieserver (Kadaster): zoekt bij postcode en huisnummer het
+  // officiële adres op, met straat, plaats en coördinaten.
+  function geocodePdok(postcode, house) {
+    var url = 'https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?fq=type:adres&rows=20' +
+      '&fl=weergavenaam,straatnaam,huisletter,huisnummertoevoeging,woonplaatsnaam,centroide_ll' +
+      '&q=' + encodeURIComponent('postcode:' + postcode + ' and huisnummer:' + house.nr);
+    return fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(function (res) {
+        if (!res.ok) throw { type: 'network' };
+        return res.json();
+      })
+      .then(function (data) {
+        var docs = (data && data.response && data.response.docs) || [];
+        if (!docs.length) throw { type: 'not_found' };
+        var doc = docs.filter(function (d) {
+          var add = ((d.huisletter || '') + (d.huisnummertoevoeging || '')).toUpperCase();
+          return add === house.add || (d.huisletter || '').toUpperCase() === house.add || (d.huisnummertoevoeging || '').toUpperCase() === house.add;
+        })[0] || docs[0];
+        var m = /POINT\(([-\d.]+) ([-\d.]+)\)/.exec(doc.centroide_ll || '');
+        if (!m) throw { type: 'not_found' };
+        return { lat: parseFloat(m[2]), lon: parseFloat(m[1]), label: doc.weergavenaam, street: doc.straatnaam, city: doc.woonplaatsnaam };
       });
   }
   function geocodeWithRetry(address, attemptsLeft) {
@@ -1069,7 +1190,7 @@
     manualKmInput.value = '';
     usingManualKm = false;
 
-    if (!streetInput.value.trim()) {
+    if (!hasAddressInput()) {
       addressStatus.textContent = '';
       deliveryDistanceKm = null;
       resolvedAddressLabel = null;
@@ -1081,12 +1202,26 @@
     lastCalculatedAddress = address;
     var myRequestId = ++calcRequestId;
     calcBtn.disabled = true;
-    addressStatus.textContent = 'Afstand berekenen...';
+    addressStatus.textContent = 'Adres zoeken...';
     addressStatus.className = 'sc-address-status';
 
-    geocodeWithRetry(address)
+    // Eerst PDOK met postcode en huisnummer; lukt dat niet en is er een
+    // straat ingevuld, dan OpenStreetMap als reserve.
+    var postcode = normPostcode(), house = parseHouseNr();
+    var lookup = postcode && house
+      ? geocodePdok(postcode, house).catch(function (err) {
+          if (!streetInput.value.trim() || addressAutoFilled) throw err;
+          return geocodeWithRetry(address);
+        })
+      : geocodeWithRetry(address);
+
+    lookup
       .then(function (dest) {
         if (!dest || myRequestId !== calcRequestId) return;
+        if (dest.street) { streetInput.value = dest.street; cityInput.value = dest.city || cityInput.value; addressAutoFilled = true; }
+        clearFieldError(postcodeInput);
+        lastCalculatedAddress = getAddress();
+        saveDraft();
         var straightKm = haversineKm(ORIGIN_COORDS.lat, ORIGIN_COORDS.lon, dest.lat, dest.lon);
         deliveryDistanceKm = Math.round(straightKm * DELIVERY_ROUTE_FACTOR);
         resolvedAddressLabel = dest.label || null;
@@ -1099,7 +1234,9 @@
         deliveryDistanceKm = null;
         resolvedAddressLabel = null;
         lastCalculatedAddress = null;
-        if (err && err.type === 'not_found') {
+        if (err && err.type === 'not_found' && postcode && house) {
+          showManualFallback('Geen adres gevonden bij deze postcode en dit huisnummer. Controleer ze, of vul straat en plaats zelf in.');
+        } else if (err && err.type === 'not_found') {
           showManualFallback('Adres niet gevonden. Controleer de invoer of vul de afstand handmatig in.');
         } else {
           showManualFallback('Automatische berekening lukt nu niet. Vul de afstand handmatig in.');
@@ -1119,6 +1256,21 @@
         if (addressInputs.indexOf(document.activeElement) === -1) calculateDelivery();
       }, 0);
     });
+  });
+  // Zodra postcode en huisnummer compleet zijn, meteen opzoeken (na een
+  // korte pauze in het typen). Straat en plaats die we eerder zelf
+  // invulden, horen bij het oude adres en gaan dan weg.
+  var addressAutoFilled = false;
+  var lookupTimer = null;
+  [postcodeInput, houseNrInput].forEach(function (el) {
+    el.addEventListener('input', function () {
+      if (addressAutoFilled) { streetInput.value = ''; cityInput.value = ''; addressAutoFilled = false; }
+      clearTimeout(lookupTimer);
+      if (normPostcode() && parseHouseNr()) lookupTimer = setTimeout(calculateDelivery, 500);
+    });
+  });
+  [streetInput, cityInput].forEach(function (el) {
+    el.addEventListener('input', function () { addressAutoFilled = false; });
   });
 
   var deliveryModeRadios = form.querySelectorAll('input[name="deliveryMode"]');
@@ -1190,22 +1342,62 @@
   }
 
   // Regels zonder prijs bovenaan de samenvatting: gelegenheid en datums.
+  // Elke regel weet bij welke stap hij hoort, voor de "wijzig"-links.
   function metaLines() {
     var out = [];
-    if (OCCASIONS[occasionInput.value]) out.push('Gelegenheid: ' + OCCASIONS[occasionInput.value]);
+    if (OCCASIONS[occasionInput.value]) out.push({ text: 'Gelegenheid: ' + OCCASIONS[occasionInput.value] });
     var ev = readDate(dateInput), s = readDate(startInput), e = readDate(endInput);
-    if (ev) out.push('Datum: ' + shortDate(ev));
-    if (s && e && e >= s) out.push('Huur: ' + shortDate(s) + ' t/m ' + shortDate(e));
+    if (ev) out.push({ text: 'Datum: ' + shortDate(ev), step: 2 });
+    if (s && e && e >= s) out.push({ text: 'Huur: ' + shortDate(s) + ' t/m ' + shortDate(e), step: 2 });
     return out;
   }
-  function renderLines(meta, lines) {
-    return meta.map(function (m) { return '<div class="sc-summary-meta">' + esc(m) + '</div>'; }).join('') +
+  // withEdit: toon "wijzig" bij regels van een eerdere stap dan de huidige.
+  function editLink(item, withEdit) {
+    if (!withEdit || !item.step || item.step >= currentStep) return '';
+    var text = item.text || item.label;
+    return ' <button type="button" class="rsv-edit" data-goto="' + item.step + '"' + (item.extras ? ' data-extras="1"' : '') + '>wijzig<span class="rsv-visually-hidden"> ' + esc(text) + '</span></button>';
+  }
+  function renderLines(meta, lines, withEdit) {
+    return meta.map(function (m) { return '<div class="sc-summary-meta">' + esc(m.text) + editLink(m, withEdit) + '</div>'; }).join('') +
       lines.map(function (l) {
-        return '<div class="sc-summary-line"><span>' + esc(l.label) + '</span><span>' + esc(l.price) + '</span></div>';
+        return '<div class="sc-summary-line"><span>' + esc(l.label) + editLink(l, withEdit) + '</span><span>' + esc(l.price) + '</span></div>';
       }).join('');
   }
+  [summaryLinesEl, sideLinesEl].forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-goto]');
+      if (!btn) return;
+      if (btn.hasAttribute('data-extras')) extrasDetails.open = true;
+      goTo(parseInt(btn.getAttribute('data-goto'), 10), true, 'push');
+    });
+  });
+
+  // Wat je wanneer betaalt, uitgerekend: aanbetaling 25%, restbedrag
+  // uiterlijk 7 dagen voor de huurdatum, en de borg.
+  var DEPOSIT = 150;
+  function renderPay(total, isFrom) {
+    var start = readDate(startInput);
+    var deadline = start ? addDays(start, -7) : null;
+    var today = addDays(new Date(), 0);
+    var when = !deadline ? 'uiterlijk 7 dagen voor de huurdatum'
+      : deadline <= today ? 'direct na de bevestiging' : 'uiterlijk ' + shortDate(deadline);
+    var pre = isFrom ? 'vanaf ' : '';
+    var html = '';
+    if (total !== null) {
+      var down = Math.round(total * 25) / 100;
+      html += '<div class="rsv-pay-row"><span>Aanbetaling 25%, na de definitieve bevestiging</span><b>' + pre + fmt(down) + '</b></div>' +
+        '<div class="rsv-pay-row"><span>Restbedrag, ' + esc(when) + '</span><b>' + pre + fmt(total - down) + '</b></div>';
+    } else {
+      html += '<div class="rsv-pay-row"><span>Aanbetaling</span><b>25% van het afgesproken bedrag</b></div>';
+    }
+    html += '<div class="rsv-pay-row"><span>Borg, vooraf; terug binnen 7 werkdagen na retour</span><b>' + fmt(DEPOSIT) + '</b></div>' +
+      '<p class="rsv-pay-note">Je reservering is definitief zodra de aanbetaling binnen is.</p>';
+    return html;
+  }
+  var payEl = document.getElementById('rsvPay');
 
   var lastSummaryHtml = '';
+  var lastPayHtml = '';
   function recalc() {
     updatePeriod();
     var guestsOverLimit = guestsInput.value === 'over30';
@@ -1236,7 +1428,7 @@
       var reasons = [];
       if (guestsOverLimit) reasons.push('meer dan 30 personen');
       if (daysOverLimit) reasons.push('meer dan 7 huurdagen');
-      lines.push({ label: 'Aanvraag voor ' + reasons.join(' en '), price: '' });
+      lines.push({ label: 'Aanvraag voor ' + reasons.join(' en '), price: '', step: 2 });
       totalText = 'Op aanvraag';
       lastComputedTotal = null;
       summaryNote.textContent = 'Voor ' + reasons.join(' en ') + ' stellen we in overleg een passende prijs samen. We nemen na ontvangst van je aanvraag contact met je op.';
@@ -1255,17 +1447,17 @@
         ? (pkg ? pkg.value : '')
         : 'Maatwerkpakket (' + checkedItems.length + ' tafel-items)';
 
-      lines.push({ label: labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)', price: fmt(baseTableCost) });
+      lines.push({ label: labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)', price: fmt(baseTableCost), step: 1 });
       if (extraDays > 0) {
-        lines.push({ label: 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')', price: fmt(extraDaysCost) });
+        lines.push({ label: 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')', price: fmt(extraDaysCost), step: 2 });
       }
-      xtraSummary.lines.forEach(function (line) { lines.push({ label: line.label, price: line.priceLabel }); });
+      xtraSummary.lines.forEach(function (line) { lines.push({ label: line.label, price: line.priceLabel, step: 2, extras: true }); });
 
       var deliveryPrice = 0;
       if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
         // Vier ritten: heen en terug bij bezorgen, heen en terug bij ophalen.
         deliveryPrice = parseFloat(dRadio.dataset.base) + deliveryDistanceKm * 4 * parseFloat(dRadio.dataset.perkm);
-        lines.push({ label: (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)', price: fmt(deliveryPrice) });
+        lines.push({ label: (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)', price: fmt(deliveryPrice), step: 3 });
         updateEstimate(deliveryPrice);
       } else {
         updateEstimate(null);
@@ -1279,9 +1471,13 @@
         : 'Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.';
     }
 
-    lastSummaryHtml = renderLines(metaLines(), lines);
-    summaryLinesEl.innerHTML = lastSummaryHtml;
-    sideLinesEl.innerHTML = lastSummaryHtml;
+    var meta = metaLines();
+    lastSummaryHtml = renderLines(meta, lines, false);
+    var editableHtml = renderLines(meta, lines, true);
+    summaryLinesEl.innerHTML = editableHtml;
+    sideLinesEl.innerHTML = editableHtml;
+    lastPayHtml = renderPay(lastComputedTotal, totalText.indexOf('vanaf') === 0);
+    payEl.innerHTML = lastPayHtml;
     totalPriceEl.textContent = totalText;
     sideTotalEl.textContent = totalText;
     navTotalEl.textContent = totalText;
@@ -1303,7 +1499,7 @@
   var DRAFT_KEY = 'sc_reserve_draft_v1';
   var DRAFT_MAX_AGE = 30 * 864e5;
   var draftReady = false;
-  var DRAFT_FIELDS = { street: streetInput, postcode: postcodeInput, city: cityInput, name: document.getElementById('scName'), email: document.getElementById('scEmail'), phone: document.getElementById('scPhone'), notes: document.getElementById('scNotes'), date: dateInput, start: startInput, end: endInput };
+  var DRAFT_FIELDS = { street: streetInput, postcode: postcodeInput, city: cityInput, name: document.getElementById('scName'), email: document.getElementById('scEmail'), phone: document.getElementById('scPhone'), notes: document.getElementById('scNotes'), houseNr: houseNrInput, date: dateInput, start: startInput, end: endInput };
 
   function saveDraft() {
     if (!draftReady || !doneEl.hidden) return;
@@ -1333,7 +1529,7 @@
     var dRadio = getDeliveryMode();
     if (dRadio && dRadio.value !== 'geen') {
       if (d.manualKm) { manualKmField.classList.add('sc-visible'); manualKmInput.value = d.manualKm; applyManualKm(); lastCalculatedAddress = getAddress(); }
-      else if (streetInput.value.trim()) calculateDelivery();
+      else if (hasAddressInput()) calculateDelivery();
     }
   }
   function hasContent(d) {
@@ -1372,19 +1568,15 @@
     e.preventDefault();
     recalc();
 
-    // Vangnet: de stapcontroles nogmaals, voor het geval er in een
-    // eerdere stap iets is veranderd.
-    for (var s = 1; s < TOTAL_STEPS; s++) {
-      if (!validateStep(s)) {
-        var msg = statusEl.textContent;
-        goTo(s, true, 'replace');
-        showError(msg);
+    // Vangnet: alle stapcontroles nogmaals, voor het geval er in een
+    // eerdere stap iets is veranderd. Bij een fout in een eerdere stap
+    // springen we daarheen en tonen de melding bij het veld.
+    clearAllFieldErrors();
+    for (var s = 1; s <= TOTAL_STEPS; s++) {
+      if (!validateStep(s, s !== currentStep)) {
+        if (s !== currentStep) { goTo(s, true, 'push'); validateStep(s); }
         return;
       }
-    }
-    if (!document.getElementById('scTermsCheck').checked) {
-      showError('Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.', document.getElementById('scTermsCheck'));
-      return;
     }
 
     submitBtn.disabled = true;
@@ -1450,7 +1642,8 @@
     var sentTotal = totalPriceEl.textContent;
     document.getElementById('rsvDoneSummary').innerHTML = lastSummaryHtml +
       '<div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>' + esc(sentTotal) + '</strong></div>' +
-      '<p class="vat-note">Incl. btw, exclusief borg</p>';
+      '<p class="vat-note">Incl. btw, exclusief borg</p>' +
+      '<div class="rsv-pay">' + lastPayHtml + '</div>';
     document.getElementById('rsvDoneTitle').textContent = name ? 'Bedankt, ' + name + '!' : 'Bedankt!';
     document.getElementById('rsvDoneStep1').textContent = 'We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail' + (email ? ' naar ' + email : '') + '.';
 
@@ -1467,13 +1660,65 @@
   }
   document.getElementById('rsvPrint').addEventListener('click', function () { window.print(); });
 
+  // ---------------------------------------------------------------
+  // E-mailadres: veelgemaakte typefouten in het domein herkennen
+  // (gmial.com, hotmail.nll, ...) en een correctie voorstellen.
+  // ---------------------------------------------------------------
+  var emailInput = document.getElementById('scEmail');
+  var emailHint = document.getElementById('scEmailHint');
+  var emailFix = document.getElementById('scEmailFix');
+  var EMAIL_DOMAINS = ['gmail.com', 'hotmail.com', 'hotmail.nl', 'outlook.com', 'outlook.nl', 'live.nl', 'live.com', 'msn.com',
+    'icloud.com', 'me.com', 'yahoo.com', 'ziggo.nl', 'kpnmail.nl', 'kpnplanet.nl', 'planet.nl', 'home.nl', 'xs4all.nl',
+    'telfort.nl', 'upcmail.nl', 'casema.nl', 'chello.nl', 'hetnet.nl', 'quicknet.nl', 'zeelandnet.nl', 'protonmail.com', 'proton.me', 'gmx.com', 'wur.nl'];
+  // Aantal tikfouten tussen twee woorden; twee omgewisselde letters
+  // ("gmial") tellen als één fout.
+  function editDistance(a, b) {
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++) { d[i] = [i]; }
+    for (j = 0; j <= b.length; j++) { d[0][j] = j; }
+    for (i = 1; i <= a.length; i++) {
+      for (j = 1; j <= b.length; j++) {
+        var cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+      }
+    }
+    return d[a.length][b.length];
+  }
+  function suggestEmail(value) {
+    var m = /^([^@\s]+)@([^@\s]+)$/.exec(value.trim());
+    if (!m) return null;
+    var domain = m[2].toLowerCase();
+    if (EMAIL_DOMAINS.indexOf(domain) !== -1) return null;
+    var best = null, bestDist = 3;
+    EMAIL_DOMAINS.forEach(function (d) {
+      var dist = editDistance(domain, d);
+      if (dist < bestDist) { bestDist = dist; best = d; }
+    });
+    return best ? m[1] + '@' + best : null;
+  }
+  function updateEmailHint() {
+    var s = suggestEmail(emailInput.value);
+    emailHint.hidden = !s;
+    if (s) emailFix.textContent = s;
+  }
+  emailInput.addEventListener('blur', updateEmailHint);
+  emailInput.addEventListener('input', function () { if (!emailHint.hidden) updateEmailHint(); });
+  emailFix.addEventListener('click', function () {
+    emailInput.value = emailFix.textContent;
+    emailHint.hidden = true;
+    clearFieldError(emailInput);
+    saveDraft();
+    emailInput.focus();
+  });
+
   // Alles terug naar de beginstand, inclusief het gedeelde mandje en het concept.
   function resetAll() {
     form.reset();
     ScCart.clear();
     clearDraft();
     xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
-    guestsInput.value = '2';
+    guestsInput.value = '1';
     daysInput.value = '3';
     occasionInput.value = '';
     renderGuests();
@@ -1497,6 +1742,7 @@
   // Start: concept terugzetten, daarna eventuele link-parameters.
   // ---------------------------------------------------------------
   var startStep = 1;
+  var restoringDraft = true;
   var draft = loadDraft();
   if (draft) {
     restoreDraft(draft);
@@ -1505,6 +1751,7 @@
     var wanted = Math.min(Math.max(1, parseInt(draft.step, 10) || 1), TOTAL_STEPS);
     while (startStep < wanted && validateStep(startStep, true)) startStep++;
   }
+  restoringDraft = false;
   if (applyParams()) startStep = 1;
   if (location.search) history.replaceState(null, '', location.pathname + location.hash);
   draftReady = true;
