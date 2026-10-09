@@ -6,7 +6,7 @@
     {
       kicker: '01 · Collectie',
       heading: 'Moss & Mist',
-      blurb: 'Zachte groentinten en natuurlijke rust, vanaf €16,75 per persoon.',
+      blurb: 'Zachte groentinten en natuurlijke rust, voor €16,75 per persoon.',
       cta: 'Ontdek Moss & Mist',
       href: 'moss-and-mist.html',
       img: 'images/img-044ae929.webp'
@@ -14,7 +14,7 @@
     {
       kicker: '02 · Collectie',
       heading: 'Mocha Sky',
-      blurb: 'Warme aardetinten, modern en tijdloos, vanaf €17,75 per persoon.',
+      blurb: 'Warme aardetinten, modern en tijdloos, voor €17,75 per persoon.',
       cta: 'Ontdek Mocha Sky',
       href: 'mocha-sky.html',
       img: 'images/img-25e2bb73.webp'
