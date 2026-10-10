@@ -135,9 +135,9 @@
   .rsv-title { font-family: var(--serif); font-weight: 400; font-size: clamp(25px, 3.4vw, 30px); line-height: 1.18; letter-spacing: -0.01em; margin: 0 0 22px; text-wrap: balance; }
   .rsv-title:focus { outline: none; }
   .rsv-muted { font-size: 13px; color: var(--ink-soft); }
-  .rsv-muted a, .rsv-textlink { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .rsv-muted a, .rsv-textlink, .rsv-promises a, .rsv-done-steps a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
   .rsv-textlink { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; cursor: pointer; }
-  .rsv-textlink:hover, .rsv-muted a:hover { color: var(--mocha-dark); }
+  .rsv-textlink:hover, .rsv-muted a:hover, .rsv-promises a:hover, .rsv-done-steps a:hover { color: var(--mocha-dark); }
   .rsv-vat { display: block; margin-top: 14px; font-size: 12px; color: var(--ink-faint); }
   .rsv-visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
 
@@ -478,8 +478,8 @@
       </div>
       <ul class="rsv-promises">
         <li><b>1</b><span>Voorlopige bevestiging binnen 2 dagen, nadat we de beschikbaarheid hebben gecontroleerd.</span></li>
-        <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% aanbetaling; dan staat je datum vast.</span></li>
-        <li><b>3</b><span>Borg van €150, die je volledig terugkrijgt na retour in goede staat.</span></li>
+        <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% van de totale pakketprijs als aanbetaling; dan staat je datum vast. Het restbedrag betaal je uiterlijk 7 dagen voor de huurdatum. Lees meer in de <a href="algemene-voorwaarden.html#prijzen-en-betaling">algemene voorwaarden</a>.</span></li>
+        <li><b>3</b><span>Borg van €150, die je samen met de pakketprijs betaalt en volledig terugkrijgt na retour in goede staat. Lees meer in de <a href="algemene-voorwaarden.html#borg">algemene voorwaarden</a>.</span></li>
       </ul>
     </div>
 
@@ -754,8 +754,8 @@
         <div class="rsv-done-summary" id="rsvDoneSummary"></div>
         <ol class="rsv-done-steps">
           <li><b>1</b><span id="rsvDoneStep1">We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail.</span></li>
-          <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% aanbetaling; dan staat je datum vast.</span></li>
-          <li><b>3</b><span>Het restbedrag betaal je uiterlijk 7 dagen voor de huurdatum. De borg van €150 betaal je vooraf; die krijg je binnen 7 werkdagen na retour terug.</span></li>
+          <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% van de totale pakketprijs als aanbetaling; dan staat je datum vast. Zie de <a href="algemene-voorwaarden.html#prijzen-en-betaling">algemene voorwaarden</a>.</span></li>
+          <li><b>3</b><span>Het restbedrag betaal je uiterlijk 7 dagen voor de huurdatum, samen met de borg van €150; die krijg je binnen 7 werkdagen na retour terug. Zie de <a href="algemene-voorwaarden.html#borg">algemene voorwaarden</a>.</span></li>
         </ol>
         <div class="rsv-done-actions">
           <a class="rsv-ghost" id="rsvMailCopy" href="#">Mail mezelf een kopie</a>
