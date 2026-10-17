@@ -1017,6 +1017,45 @@ body.gallery-open { overflow: hidden; }
 .occasion-card:focus-visible h3::after { transform: translateX(3px); opacity: 1; }
 .occasion-card-body p { font-size: 12px; color: rgba(248,246,239,0.78); line-height: 1.45; }
 
+/* Seizoensblok boven de gelegenheden (home): één brede kaart, in de warme
+   mocha-tint, zodat hij opvalt zonder de vier vaste kaarten te verdringen. */
+.season-feature {
+  display: grid; grid-template-columns: 1fr;
+  margin-bottom: 24px;
+  background: var(--mocha-dark); color: var(--paper);
+  text-decoration: none; overflow: hidden;
+}
+@media (min-width: 760px) { .season-feature { grid-template-columns: 1.1fr 1fr; } }
+.season-feature-media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; }
+.season-feature-media img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.season-feature:hover .season-feature-media img { transform: scale(1.04); }
+.season-feature-body {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(24px, 4vw, 48px);
+}
+.season-feature-body .season-feature-tag {
+  align-self: flex-start;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink); background: var(--gold);
+  padding: 5px 10px; margin-bottom: 16px;
+}
+.season-feature-body h3 { font-size: clamp(24px, 2.6vw, 32px); color: var(--paper); margin-bottom: 12px; }
+.season-feature-body p { font-size: 15px; color: rgba(248,246,239,0.85); max-width: 46ch; }
+.season-feature-link {
+  margin-top: 20px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--paper); border-bottom: 1px solid var(--gold); align-self: flex-start; padding-bottom: 3px;
+}
+.season-feature-link::after { content: " →"; }
+.season-feature:focus-visible { outline: 2px solid var(--moss-dark); outline-offset: 3px; }
+
+/* Kerst in de stories-rij en de aankondigingsbalk. */
+.story-avatar--season .story-ring { background: var(--gold); }
+.announce-bar-list a { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--gold); }
+
+
 /* ---------------------------------------------------------------------- */
 /* FAQ accordion                                                          */
 /* ---------------------------------------------------------------------- */

@@ -4,6 +4,14 @@
 (function () {
   var stories = [
     {
+      kicker: 'Nu in december',
+      heading: 'Kerst & oud en nieuw',
+      blurb: 'Eén complete tafel voor de feestdagen. Er is één set per collectie: reserveer op tijd.',
+      cta: 'Bekijk kerst & feestdagen',
+      href: 'kerst-en-feestdagen.html',
+      img: 'images/img-25e2bb73.webp'
+    },
+    {
       kicker: 'Voor elk moment',
       heading: 'Welk moment vier je?',
       blurb: 'Van 21-diner tot jubileum: voor elke bijzondere gelegenheid.',
