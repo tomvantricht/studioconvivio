@@ -239,19 +239,42 @@ textarea:focus-visible,
   background: var(--ink);
   color: var(--paper);
   text-align: center;
-  padding: 10px 46px;
+  padding: 8px 44px;
   font-size: 13px;
+  line-height: 1.5;
 }
-.announce-bar[hidden] { display: none; }
-.announce-bar-text { margin: 0; }
-.announce-bar-text a { color: var(--paper); text-decoration: underline; text-underline-offset: 2px; }
-.announce-bar-text a:hover { color: var(--gold); }
-.announce-bar-close {
-  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+/* Mobiel: één regel die om de paar seconden wisselt (zie site.js).
+   Alle punten liggen op dezelfde plek; alleen .is-active is zichtbaar.
+   Schermlezers lezen gewoon de hele lijst voor. */
+.announce-bar-list { list-style: none; margin: 0; padding: 0; display: grid; overflow: hidden; }
+.announce-bar-list li {
+  grid-area: 1 / 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transform: translateX(100%);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.announce-bar-list li.is-active { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .announce-bar-list li { transform: none; transition: none; }
+}
+/* Desktop: genoeg ruimte om alle punten naast elkaar te tonen. */
+@media (min-width: 900px) {
+  .announce-bar-list { display: flex; justify-content: center; gap: 0; }
+  .announce-bar-list { overflow: visible; }
+  /* !important: het schuiven zet transforms inline (site.js). */
+  .announce-bar-list li { grid-area: auto; opacity: 1; transform: none !important; }
+  .announce-bar-list li + li::before { content: "·"; margin: 0 16px; color: var(--gold); }
+  .announce-bar-prev, .announce-bar-next { display: none; }
+}
+/* Pijltjes om zelf te bladeren; 44px breed klikvlak over de hele balkhoogte. */
+.announce-bar-prev, .announce-bar-next {
+  position: absolute; top: 0; bottom: 0; width: 44px;
   background: none; border: none; color: var(--paper);
-  font-size: 20px; line-height: 1; cursor: pointer; padding: 8px 10px; border-radius: 4px;
+  font-size: 20px; line-height: 1; cursor: pointer; opacity: 0.75;
 }
-.announce-bar-close:hover { background: rgba(248,246,239,0.15); }
+.announce-bar-prev { left: 0; }
+.announce-bar-next { right: 0; }
+.announce-bar-prev:hover, .announce-bar-next:hover { opacity: 1; color: var(--gold); }
 
 /* ---------------------------------------------------------------------- */
 /* Stories: cirkelrij + volledig-scherm verhaalweergave                   */
@@ -516,25 +539,38 @@ body.gallery-open { overflow: hidden; }
 }
 .site-nav a:hover, .site-nav a[aria-current="page"] { color: var(--mocha-dark); }
 .site-nav a:hover::after, .site-nav a[aria-current="page"]::after { left: 0; right: 0; }
+/* Smalle desktop: zeven menu-items passen alleen met wat minder lucht.
+   (Mobiel, hieronder, overschrijft dit weer.) */
+@media (max-width: 1180px) {
+  .site-nav ul { gap: 22px; }
+  .site-nav a { letter-spacing: 0.12em; white-space: nowrap; }
+}
 
 @media (max-width: 860px) {
   /* Mobiel: logo met slogan ernaast, hamburger rechts. */
   .site-header-inner { display: flex; justify-content: space-between; padding: 14px var(--edge); }
   .header-tagline, .header-cta { display: none; }
-  .site-header .brand { flex-direction: row; align-items: center; gap: 14px; }
-  .site-header .logo-img { height: 46px; }
+  .site-header .brand { flex-direction: row; align-items: center; gap: 4px; }
+  /* Het logobestand heeft rondom ongeveer een derde lege rand. We maken het
+     groter en trekken die rand weg met negatieve marges, zodat de letters
+     zelf groter worden zonder dat de header hoger wordt of opschuift. */
+  .site-header .logo-img { height: 64px; margin: -11px 0 -11px -31px; }
+  /* Slogan rustiger, zodat het logo de blikvanger is. */
   .site-header .brand small {
     display: block;
-    padding-left: 14px;
+    padding-left: 12px;
     border-left: 1px solid var(--line);
     font-size: 11px;
+    font-weight: 500;
     line-height: 1.5;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.1em;
     white-space: normal;
     max-width: 11em;
-    color: var(--ink-soft);
+    color: var(--ink-faint);
   }
-  .nav-toggle { display: flex; }
+  /* Slanker menu-icoon: streepjes 26px breed en wat dunner. */
+  .nav-toggle { display: flex; padding: 0 9px; }
+  .nav-toggle span { height: 1.25px; }
   .site-nav {
     position: fixed;
     inset: 0;
@@ -549,10 +585,29 @@ body.gallery-open { overflow: hidden; }
     border-top: 1px solid var(--line);
   }
   .site-nav.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
-  .site-nav ul { flex-direction: column; gap: 22px; padding: 0; }
-  .site-nav .nav-item-reserve { display: list-item; }
-  .site-nav a { font-size: 15px; letter-spacing: 0.14em; }
+  .site-nav { overflow-y: auto; }
+  .site-nav ul { flex-direction: column; align-items: flex-start; gap: 2px; padding: 0; }
+  .site-nav .nav-item-reserve { display: list-item; align-self: stretch; margin-top: 18px; }
+  /* 44px klikvlak per menu-item; het lijntje blijft onder de tekst. */
+  .site-nav a { display: inline-block; padding: 11px 0; font-size: 15px; letter-spacing: 0.14em; }
+  .site-nav a::after { bottom: 8px; }
+  .site-nav .nav-item-reserve a {
+    display: block; padding: 15px 24px; text-align: center;
+    background: var(--ink); color: var(--paper); border-radius: 999px;
+  }
+  .site-nav .nav-item-reserve a::after { display: none; }
   body.nav-open { overflow: hidden; }
+
+  /* De header blijft bovenin staan: hij schuift weg als je naar beneden
+     scrolt en komt terug zodra je omhoog scrolt (zie site.js), zodat menu
+     en Reserveren altijd binnen één veeg bereikbaar zijn. */
+  .site-header { position: sticky; top: 0; z-index: 60; transition: transform 0.25s ease; }
+  .site-header.is-hidden { transform: translateY(-100%); }
+  /* Reserveren heeft een eigen vaste voortgangsbalk bovenin. */
+  .site-header--static { position: static; }
+}
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) {
+  .site-header { transition: none; }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -937,7 +992,7 @@ body.gallery-open { overflow: hidden; }
 }
 .field input[type="text"], .field input[type="email"], .field input[type="tel"],
 .field input[type="number"], .field input[type="date"], .field select, .field textarea {
-  width: 100%; font-family: var(--sans); font-size: 15px; padding: 12px 14px;
+  width: 100%; font-family: var(--sans); font-size: 16px; padding: 12px 14px;
   border: 1px solid var(--line); border-radius: 3px; background: #fff; color: var(--ink);
 }
 .field textarea { resize: vertical; min-height: 100px; }

@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
 <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/site.css?v=4">
+<link rel="stylesheet" href="css/site.css?v=10">
 <link rel="preload" as="image" href="images/img-728b3f21.webp" imagesrcset="images/img-728b3f21-800.webp 800w, images/img-728b3f21.webp 1600w" imagesizes="(min-width: 900px) 52vw, 100vw">
 
 <script type="application/ld+json">
@@ -124,8 +124,13 @@
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 
 <div class="announce-bar" id="announceBar">
-  <p class="announce-bar-text">Nu losse extra's bestellen &mdash; <a href="extras.html">bekijk het assortiment</a></p>
-  <button type="button" class="announce-bar-close" aria-label="Melding sluiten">&times;</button>
+  <button type="button" class="announce-bar-prev" aria-label="Vorige melding" aria-controls="announceList">&lsaquo;</button>
+  <ul class="announce-bar-list" id="announceList" aria-label="Goed om te weten">
+    <li class="is-active">3 dagen huurperiode, extra dag €35</li>
+    <li>Ophalen in Wageningen of bezorgen</li>
+    <li>Voor gelegenheden tot 30 personen</li>
+  </ul>
+  <button type="button" class="announce-bar-next" aria-label="Volgende melding" aria-controls="announceList">&rsaquo;</button>
 </div>
 
 <header class="site-header">
@@ -142,11 +147,14 @@
   </div>
   <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
     <ul>
+      <li><a href="moss-and-mist.html">Moss &amp; Mist</a></li>
+      <li><a href="mocha-sky.html">Mocha Sky</a></li>
       <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
-      <li class="nav-item-reserve"><a href="reserveren.html">Reserveren</a></li>
       <li><a href="extras.html">Extra's</a></li>
+      <li><a href="faq.html">Vragen</a></li>
       <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li class="nav-item-reserve"><a href="reserveren.html">Reserveren</a></li>
     </ul>
   </nav>
 </header>
@@ -443,7 +451,7 @@
   </div>
 </div>
 
-<script src="js/site.js?v=5"></script>
+<script src="js/site.js?v=9"></script>
 <script src="js/stories.js?v=3"></script>
 
 </body></html>

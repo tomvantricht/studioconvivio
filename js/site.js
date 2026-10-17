@@ -69,30 +69,91 @@ window.ScCart = (function () {
   window.addEventListener('resize', setHeaderHeight);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(setHeaderHeight);
 
-  // Meldingsbalk boven de header: sluit voor de rest van het bezoek (per
-  // tabblad/sessie) en herbereken meteen de headerhoogte voor het mobiele menu.
+  // Meldingsbalk boven de header. Mobiel staat er één punt tegelijk dat
+  // vanzelf doorwisselt; met de pijltjes of door te vegen blader je zelf.
+  // Op desktop staan alle punten naast elkaar en zijn de pijltjes verborgen.
   var announceBar = document.getElementById('announceBar');
-  if (announceBar) {
-    var ANNOUNCE_KEY = 'sc_announce_dismissed_v1';
-    var dismissed = false;
-    try { dismissed = sessionStorage.getItem(ANNOUNCE_KEY) === '1'; } catch (e) {}
-    if (dismissed) {
-      announceBar.hidden = true;
-      setHeaderHeight();
+  var announceItems = announceBar ? announceBar.querySelectorAll('.announce-bar-list li') : [];
+  if (announceItems.length > 1) {
+    var AUTO_DELAY = 4500, AFTER_MANUAL_DELAY = 9000;
+    var announceIndex = 0, announceTimer = null, announceHover = false;
+
+    // Schuift opzij in de richting van het pijltje: bij "volgende" komt het
+    // nieuwe punt van rechts en verdwijnt het oude naar links, en andersom.
+    function showAnnounce(i, dir) {
+      var leaving = announceItems[announceIndex];
+      announceIndex = (i + announceItems.length) % announceItems.length;
+      var entering = announceItems[announceIndex];
+      entering.style.transition = 'none';
+      entering.style.transform = 'translateX(' + (dir * 100) + '%)';
+      void entering.offsetWidth; // startpositie vastleggen vóór het schuiven
+      entering.style.transition = '';
+      entering.style.transform = '';
+      leaving.style.transform = 'translateX(' + (-dir * 100) + '%)';
+      leaving.classList.remove('is-active');
+      entering.classList.add('is-active');
     }
-    var announceClose = announceBar.querySelector('.announce-bar-close');
-    if (announceClose) {
-      announceClose.addEventListener('click', function () {
-        announceBar.hidden = true;
-        try { sessionStorage.setItem(ANNOUNCE_KEY, '1'); } catch (e) {}
-        setHeaderHeight();
-      });
+    function scheduleAnnounce(delay) {
+      clearTimeout(announceTimer);
+      announceTimer = setTimeout(function () {
+        // Niet wisselen onder de muis, of als het toetsenbord in de balk staat.
+        var keyboardFocus = announceBar.querySelector(':focus-visible');
+        if (!announceHover && !keyboardFocus && !document.hidden) showAnnounce(announceIndex + 1, 1);
+        scheduleAnnounce(AUTO_DELAY);
+      }, delay);
     }
+    // Zelf bladeren: daarna even langer wachten voor het weer vanzelf gaat.
+    function stepAnnounce(dir) {
+      showAnnounce(announceIndex + dir, dir);
+      scheduleAnnounce(AFTER_MANUAL_DELAY);
+    }
+
+    var prevBtn = announceBar.querySelector('.announce-bar-prev');
+    var nextBtn = announceBar.querySelector('.announce-bar-next');
+    if (prevBtn) prevBtn.addEventListener('click', function () { stepAnnounce(-1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { stepAnnounce(1); });
+
+    var touchX = null, touchY = null;
+    announceBar.addEventListener('touchstart', function (e) {
+      touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+    }, { passive: true });
+    announceBar.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX, dy = e.changedTouches[0].clientY - touchY;
+      touchX = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) stepAnnounce(dx < 0 ? 1 : -1);
+    });
+
+    announceBar.addEventListener('mouseenter', function () { announceHover = true; });
+    announceBar.addEventListener('mouseleave', function () { announceHover = false; });
+    scheduleAnnounce(AUTO_DELAY);
   }
 
   if (!toggle || !nav) return;
 
+  // Mobiel: header verbergen bij naar beneden scrollen, tonen bij omhoog.
+  // Op reserveren blijft hij gewoon bovenaan de pagina staan (--static).
+  var mobileQuery = window.matchMedia('(max-width: 860px)');
+  if (header && !header.classList.contains('site-header--static')) {
+    var lastY = window.scrollY;
+    window.addEventListener('scroll', function () {
+      var y = window.scrollY, dy = y - lastY;
+      if (!mobileQuery.matches || nav.classList.contains('is-open') || y <= header.offsetHeight) {
+        header.classList.remove('is-hidden');
+      } else if (dy > 6) {
+        header.classList.add('is-hidden');
+      } else if (dy < -6) {
+        header.classList.remove('is-hidden');
+      }
+      if (Math.abs(dy) > 6) lastY = y;
+    }, { passive: true });
+    // Met het toetsenbord in de header tabben: dan moet hij zichtbaar zijn.
+    header.addEventListener('focusin', function () { header.classList.remove('is-hidden'); });
+  }
+
   function setOpen(isOpen) {
+    // De header kan meegescrold zijn; het menu begint direct eronder.
+    if (isOpen) setHeaderHeight();
     nav.classList.toggle('is-open', isOpen);
     document.body.classList.toggle('nav-open', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
