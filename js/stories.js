@@ -4,7 +4,15 @@
 (function () {
   var stories = [
     {
-      kicker: '01 · Collectie',
+      kicker: 'Voor elk moment',
+      heading: 'Welk moment vier je?',
+      blurb: 'Van 21-diner tot jubileum: voor elke bijzondere gelegenheid.',
+      cta: 'Bekijk gelegenheden',
+      href: 'index.html#gelegenheden',
+      img: 'images/img-43ca6586.webp'
+    },
+    {
+      kicker: 'Collectie',
       heading: 'Moss & Mist',
       blurb: 'Zachte groentinten en natuurlijke rust, voor €16,75 per persoon.',
       cta: 'Ontdek Moss & Mist',
@@ -12,7 +20,7 @@
       img: 'images/img-044ae929.webp'
     },
     {
-      kicker: '02 · Collectie',
+      kicker: 'Collectie',
       heading: 'Mocha Sky',
       blurb: 'Warme aardetinten, modern en tijdloos, voor €17,75 per persoon.',
       cta: 'Ontdek Mocha Sky',
@@ -34,14 +42,6 @@
       cta: "Bekijk de extra's",
       href: 'extras.html',
       img: 'images/img-c41acedc.webp'
-    },
-    {
-      kicker: 'Voor elk moment',
-      heading: 'Welk moment vier je?',
-      blurb: 'Van 21-diner tot jubileum: voor elke bijzondere gelegenheid.',
-      cta: 'Bekijk gelegenheden',
-      href: 'index.html#gelegenheden',
-      img: 'images/img-43ca6586.webp'
     },
     {
       kicker: 'Klaar voor je moment?',

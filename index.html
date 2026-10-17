@@ -22,7 +22,7 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
 <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/site.css?v=12">
+<link rel="stylesheet" href="css/site.css?v=13">
 <link rel="preload" as="image" href="images/img-728b3f21.webp" imagesrcset="images/img-728b3f21-800.webp 800w, images/img-728b3f21.webp 1600w" imagesizes="(min-width: 900px) 52vw, 100vw">
 
 <script type="application/ld+json">
@@ -147,12 +147,26 @@
   </div>
   <nav class="site-nav" id="hoofdnavigatie" aria-label="Hoofdnavigatie">
     <ul>
-      <li><a href="moss-and-mist.html">Moss &amp; Mist</a></li>
-      <li><a href="mocha-sky.html">Mocha Sky</a></li>
+      <li class="nav-group">
+        <button type="button" class="nav-group-toggle" aria-expanded="false" aria-controls="nav-collecties">Collecties</button>
+        <ul class="nav-sub" id="nav-collecties">
+          <li><a href="moss-and-mist.html">Moss &amp; Mist</a></li>
+          <li><a href="mocha-sky.html">Mocha Sky</a></li>
+        </ul>
+      </li>
+      <li class="nav-group">
+        <button type="button" class="nav-group-toggle" aria-expanded="false" aria-controls="nav-gelegenheden">Gelegenheden</button>
+        <ul class="nav-sub" id="nav-gelegenheden">
+          <li><a href="21-diner.html">21-diner</a></li>
+          <li><a href="verjaardagsjubileum.html">Verjaardagsjubileum</a></li>
+          <li><a href="huwelijksjubileum.html">Huwelijksjubileum</a></li>
+          <li><a href="intieme-bruiloft.html">Intieme bruiloft</a></li>
+        </ul>
+      </li>
       <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
       <li><a href="extras.html">Extra's</a></li>
-      <li><a href="faq.html">Vragen</a></li>
       <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
+      <li><a href="faq.html"><span class="nav-long">Veelgestelde </span>vragen</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li class="nav-item-reserve"><a href="reserveren.html">Reserveren</a></li>
     </ul>
@@ -164,6 +178,10 @@
   <!-- SECTIE: Stories -->
   <section class="story-row" aria-label="In het kort">
     <div class="story-row-scroll">
+      <button type="button" class="story-avatar">
+        <span class="story-ring"><img src="images/img-43ca6586-240.webp" alt="" loading="lazy"></span>
+        <span class="story-label">Gelegenheden</span>
+      </button>
       <button type="button" class="story-avatar">
         <span class="story-ring"><img src="images/img-044ae929-240.webp" alt="" loading="lazy"></span>
         <span class="story-label">Moss &amp; Mist</span>
@@ -179,10 +197,6 @@
       <button type="button" class="story-avatar">
         <span class="story-ring"><img src="images/img-c41acedc-240.webp" alt="" loading="lazy"></span>
         <span class="story-label">Extra's</span>
-      </button>
-      <button type="button" class="story-avatar">
-        <span class="story-ring"><img src="images/img-43ca6586-240.webp" alt="" loading="lazy"></span>
-        <span class="story-label">Gelegenheden</span>
       </button>
       <button type="button" class="story-avatar">
         <span class="story-ring"><img src="images/img-728b3f21-240.webp" alt="" loading="lazy"></span>
@@ -212,72 +226,94 @@
   </section>
 
 
-  <!-- SECTIE: Moss & Mist -->
-  <section class="section">
-    <div class="wrap split-row">
-      <div class="collage collage--moss">
-        <div class="collage-frame" aria-hidden="true"></div>
-        <div class="collage-main photo-tone photo-tone--moss">
-          <img src="images/img-4ea5cd48.webp"
-               srcset="images/img-4ea5cd48-800.webp 800w, images/img-4ea5cd48.webp 1600w"
-               sizes="(min-width: 1180px) 530px, (min-width: 860px) 45vw, 92vw"
-               width="1600" height="1066" loading="lazy" decoding="async"
-               alt="Ovale tafel gedekt met de Moss &amp; Mist-collectie: linnen tafelkleed met groene volant, gedraaide kaarsen en witte bloemen">
-        </div>
-        <div class="collage-accent photo-tone photo-tone--moss">
-          <img src="images/img-b3e40ab5.webp"
-               srcset="images/img-b3e40ab5-600.webp 600w, images/img-b3e40ab5.webp 1200w"
-               sizes="(min-width: 860px) 250px, 42vw"
-               width="1200" height="800" loading="lazy" decoding="async"
-               alt="Detail van de Moss &amp; Mist-tafelstyling met servetring en placemat">
-        </div>
-        <span class="collage-label">Moss &amp; Mist</span>
+  <!-- SECTIE: Gelegenheden -->
+  <section class="section section--paper-alt" id="gelegenheden">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker"><span>Voor elk bijzonder moment</span></div>
+        <h2>Welk moment vier je?</h2>
       </div>
-      <div class="split-copy">
-        <div class="kicker"><span>01 · Collectie</span></div>
-        <h2>Moss &amp; Mist</h2>
-        <p>Een harmonieuze combinatie van zachte groentinten, natuurlijke materialen en verfijnde details. Moss &amp; Mist brengt rust, elegantie en een vleugje buitengevoel naar tafel.</p>
-        <p style="margin-top:20px;font-family:var(--serif);font-size:20px;">€16,75 per persoon</p>
-        <span class="vat-note">Incl. btw</span>
-        <p style="margin-top:20px;"><a class="link" href="moss-and-mist.html">Ontdek de Moss &amp; Mist collectie</a></p>
+      <div class="occasion-grid">
+        <a class="occasion-card" href="21-diner.html">
+          <img src="images/img-4d5a5b89.webp" srcset="images/img-4d5a5b89-480.webp 480w, images/img-4d5a5b89.webp 800w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
+               alt="Gedekte tafel voor een 21-diner">
+          <div class="occasion-card-body">
+            <h3>21-diner</h3>
+            <p>Vier je 21e verjaardag met een tafel die net zo bijzonder is als jij.</p>
+          </div>
+        </a>
+        <a class="occasion-card" href="verjaardagsjubileum.html">
+          <img src="images/img-f9da6c9e.webp" srcset="images/img-f9da6c9e-480.webp 480w, images/img-f9da6c9e.webp 800w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
+               alt="Gedekte tafel voor een verjaardagsjubileum">
+          <div class="occasion-card-body">
+            <h3>Verjaardags&shy;jubileum</h3>
+            <p>30, 40, 50 jaar of ouder: een rond jaar verdient een stijlvol gedekte tafel.</p>
+          </div>
+        </a>
+        <a class="occasion-card" href="huwelijksjubileum.html">
+          <img src="images/img-4ea5cd48-800.webp" srcset="images/img-4ea5cd48-480.webp 480w, images/img-4ea5cd48-800.webp 800w, images/img-4ea5cd48-1200.webp 1200w, images/img-4ea5cd48.webp 1600w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
+               alt="Gedekte tafel voor een huwelijksjubileum">
+          <div class="occasion-card-body">
+            <h3>Huwelijks&shy;jubileum</h3>
+            <p>Van 12,5 tot 50 jaar getrouwd: vier jullie jubileum in stijl.</p>
+          </div>
+        </a>
+        <a class="occasion-card" href="intieme-bruiloft.html">
+          <img src="images/img-728b3f21-800.webp" srcset="images/img-728b3f21-480.webp 480w, images/img-728b3f21-800.webp 800w, images/img-728b3f21-1200.webp 1200w, images/img-728b3f21.webp 1600w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
+               alt="Gedekte tafel voor een intieme bruiloft">
+          <div class="occasion-card-body">
+            <h3>Intieme bruiloft</h3>
+            <p>Een kleinschalige bruiloft, romantisch en tot in de puntjes gestyled.</p>
+          </div>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- SECTIE: Jouw moment, jouw manier (extra services teaser) -->
-  <section class="section section--ink" style="background-image:linear-gradient(rgba(30,22,12,0.68),rgba(30,22,12,0.82)),url('images/img-9a61a475.webp');background-size:cover;background-position:center;">
-    <div class="wrap" style="max-width:640px;">
-      <div class="kicker"><span>02 · Op maat</span></div>
-      <h2>Jouw moment, jouw manier</h2>
-      <p style="margin-top:18px;font-size:17px;color:rgba(248,246,239,0.85);">Iedere gelegenheid is uniek. Daarom bieden we naast onze tafelpakketten ook losse extra's, zoals bezorging en styling op locatie. Liever iets op maat? Dan stellen we samen een pakket samen dat perfect aansluit bij jouw wensen.</p>
-      <p style="margin-top:28px;"><a class="btn btn-outline" style="border-color:var(--paper);color:var(--paper);" href="extras.html">Bekijk de extra's</a></p>
-    </div>
-  </section>
-
-  <!-- SECTIE: Mocha Sky -->
+  <!-- SECTIE: Collecties. Twee kaarten in de kleur van de collectie; op
+       mobiel veeg je ertussen, op desktop staan ze naast elkaar. -->
   <section class="section">
-    <div class="wrap split-row split-row--reverse">
-      <div class="collage collage--mocha">
-        <div class="collage-frame" aria-hidden="true"></div>
-        <div class="collage-main photo-tone photo-tone--mocha">
-          <img src="images/img-25e2bb73.webp" width="1000" height="667" loading="lazy" decoding="async"
-               sizes="(min-width: 1180px) 530px, (min-width: 860px) 45vw, 92vw"
-               alt="Gedekte tafel in de Mocha Sky-collectie met warme aardetinten">
-        </div>
-        <div class="collage-accent photo-tone photo-tone--mocha">
-          <img src="images/img-52c47e24.webp" srcset="images/img-52c47e24-480.webp 480w, images/img-52c47e24-800.webp 800w, images/img-52c47e24.webp 900w" sizes="(min-width: 900px) 216px, 37vw" width="900" height="1600" loading="lazy" decoding="async"
-               sizes="(min-width: 860px) 250px, 42vw"
-               alt="Detail van de Mocha Sky-tafelstyling met champagneglas en kaarslicht">
-        </div>
-        <span class="collage-label">Mocha Sky</span>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker"><span>Kies je sfeer</span></div>
+        <h2>Twee collecties</h2>
+        <p>Allebei een compleet pakket: servies, bestek, glaswerk, katoenen servetten en tafelkleden.</p>
       </div>
-      <div class="split-copy">
-        <div class="kicker"><span>03 · Collectie</span></div>
-        <h2>Mocha Sky</h2>
-        <p>Warme aardetinten ontmoeten lichte, verfijnde accenten. Mocha Sky voelt modern, tijdloos en uitnodigend aan en creëert een sfeer die zowel stijlvol als ontspannen is.</p>
-        <p style="margin-top:20px;font-family:var(--serif);font-size:20px;">€17,75 per persoon</p>
-        <span class="vat-note">Incl. btw</span>
-        <p style="margin-top:20px;"><a class="link" href="mocha-sky.html">Ontdek de Mocha Sky collectie</a></p>
+      <div class="collection-cards">
+        <a class="collection-card collection-card--moss" href="moss-and-mist.html">
+          <span class="collection-card-photo photo-tone photo-tone--moss">
+            <img src="images/img-4ea5cd48-800.webp"
+                 srcset="images/img-4ea5cd48-480.webp 480w, images/img-4ea5cd48-800.webp 800w, images/img-4ea5cd48-1200.webp 1200w, images/img-4ea5cd48.webp 1600w"
+                 sizes="(min-width: 1180px) 540px, (min-width: 768px) 45vw, 82vw"
+                 width="1600" height="1066" loading="lazy" decoding="async" style="object-position:58% 50%"
+                 alt="Ovale tafel gedekt met de Moss &amp; Mist-collectie: linnen tafelkleed met groene volant, gedraaide kaarsen en witte bloemen">
+          </span>
+          <span class="collection-card-body">
+            <span class="collection-card-name">Moss &amp; Mist</span>
+            <span class="collection-card-mood">Zachte groentinten, natuurlijke materialen</span>
+            <span class="collection-card-foot">
+              <span class="collection-card-price">€16,75 <small>p.p. incl. btw</small></span>
+              <span class="collection-card-more">Bekijk collectie</span>
+            </span>
+          </span>
+        </a>
+        <a class="collection-card collection-card--mocha" href="mocha-sky.html">
+          <span class="collection-card-photo photo-tone photo-tone--mocha">
+            <img src="images/img-52c47e24-800.webp"
+                 srcset="images/img-52c47e24-480.webp 480w, images/img-52c47e24-800.webp 800w, images/img-52c47e24.webp 900w"
+                 sizes="(min-width: 1180px) 540px, (min-width: 768px) 45vw, 82vw"
+                 width="900" height="1600" loading="lazy" decoding="async" style="object-position:50% 22%"
+                 alt="Gedekte tafel in de Mocha Sky-collectie met champagneglas en kaarslicht">
+          </span>
+          <span class="collection-card-body">
+            <span class="collection-card-name">Mocha Sky</span>
+            <span class="collection-card-mood">Warme aardetinten, luxe, met placemats</span>
+            <span class="collection-card-foot">
+              <span class="collection-card-price">€17,75 <small>p.p. incl. btw</small></span>
+              <span class="collection-card-more">Bekijk collectie</span>
+            </span>
+          </span>
+        </a>
       </div>
     </div>
   </section>
@@ -305,51 +341,13 @@
     </div>
   </section>
 
-  <!-- SECTIE: Gelegenheden -->
-  <section class="section section--paper-alt" id="gelegenheden">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker"><span>Voor elk bijzonder moment</span></div>
-        <h2>Welk moment vier je?</h2>
-      </div>
-      <div class="occasion-grid">
-        <a class="occasion-card" href="21-diner.html">
-          <img src="images/img-4d5a5b89.webp" srcset="images/img-4d5a5b89-480.webp 480w, images/img-4d5a5b89.webp 800w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
-               sizes="(min-width: 760px) 25vw, 50vw"
-               alt="Gedekte tafel voor een 21-diner">
-          <div class="occasion-card-body">
-            <h3>21-diner</h3>
-            <p>Vier je 21e verjaardag met een tafel die net zo bijzonder is als jij.</p>
-          </div>
-        </a>
-        <a class="occasion-card" href="verjaardagsjubileum.html">
-          <img src="images/img-f9da6c9e.webp" srcset="images/img-f9da6c9e-480.webp 480w, images/img-f9da6c9e.webp 800w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
-               sizes="(min-width: 760px) 25vw, 50vw"
-               alt="Gedekte tafel voor een verjaardagsjubileum">
-          <div class="occasion-card-body">
-            <h3>Verjaardags&shy;jubileum</h3>
-            <p>30, 40, 50 jaar of ouder: een rond jaar verdient een stijlvol gedekte tafel.</p>
-          </div>
-        </a>
-        <a class="occasion-card" href="huwelijksjubileum.html">
-          <img src="images/img-4ea5cd48-800.webp" srcset="images/img-4ea5cd48-480.webp 480w, images/img-4ea5cd48-800.webp 800w, images/img-4ea5cd48-1200.webp 1200w, images/img-4ea5cd48.webp 1600w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
-               sizes="(min-width: 760px) 25vw, 50vw"
-               alt="Gedekte tafel voor een huwelijksjubileum">
-          <div class="occasion-card-body">
-            <h3>Huwelijks&shy;jubileum</h3>
-            <p>Van 12,5 tot 50 jaar getrouwd: vier jullie jubileum in stijl.</p>
-          </div>
-        </a>
-        <a class="occasion-card" href="intieme-bruiloft.html">
-          <img src="images/img-728b3f21-800.webp" srcset="images/img-728b3f21-480.webp 480w, images/img-728b3f21-800.webp 800w, images/img-728b3f21-1200.webp 1200w, images/img-728b3f21.webp 1600w" sizes="(min-width: 900px) 262px, 45vw" width="800" height="533" loading="lazy" decoding="async"
-               sizes="(min-width: 760px) 25vw, 50vw"
-               alt="Gedekte tafel voor een intieme bruiloft">
-          <div class="occasion-card-body">
-            <h3>Intieme bruiloft</h3>
-            <p>Een kleinschalige bruiloft, romantisch en tot in de puntjes gestyled.</p>
-          </div>
-        </a>
-      </div>
+  <!-- SECTIE: Jouw moment, jouw manier (extra services teaser) -->
+  <section class="section section--ink" style="background-image:linear-gradient(rgba(30,22,12,0.68),rgba(30,22,12,0.82)),url('images/img-9a61a475.webp');background-size:cover;background-position:center;">
+    <div class="wrap" style="max-width:640px;">
+      <div class="kicker"><span>Op maat</span></div>
+      <h2>Jouw moment, jouw manier</h2>
+      <p style="margin-top:18px;font-size:17px;color:rgba(248,246,239,0.85);">Iedere gelegenheid is uniek. Daarom bieden we naast onze tafelpakketten ook losse extra's, zoals bezorging en styling op locatie. Liever iets op maat? Dan stellen we samen een pakket samen dat perfect aansluit bij jouw wensen.</p>
+      <p style="margin-top:28px;"><a class="btn btn-outline" style="border-color:var(--paper);color:var(--paper);" href="extras.html">Bekijk de extra's</a></p>
     </div>
   </section>
 
@@ -451,7 +449,7 @@
   </div>
 </div>
 
-<script src="js/site.js?v=10"></script>
-<script src="js/stories.js?v=3"></script>
+<script src="js/site.js?v=11"></script>
+<script src="js/stories.js?v=4"></script>
 
 </body></html>

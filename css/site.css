@@ -544,8 +544,42 @@ body.gallery-open { overflow: hidden; }
    (Mobiel, hieronder, overschrijft dit weer.) */
 @media (max-width: 1180px) {
   .site-nav ul { gap: 22px; }
-  .site-nav a { letter-spacing: 0.12em; white-space: nowrap; }
+  .site-nav a, .nav-group-toggle { letter-spacing: 0.12em; white-space: nowrap; }
 }
+
+/* Groepen in het menu (Gelegenheden, Collecties). Desktop: uitklapmenu dat
+   opent bij aanwijzen of aanklikken (site.js); mobiel: zie hieronder. */
+.nav-long { display: none; }
+.site-nav .nav-group { position: relative; }
+.nav-group-toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: none; border: 0; padding: 0 0 4px; cursor: pointer;
+  font-family: var(--sans); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink);
+}
+.nav-group-toggle::after {
+  content: ""; width: 6px; height: 6px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: translateY(-3px) rotate(45deg); transition: transform 0.2s ease;
+}
+.nav-group.is-open > .nav-group-toggle::after { transform: translateY(1px) rotate(-135deg); }
+.nav-group-toggle:hover, .nav-group.is-current > .nav-group-toggle { color: var(--mocha-dark); }
+.site-nav .nav-sub {
+  display: none; flex-direction: column; justify-content: flex-start; gap: 0;
+  position: absolute; left: 50%; top: calc(100% + 12px); transform: translateX(-50%); z-index: 40;
+  min-width: 230px; padding: 10px 0;
+  background: var(--paper); border: 1px solid var(--line);
+  box-shadow: 0 18px 40px -18px rgba(43,44,36,0.35);
+}
+/* Onzichtbare brug, zodat het menu open blijft als je de muis erheen beweegt. */
+.site-nav .nav-sub::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.site-nav .nav-group.is-open > .nav-sub { display: flex; }
+@media (min-width: 861px) and (hover: hover) {
+  .site-nav .nav-group:hover > .nav-sub { display: flex; }
+}
+.site-nav .nav-sub a { display: block; padding: 9px 22px; letter-spacing: 0.12em; white-space: nowrap; }
+.site-nav .nav-sub a::after { display: none; }
+.site-nav .nav-sub a:hover { background: var(--paper-alt); }
 
 @media (max-width: 860px) {
   /* Mobiel: logo met slogan ernaast, hamburger rechts. */
@@ -588,14 +622,42 @@ body.gallery-open { overflow: hidden; }
     border-top: 1px solid var(--line);
   }
   .site-nav.is-open { opacity: 1; visibility: visible; transform: translateY(0); }
-  .site-nav { overflow-y: auto; }
-  .site-nav ul { flex-direction: column; align-items: flex-start; gap: 2px; padding: 0; }
-  .site-nav .nav-item-reserve { display: list-item; align-self: stretch; margin-top: 18px; }
-  /* 44px klikvlak per menu-item; het lijntje blijft onder de tekst. */
-  .site-nav a { display: inline-block; padding: 11px 0; font-size: 15px; letter-spacing: 0.14em; }
-  .site-nav a::after { bottom: 8px; }
+  .site-nav { overflow-y: auto; padding-top: 14px; padding-bottom: 28px; }
+  /* Lijst met dunne scheidslijnen; Gelegenheden en Collecties klappen open
+     met een plus/min, net als de veelgestelde vragen. */
+  .site-nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
+  .site-nav > ul > li:not(.nav-item-reserve) { border-bottom: 1px solid var(--line-soft); }
+  .site-nav > ul > li > a, .nav-group-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; min-height: 48px; padding: 0; text-align: left;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  /* Gewone links als blok, zodat "Veelgestelde vragen" één regel blijft. */
+  .site-nav > ul > li > a { display: block; padding: 16px 0; min-height: 0; }
+  .site-nav > ul > li > a::after { display: none; }
+  .nav-long { display: inline; }
+  .nav-group-toggle::after {
+    width: 14px; height: 14px; border: 0; transform: none;
+    background:
+      linear-gradient(var(--ink), var(--ink)) center / 14px 1px no-repeat,
+      linear-gradient(var(--ink), var(--ink)) center / 1px 14px no-repeat;
+    transition: background-size 0.2s ease;
+  }
+  .nav-group.is-open > .nav-group-toggle::after { transform: none; background-size: 14px 1px, 1px 0; }
+  .site-nav .nav-sub {
+    position: static; transform: none; min-width: 0;
+    padding: 0 0 10px 14px; background: none; border: 0; box-shadow: none;
+  }
+  .site-nav .nav-sub::before { display: none; }
+  .site-nav .nav-sub a {
+    padding: 9px 0; font-size: 15px; font-weight: 500;
+    letter-spacing: 0; text-transform: none; color: var(--ink-soft);
+  }
+  .site-nav .nav-sub a:hover { background: none; }
+  .site-nav .nav-sub a[aria-current="page"] { color: var(--mocha-dark); }
+  .site-nav .nav-item-reserve { display: list-item; margin-top: 22px; }
   .site-nav .nav-item-reserve a {
-    display: block; padding: 15px 24px; text-align: center;
+    display: block; padding: 14px 20px; text-align: center;
     background: var(--ink); color: var(--paper); border-radius: 999px;
   }
   .site-nav .nav-item-reserve a::after { display: none; }
@@ -731,6 +793,54 @@ body.gallery-open { overflow: hidden; }
 /* Sectie-ritme                                                            */
 /* ---------------------------------------------------------------------- */
 .section { padding: 84px 0; }
+/* Mobiel: minder ruimte tussen de blokken, zodat de pagina compacter leest. */
+@media (max-width: 767px) {
+  .section { padding: 52px 0; }
+  .section-head { margin-bottom: 24px; }
+  .section-head p { margin-top: 10px; }
+  .trust-item { padding-top: 16px; padding-bottom: 16px; }
+}
+
+/* Collectiekaarten op de homepage: foto met een vlak in de kleur van de
+   collectie. Mobiel veeg je ertussen (de tweede kaart steekt net in beeld),
+   vanaf tablet staan ze naast elkaar. */
+.collection-cards {
+  display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+  margin: 0 calc(-1 * var(--edge)); padding: 0 var(--edge) 6px; scroll-padding: 0 var(--edge);
+  scrollbar-width: none;
+}
+.collection-cards::-webkit-scrollbar { display: none; }
+.collection-card {
+  flex: 0 0 82%; scroll-snap-align: start;
+  display: flex; flex-direction: column; border-radius: 4px; overflow: hidden;
+  text-decoration: none; color: var(--paper);
+}
+.collection-card--moss { background: var(--moss-dark); }
+.collection-card--mocha { background: var(--mocha-dark); }
+.collection-card:focus-visible { outline: 2px solid var(--moss-dark); outline-offset: 3px; }
+.collection-card-photo { display: block; aspect-ratio: 4 / 3.4; overflow: hidden; }
+.collection-card-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.collection-card:hover .collection-card-photo img { transform: scale(1.03); }
+.collection-card-body { display: flex; flex-direction: column; gap: 6px; padding: 18px 18px 20px; }
+.collection-card-name { font-family: var(--serif); font-size: 26px; line-height: 1.1; }
+.collection-card-mood { font-size: 14px; color: rgba(248,246,239,0.85); }
+.collection-card-foot {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 12px;
+  margin-top: 10px; padding-top: 12px; border-top: 1px solid rgba(248,246,239,0.25);
+}
+.collection-card-price { font-family: var(--serif); font-size: 20px; }
+.collection-card-price small { display: block; margin-top: 2px; font-family: var(--sans); font-size: 12px; opacity: 0.8; }
+.collection-card-more { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e2c48f; white-space: nowrap; }
+.collection-card-more::after { content: " →"; }
+@media (min-width: 768px) {
+  .collection-cards { overflow: visible; margin: 0; padding: 0; gap: 28px; }
+  .collection-card { flex: 1 1 0; }
+  .collection-card-photo { aspect-ratio: 4 / 3; }
+  .collection-card-name { font-size: 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .collection-card-photo img { transition: none; }
+}
 .section--paper-alt { background: var(--paper-alt); }
 .section--ink { background: var(--ink); color: var(--paper); }
 .section--ink h2, .section--ink h3 { color: var(--paper); }

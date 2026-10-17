@@ -152,7 +152,7 @@ window.ScCart = (function () {
 
   function setOpen(isOpen) {
     // De header kan meegescrold zijn; het menu begint direct eronder.
-    if (isOpen) setHeaderHeight();
+    if (isOpen) { header.classList.remove('is-hidden'); setHeaderHeight(); }
     nav.classList.toggle('is-open', isOpen);
     document.body.classList.toggle('nav-open', isOpen);
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -171,10 +171,42 @@ window.ScCart = (function () {
     });
   });
 
-  // Escape sluit het menu en zet de focus terug op de knop, zodat je met
-  // toetsenbord niet vast komt te zitten achter het schermvullende overlay.
+  // Groepen (Gelegenheden, Collecties). Desktop: uitklapmenu, er staat er
+  // maar één tegelijk open. Mobiel: open- en dichtklappen in de lijst; de
+  // groep met de huidige pagina staat daar al open.
+  var groups = nav.querySelectorAll('.nav-group');
+  function setGroup(group, isOpen) {
+    group.classList.toggle('is-open', isOpen);
+    group.querySelector('.nav-group-toggle').setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  function closeGroups(except) {
+    groups.forEach(function (g) { if (g !== except) setGroup(g, false); });
+  }
+  groups.forEach(function (group) {
+    group.querySelector('.nav-group-toggle').addEventListener('click', function () {
+      var open = !group.classList.contains('is-open');
+      if (!mobileQuery.matches) closeGroups(group);
+      setGroup(group, open);
+    });
+    if (mobileQuery.matches && group.classList.contains('is-current')) setGroup(group, true);
+  });
+  // Desktop: klik ergens anders sluit het uitklapmenu.
+  document.addEventListener('click', function (e) {
+    if (!mobileQuery.matches && !e.target.closest('.nav-group')) closeGroups();
+  });
+  // Wisselen tussen mobiel en desktop: geen uitklapmenu laten openstaan.
+  if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', function () { closeGroups(); });
+
+  // Escape sluit eerst een open uitklapmenu, anders het mobiele menu, en zet
+  // de focus terug op de knop, zodat je met toetsenbord niet vast komt te
+  // zitten achter het schermvullende overlay.
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+    if (e.key !== 'Escape') return;
+    var openGroup = !mobileQuery.matches && nav.querySelector('.nav-group.is-open');
+    if (openGroup) {
+      setGroup(openGroup, false);
+      openGroup.querySelector('.nav-group-toggle').focus();
+    } else if (nav.classList.contains('is-open')) {
       setOpen(false);
       toggle.focus();
     }
