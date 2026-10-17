@@ -69,9 +69,8 @@ window.ScCart = (function () {
   window.addEventListener('resize', setHeaderHeight);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(setHeaderHeight);
 
-  // Meldingsbalk boven de header. Mobiel staat er één punt tegelijk dat
-  // vanzelf doorwisselt; met de pijltjes of door te vegen blader je zelf.
-  // Op desktop staan alle punten naast elkaar en zijn de pijltjes verborgen.
+  // Meldingsbalk boven de header: één punt tegelijk dat vanzelf
+  // doorwisselt; met de pijltjes of door te vegen blader je zelf.
   var announceBar = document.getElementById('announceBar');
   var announceItems = announceBar ? announceBar.querySelectorAll('.announce-bar-list li') : [];
   if (announceItems.length > 1) {

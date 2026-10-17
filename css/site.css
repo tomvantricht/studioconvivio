@@ -235,18 +235,22 @@ textarea:focus-visible,
 /* Meldingsbalk (boven de header)                                         */
 /* ---------------------------------------------------------------------- */
 .announce-bar {
-  position: relative;
+  display: flex; justify-content: center; align-items: stretch;
   background: var(--ink);
   color: var(--paper);
   text-align: center;
-  padding: 8px 44px;
   font-size: 13px;
   line-height: 1.5;
 }
-/* Mobiel: één regel die om de paar seconden wisselt (zie site.js).
-   Alle punten liggen op dezelfde plek; alleen .is-active is zichtbaar.
-   Schermlezers lezen gewoon de hele lijst voor. */
-.announce-bar-list { list-style: none; margin: 0; padding: 0; display: grid; overflow: hidden; }
+/* Eén regel die om de paar seconden wisselt (zie site.js), op mobiel én
+   desktop. Pijltjes direct naast de tekst; op desktop blijft het geheel
+   compact in het midden. Alle punten liggen op dezelfde plek; alleen
+   .is-active is zichtbaar. Schermlezers lezen gewoon de hele lijst voor. */
+.announce-bar-list {
+  flex: 0 1 340px; min-width: 0;
+  list-style: none; margin: 0; padding: 8px 0;
+  display: grid; overflow: hidden;
+}
 .announce-bar-list li {
   grid-area: 1 / 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -257,23 +261,12 @@ textarea:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   .announce-bar-list li { transform: none; transition: none; }
 }
-/* Desktop: genoeg ruimte om alle punten naast elkaar te tonen. */
-@media (min-width: 900px) {
-  .announce-bar-list { display: flex; justify-content: center; gap: 0; }
-  .announce-bar-list { overflow: visible; }
-  /* !important: het schuiven zet transforms inline (site.js). */
-  .announce-bar-list li { grid-area: auto; opacity: 1; transform: none !important; }
-  .announce-bar-list li + li::before { content: "·"; margin: 0 16px; color: var(--gold); }
-  .announce-bar-prev, .announce-bar-next { display: none; }
-}
 /* Pijltjes om zelf te bladeren; 44px breed klikvlak over de hele balkhoogte. */
 .announce-bar-prev, .announce-bar-next {
-  position: absolute; top: 0; bottom: 0; width: 44px;
+  flex: none; width: 44px;
   background: none; border: none; color: var(--paper);
   font-size: 20px; line-height: 1; cursor: pointer; opacity: 0.75;
 }
-.announce-bar-prev { left: 0; }
-.announce-bar-next { right: 0; }
 .announce-bar-prev:hover, .announce-bar-next:hover { opacity: 1; color: var(--gold); }
 
 /* ---------------------------------------------------------------------- */
@@ -303,6 +296,14 @@ textarea:focus-visible,
 .story-avatar:hover .story-label { color: var(--ink); }
 .story-avatar:focus-visible { outline: none; }
 .story-avatar:focus-visible .story-ring { outline: 2px solid var(--moss-dark); outline-offset: 3px; border-radius: 50%; }
+/* Mobiel: compacte rij die direct op de header aansluit (zie
+   .site-header--flush), zodat de foto eerder begint. */
+@media (max-width: 767px) {
+  .story-row { padding: 4px 0 12px; }
+  .story-row-scroll { gap: 12px; }
+  .story-avatar { width: 74px; gap: 5px; }
+  .story-ring { width: 54px; height: 54px; padding: 2px; }
+}
 /* Laptop/desktop: gecentreerde rij met iets grotere cirkels; mobiel blijft ongewijzigd. */
 @media (min-width: 768px) {
   .story-row { padding: 32px 0 20px; }
@@ -548,7 +549,9 @@ body.gallery-open { overflow: hidden; }
 
 @media (max-width: 860px) {
   /* Mobiel: logo met slogan ernaast, hamburger rechts. */
-  .site-header-inner { display: flex; justify-content: space-between; padding: 14px var(--edge); }
+  .site-header-inner { display: flex; justify-content: space-between; padding: 10px var(--edge); }
+  /* Homepage: geen lijn tussen header en de rij rondjes, ze horen bij elkaar. */
+  .site-header--flush { border-bottom: 0; }
   .header-tagline, .header-cta { display: none; }
   .site-header .brand { flex-direction: row; align-items: center; gap: 4px; }
   /* Het logobestand heeft rondom ongeveer een derde lege rand. We maken het
@@ -651,6 +654,28 @@ body.gallery-open { overflow: hidden; }
 }
 .photo-tone--mocha::after { background: linear-gradient(155deg, rgba(58,35,10,0.55), rgba(122,71,42,0.18)); }
 .photo-tone--moss::after { background: linear-gradient(155deg, rgba(48,58,40,0.28), rgba(107,122,94,0.12)); }
+
+/* Homepage op mobiel en tablet: kop, intro en knop liggen op de foto, op
+   een donker verloop, zodat de reserveerknop al in het eerste scherm staat.
+   Desktop (vanaf 900px) houdt foto en tekst naast elkaar. */
+@media (max-width: 899px) {
+  .hero--overlay { position: relative; }
+  .hero--overlay .hero-media { min-height: 0; height: 515px; }
+  .hero--overlay .hero-media img { object-position: 50% 0%; }
+  .hero--overlay .hero-copy {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+    padding: 110px var(--edge) 24px; gap: 12px;
+    background: linear-gradient(180deg, rgba(28,29,23,0) 0%, rgba(28,29,23,0.66) 30%, rgba(28,29,23,0.92) 100%);
+  }
+  .hero--overlay .hero-copy h1 { font-size: 32px; color: var(--paper); text-shadow: 0 1px 12px rgba(0,0,0,0.35); }
+  .hero--overlay .hero-copy h1 em { color: #e2c48f; }
+  .hero--overlay .hero-copy .lede { font-size: 15px; color: rgba(248,246,239,0.9); }
+  .hero--overlay .hero-actions { margin-top: 8px; }
+  .hero--overlay .btn { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .hero--overlay .btn:hover { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .hero--overlay .link { color: var(--paper); background-image: linear-gradient(var(--paper), var(--paper)); }
+  .hero--overlay .link:hover { color: var(--gold); }
+}
 
 /* ---------------------------------------------------------------------- */
 /* Vertrouwensstrook (direct onder de hero)                                */
