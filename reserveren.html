@@ -368,13 +368,6 @@
   .rsv-terms input:checked { background: var(--ink); border-color: var(--ink); }
   .rsv-terms input:checked::after { content: ""; width: 9px; height: 4.5px; border: solid var(--paper); border-width: 0 0 1.5px 1.5px; transform: translateY(-1px) rotate(-45deg); }
   .rsv-terms a { color: var(--ink); text-underline-offset: 2px; }
-  /* De hCaptcha-widget is vast 302px breed; op smalle telefoons schalen we
-     hem mee zodat hij niet buiten de kaart steekt. */
-  .rsv-captcha { margin: 0 0 18px; container-type: inline-size; overflow: hidden; }
-  @container (max-width: 301px) { .h-captcha { zoom: 0.9; } }
-  @container (max-width: 271px) { .h-captcha { zoom: 0.8; } }
-  @container (max-width: 241px) { .h-captcha { zoom: 0.7; } }
-  .rsv-captcha-label { font-size: 12.5px; font-weight: 700; margin-bottom: 8px; }
 
   /* ---- Navigatie onderaan ---- */
   .rsv-nav { display: flex; gap: 12px; margin-top: 28px; }
@@ -442,7 +435,6 @@
     .rsv-step.is-entering { animation: none; }
   }
 </style>
-<script src="https://web3forms.com/client/script.js" async defer></script>
 </head>
 <body>
 
@@ -756,11 +748,6 @@
               <div class="rsv-pay" id="rsvPay"></div>
             </div>
 
-            <div class="rsv-captcha">
-              <p class="rsv-captcha-label">Even checken of je geen robot bent</p>
-              <div class="h-captcha" data-captcha="true"></div>
-            </div>
-
             <label class="rsv-terms">
               <input type="checkbox" id="scTermsCheck" name="akkoord_voorwaarden" value="Ja" required>
               <span>Ik ga akkoord met de <a href="algemene-voorwaarden.html" target="_blank" rel="noopener">algemene voorwaarden</a> en heb de <a href="privacy-van-gegevens.html" target="_blank" rel="noopener">privacyverklaring</a> gelezen.</span>
@@ -1012,7 +999,7 @@
     p.textContent = msg;
     var field = el.closest('.rsv-field');
     if (field) field.appendChild(p);
-    else (el.closest('.rsv-terms') || el.closest('.sc-item-tiles') || el.closest('.rsv-captcha') || el).insertAdjacentElement('afterend', p);
+    else (el.closest('.rsv-terms') || el.closest('.sc-item-tiles') || el).insertAdjacentElement('afterend', p);
     el.setAttribute('aria-invalid', 'true');
     el.setAttribute('aria-describedby', ((el.getAttribute('aria-describedby') || '') + ' ' + p.id).trim());
     el._rsvErr = p;
@@ -1140,12 +1127,10 @@
       var nameEl = document.getElementById('scName');
       var emailEl = document.getElementById('scEmail');
       var termsEl = document.getElementById('scTermsCheck');
-      var captchaResp = form.querySelector('[name="h-captcha-response"]');
       if (!nameEl.value.trim()) return fail('Vul je naam in.', nameEl);
       if (!emailEl.value.trim()) return fail('Vul je e-mailadres in.', emailEl);
       if (!EMAIL_RE.test(emailEl.value.trim())) return fail('Dit e-mailadres lijkt niet te kloppen. Controleer het even.', emailEl);
       if (!validateHome(fail)) return false;
-      if (captchaResp && !captchaResp.value) return fail('Vink "Ik ben een mens" aan.', form.querySelector('.h-captcha'));
       if (!termsEl.checked) return fail('Ga akkoord met de algemene voorwaarden om je aanvraag te versturen.', termsEl);
     }
     return true;
