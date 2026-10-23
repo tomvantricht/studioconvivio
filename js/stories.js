@@ -6,7 +6,7 @@
     {
       kicker: 'Nu in december',
       heading: 'Kerst & oud en nieuw',
-      blurb: 'Eén complete tafel voor de feestdagen. Er is één set per collectie: reserveer op tijd.',
+      blurb: 'Nieuw: Winter Glow, onze kerstcollectie met lichtgevende dennenslinger. Er is één set per collectie: reserveer op tijd.',
       cta: 'Bekijk kerst & feestdagen',
       href: 'kerst-en-feestdagen.html',
       img: 'images/kerst-couvert.webp'

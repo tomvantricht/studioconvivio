@@ -469,6 +469,7 @@
         <ul class="nav-sub" id="nav-collecties">
           <li><a href="moss-and-mist.html">Moss &amp; Mist</a></li>
           <li><a href="mocha-sky.html">Mocha Sky</a></li>
+          <li><a href="winter-glow.html">Winter Glow</a></li>
         </ul>
       </li>
       <li class="nav-group">
@@ -563,6 +564,16 @@
                     </div>
                   </div>
                 </label>
+                <label class="sc-package-option">
+                  <input type="radio" name="package" value="Winter Glow" data-price="17.75" data-photo="images/kerst-tafel-800.webp">
+                  <div class="sc-package-card">
+                    <img class="sc-package-photo" src="images/kerst-tafel-bovenaf-800.webp" alt="Kersttafel in de Winter Glow-collectie met dennenslinger, lichtjes en zilveren cadeautjes" width="800" height="533" loading="lazy" decoding="async">
+                    <div class="sc-package-body">
+                      <div class="sc-package-head"><strong>Winter Glow</strong><span>€17,75 p.p.</span></div>
+                      <p>Alles van een complete tafel (zonder placemats), plus lichtgevende dennenslinger met cadeautjes en dennenappels, servetringen, strikjes om de wijnglazen en strikken aan het tafelkleed. Te boeken van 1 november t/m 31 januari.</p>
+                    </div>
+                  </div>
+                </label>
               </div>
               <p class="rsv-alt">Liever maatwerk? <button type="button" class="rsv-textlink" id="rsvToCustom">Stel je pakket per item samen</button></p>
             </div>
@@ -607,7 +618,7 @@
                   <span class="sc-item-tile-card"><span class="sc-item-name"><span class="sc-item-check-icon"></span>Katoenen servetten</span><span class="sc-item-price">€2,00</span></span>
                 </label>
               </div>
-              <p class="rsv-muted" style="margin-top:14px;">Wil je foto's zien van wat je aanvinkt? Servies, glazen en bestek zie je op de pagina's van <a href="moss-and-mist.html">Moss &amp; Mist</a> en <a href="mocha-sky.html">Mocha Sky</a>; champagneglazen, servetringen en decoratie op de <a href="extras.html">extra's-pagina</a>. Je keuzes hier blijven bewaard.</p>
+              <p class="rsv-muted" style="margin-top:14px;">Wil je foto's zien van wat je aanvinkt? Servies, glazen en bestek zie je op de pagina's van <a href="moss-and-mist.html">Moss &amp; Mist</a>, <a href="mocha-sky.html">Mocha Sky</a> en <a href="winter-glow.html">Winter Glow</a>; champagneglazen, servetringen en decoratie op de <a href="extras.html">extra's-pagina</a>. Je keuzes hier blijven bewaard.</p>
               <p class="rsv-alt">Toch een vaste collectie? <button type="button" class="rsv-textlink" id="rsvToStandard">Kies een standaardpakket</button></p>
             </div>
             <span class="rsv-vat">Alle prijzen zijn per persoon en inclusief btw.</span>
@@ -1102,6 +1113,7 @@
       var ev = readDate(dateInput), s = readDate(startInput), e = readDate(endInput);
       if (!ev) return fail('Kies de datum van je diner of feest.', dateInput);
       if (ev < minDate) return fail('Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar info@studio-convivio.nl.', dateInput);
+      if (outOfSeason(ev)) return fail('Winter Glow is te boeken voor een datum van 1 november tot en met 31 januari. Kies een andere datum of een andere collectie.', dateInput);
       if (!s) return fail('Vul in wanneer je de spullen wilt ophalen of laten bezorgen.', startInput);
       if (!e) return fail('Vul in wanneer je de spullen terugbrengt of laat ophalen.', endInput);
       if (s < minDate) return fail('Ophalen of bezorgen kan vanaf ' + shortDate(minDate) + '.', startInput);
@@ -1202,6 +1214,13 @@
 
   function getMode() { var r = form.querySelector('input[name="mode"]:checked'); return r ? r.value : 'standard'; }
   function getSelectedPackage() { return form.querySelector('input[name="package"]:checked'); }
+  // Winter Glow is alleen te boeken voor een datum van 1 november t/m 31 januari.
+  var SEASON_MONTHS = { 'Winter Glow': [10, 11, 0] };
+  function outOfSeason(ev) {
+    var pkg = getSelectedPackage();
+    var months = getMode() === 'standard' && pkg && SEASON_MONTHS[pkg.value];
+    return !!(months && ev && months.indexOf(ev.getMonth()) === -1);
+  }
   function getDeliveryMode() { return form.querySelector('input[name="deliveryMode"]:checked'); }
 
   // ---------------------------------------------------------------
@@ -1806,9 +1825,9 @@
 
   // ---------------------------------------------------------------
   // Vooraf invullen vanaf andere pagina's:
-  // ?collectie=moss-mist|mocha-sky|maatwerk en ?gelegenheid=21-diner enz.
+  // ?collectie=moss-mist|mocha-sky|winter-glow|maatwerk en ?gelegenheid=21-diner enz.
   // ---------------------------------------------------------------
-  var PACKAGE_PARAMS = { 'moss-mist': 'Moss & Mist', 'moss-and-mist': 'Moss & Mist', 'mocha-sky': 'Mocha Sky' };
+  var PACKAGE_PARAMS = { 'moss-mist': 'Moss & Mist', 'moss-and-mist': 'Moss & Mist', 'mocha-sky': 'Mocha Sky', 'winter-glow': 'Winter Glow' };
   function applyParams() {
     var params = new URLSearchParams(location.search);
     var col = (params.get('collectie') || '').toLowerCase();
