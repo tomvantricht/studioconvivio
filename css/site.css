@@ -1127,6 +1127,18 @@ body.gallery-open { overflow: hidden; }
 .gallery-strip img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 3 / 4; display: block; }
 @media (max-width: 560px) { .gallery-strip { grid-template-columns: repeat(2, 1fr); } .gallery-strip > :last-child:nth-child(odd) { display: none; } }
 
+/* Sfeerbeelden op een gelegenheidspagina: één grote foto plus vijf kleine */
+.occasion-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.occasion-gallery figure { margin: 0; overflow: hidden; background: var(--paper-deep); aspect-ratio: 3 / 2; }
+.occasion-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.occasion-gallery-main { grid-column: 1 / -1; }
+.occasion-gallery > :last-child:nth-child(even) { grid-column: 1 / -1; }
+@media (min-width: 900px) {
+  .occasion-gallery { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .occasion-gallery-main { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+  .occasion-gallery > :last-child:nth-child(even) { grid-column: auto; }
+}
+
 .include-cols { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 40px; }
 @media (max-width: 560px) { .include-cols { columns: 1; } }
 .include-cols li { font-size: 15px; color: var(--ink-soft); padding: 9px 0; border-top: 1px solid var(--line-soft); break-inside: avoid; }

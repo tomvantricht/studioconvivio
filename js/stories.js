@@ -9,7 +9,7 @@
       blurb: 'Eén complete tafel voor de feestdagen. Er is één set per collectie: reserveer op tijd.',
       cta: 'Bekijk kerst & feestdagen',
       href: 'kerst-en-feestdagen.html',
-      img: 'images/img-25e2bb73.webp'
+      img: 'images/kerst-couvert.webp'
     },
     {
       kicker: 'Voor elk moment',
