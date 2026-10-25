@@ -660,7 +660,7 @@
 
             <div class="rsv-panel" role="group" aria-labelledby="rsvGuestsLabel">
               <span class="rsv-panel-label" id="rsvGuestsLabel">Aantal personen</span>
-              <p class="rsv-muted">Meer dan 30? Kies 30+ of mail naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a></p>
+              <p class="rsv-muted">Meer dan 30 personen? Mail naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>, dan kijken we wat er mogelijk is.</p>
               <div class="rsv-stepper">
                 <button type="button" data-stepper="guests" data-dir="-1" aria-label="Eén persoon minder"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>
                 <output id="rsvGuestsOut" aria-live="polite">1</output>
@@ -1252,25 +1252,21 @@
   function getDeliveryMode() { return form.querySelector('input[name="deliveryMode"]:checked'); }
 
   // ---------------------------------------------------------------
-  // Stap 2: aantal personen via plus/min. 30+ is de oude optie
-  // "Meer dan 30 personen" (prijs op aanvraag).
+  // Stap 2: aantal personen via plus/min, 1 tot en met 30. Meer dan 30
+  // gaat per mail (zie de tekst boven de knoppen).
   // ---------------------------------------------------------------
-  var GUESTS = { min: 1, max: 30, over: 'over30', out: document.getElementById('rsvGuestsOut') };
+  var GUESTS = { min: 1, max: 30, out: document.getElementById('rsvGuestsOut') };
   function renderGuests() {
-    var v = guestsInput.value;
-    GUESTS.out.textContent = v === GUESTS.over ? GUESTS.max + '+' : v;
-    form.querySelector('[data-stepper="guests"][data-dir="-1"]').disabled = v !== GUESTS.over && parseInt(v, 10) <= GUESTS.min;
-    form.querySelector('[data-stepper="guests"][data-dir="1"]').disabled = v === GUESTS.over;
+    var n = parseInt(guestsInput.value, 10);
+    GUESTS.out.textContent = n;
+    form.querySelector('[data-stepper="guests"][data-dir="-1"]').disabled = n <= GUESTS.min;
+    form.querySelector('[data-stepper="guests"][data-dir="1"]').disabled = n >= GUESTS.max;
   }
   form.querySelectorAll('[data-stepper="guests"]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var dir = parseInt(btn.getAttribute('data-dir'), 10);
-      var v = guestsInput.value;
-      if (v === GUESTS.over) { if (dir < 0) guestsInput.value = String(GUESTS.max); }
-      else {
-        var n = parseInt(v, 10) + dir;
-        guestsInput.value = n > GUESTS.max ? GUESTS.over : String(Math.max(GUESTS.min, n));
-      }
+      var n = parseInt(guestsInput.value, 10) + dir;
+      guestsInput.value = String(Math.min(GUESTS.max, Math.max(GUESTS.min, n)));
       renderGuests();
       // Blijf op een bruikbare knop staan als deze net uitgeschakeld werd.
       if (btn.disabled) form.querySelector('[data-stepper="guests"][data-dir="' + (-dir) + '"]').focus();
@@ -1610,7 +1606,6 @@
   function recalc() {
     syncDateEmpty();
     updatePeriod();
-    var guestsOverLimit = guestsInput.value === 'over30';
     var daysOverLimit = daysInput.value === 'over7';
     var mode = getMode();
     var pkg = getSelectedPackage();
@@ -1634,10 +1629,8 @@
     var lines = [];
     var totalText;
 
-    if (guestsOverLimit || daysOverLimit) {
-      var reasons = [];
-      if (guestsOverLimit) reasons.push('meer dan 30 personen');
-      if (daysOverLimit) reasons.push('meer dan 7 huurdagen');
+    if (daysOverLimit) {
+      var reasons = ['meer dan 7 huurdagen'];
       lines.push({ label: 'Aanvraag voor ' + reasons.join(' en '), price: '', step: 2 });
       totalText = 'Op aanvraag';
       lastComputedTotal = null;
@@ -1834,7 +1827,8 @@
     var pkgRadio = form.querySelector('input[name="package"][value="' + (d.pkg || '').replace(/"/g, '') + '"]');
     if (pkgRadio) pkgRadio.checked = true;
     form.querySelectorAll('.sc-item-check').forEach(function (el) { el.checked = (d.items || []).indexOf(el.value) !== -1; });
-    if (d.guests === 'over30' || /^\d+$/.test(d.guests || '')) guestsInput.value = d.guests;
+    // Een oud concept kan nog "over30" bevatten (de vroegere 30+-optie); dat slaan we over.
+    if (/^\d+$/.test(d.guests || '')) guestsInput.value = String(Math.min(GUESTS.max, Math.max(GUESTS.min, +d.guests)));
     renderGuests();
     if (OCCASIONS[d.occasion]) occasionInput.value = d.occasion;
     var k;
@@ -1902,7 +1896,6 @@
     var formData = new FormData(form);
     var mode = getMode();
     formData.append('modus', mode === 'standard' ? 'Standaardpakket' : 'Maatwerkpakket');
-    if (guestsInput.value === 'over30') formData.set('guests', 'Meer dan 30 personen');
     formData.set('date', longDate(dateInput));
     if (holidayPeriod()) {
       formData.append('days', 'In overleg (feestdagen)');
