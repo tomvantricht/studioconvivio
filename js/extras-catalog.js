@@ -111,7 +111,7 @@ window.SC_EXTRAS_CATALOG = [
         photos: [
           { src: 'images/extra-kaart-6.webp', alt: 'Menukaart in de vorm van een waaier met lelies en een kwastje' }
         ],
-        name: 'Menukaarten', price: 3.50, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
+        name: 'Menukaarten', price: 2.50, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
         addon: { label: 'Met kwastje', price: 0.50 },
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' },
       { key: 'bedankkaarten',
