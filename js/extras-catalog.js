@@ -107,7 +107,7 @@ window.SC_EXTRAS_CATALOG = [
         ],
         name: 'Handgemaakte kaarten', price: 1.25, priceFrom: true, unit: 'stuk', stock: null, hasType: true,
         note: 'Ontwerp in overleg',
-        typePlaceholder: 'Welk soort en welke sfeer? bijv. naamkaarten, groen met goud',
+        typePlaceholder: 'Welk soort? bijv. menukaarten of naamkaartjes',
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' }
     ]
   }
