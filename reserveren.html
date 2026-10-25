@@ -264,6 +264,8 @@
   .sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px 25px; }
   .sc-qty-field input[type="number"] { max-width: 90px; }
   .sc-qty-field input[type="text"] { flex: 1; min-width: 160px; }
+  .sc-shop-addon { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+  .sc-shop-addon input { accent-color: var(--moss-dark); }
 
   /* ---- Stap 3: bezorging ---- */
   .rsv-choices { display: grid; gap: 10px; }
@@ -871,8 +873,8 @@
 </div>
 
 <script src="js/site.js?v=11"></script>
-<script src="js/extras-catalog.js?v=13"></script>
-<script src="js/extras-shop.js?v=8"></script>
+<script src="js/extras-catalog.js?v=14"></script>
+<script src="js/extras-shop.js?v=9"></script>
 
 <script>
 (function () {
@@ -1146,11 +1148,6 @@
         if (s < minDate) return fail('Ophalen of bezorgen kan vanaf ' + shortDate(minDate) + '.', startInput);
         if (e < s) return fail('De retourdatum ligt vóór de ophaaldatum.', endInput);
         if (ev < s || ev > e) return fail('De datum van je feest moet binnen de huurperiode vallen.', startInput);
-      }
-      var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
-      if (cardsEntry && cardsEntry.qty > 0 && !(cardsEntry.type || '').trim()) {
-        if (!silent) extrasDetails.open = true;
-        return fail('Vul aan welk soort kaarten je wilt (bijv. menukaarten, naamkaarten).', xtraCatalogEl.querySelector('[data-key="handgemaakte-kaarten"] .sc-shop-type-input'));
       }
     }
     if (n === 3) {
@@ -1921,7 +1918,7 @@
     ScExtrasShop.flatItems().forEach(function (item) {
       var entry = xtraCart[item.key];
       if (!entry || entry.qty < 1) return;
-      xtraLines.push(item.name + ' × ' + entry.qty + (entry.type ? ' (' + entry.type + ')' : ''));
+      xtraLines.push(item.name + (item.addon && entry.addon ? ', ' + item.addon.label.toLowerCase() : '') + ' × ' + entry.qty + (entry.type ? ' (' + entry.type + ')' : ''));
     });
     formData.append('extra_items', xtraLines.length ? xtraLines.join(', ') : 'Geen');
     formData.append('adres', getHomeAddress());

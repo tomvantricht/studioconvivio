@@ -11,6 +11,8 @@
 // priceFrom: true toont de prijs als "vanaf" (de minimale prijs telt mee in
 // de indicatie). price: null betekent "Prijs volgt" of "in overleg".
 // sale: true is een verbruiksartikel dat je koopt in plaats van huurt.
+// addon: een optie per stuk die je erbij aanvinkt (bv. een kwastje aan de
+// menukaart), met eigen meerprijs per stuk.
 // note: korte regel onder de prijs in plaats van de voorraad (bv. "Ontwerp
 // in overleg").
 // photos: de productfoto's (de eerste is de hoofdfoto), voor de fotogalerij
@@ -96,18 +98,24 @@ window.SC_EXTRAS_CATALOG = [
         ],
         name: 'Cilindervazen', price: 4.50, unit: 'set van 3', stock: 4,
         icon: '<rect x="4" y="9" width="4" height="11" rx="1"/><rect x="10" y="6" width="4" height="14" rx="1"/><rect x="16" y="11" width="4" height="9" rx="1"/>' },
-      { key: 'handgemaakte-kaarten',
+      { key: 'naamkaartjes',
         photos: [
-          { src: 'images/extra-kaart-1.webp', alt: 'Handgemaakte ovale kaart met de tekst it\'s giving birthday girl' },
           { src: 'images/extra-kaart-2.webp', alt: 'Naamkaartje met blauwe bloemen en groene takjes, op een gedekte tafel' },
           { src: 'images/extra-kaart-3.webp', alt: 'Drie naamkaartjes in de vorm van een dennenboom op een servet' },
           { src: 'images/extra-kaart-4.webp', alt: 'Witte papieren vlinder met een naam op de vleugel, op een bord' },
-          { src: 'images/extra-kaart-5.webp', alt: 'Uitgesneden tennisracket van wit papier met een naam op het handvat' },
+          { src: 'images/extra-kaart-5.webp', alt: 'Uitgesneden tennisracket van wit papier met een naam op het handvat' }
+        ],
+        name: 'Naamkaartjes', price: 1.25, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
+        icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' },
+      { key: 'menukaarten',
+        photos: [
           { src: 'images/extra-kaart-6.webp', alt: 'Menukaart in de vorm van een waaier met lelies en een kwastje' }
         ],
-        name: 'Handgemaakte kaarten', price: 1.25, priceFrom: true, unit: 'stuk', stock: null, hasType: true,
-        note: 'Ontwerp in overleg',
-        typePlaceholder: 'Welk soort? bijv. menukaarten of naamkaartjes',
+        name: 'Menukaarten', price: 3.50, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
+        addon: { label: 'Met kwastje', price: 0.50 },
+        icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' },
+      { key: 'bedankkaarten',
+        name: 'Bedankkaarten', price: 1.25, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' }
     ]
   }

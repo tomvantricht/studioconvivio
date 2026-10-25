@@ -49,6 +49,10 @@ window.ScExtrasShop = (function () {
     return '<button type="button" class="sc-shop-zoom" data-zoom="' + item.key + '" aria-label="' + label + '">' + img +
       '<svg class="sc-shop-zoom-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg></button>';
   }
+  // Optie per stuk bij een item, bv. "Met kwastje (+€0,50/stuk)".
+  function addonHtml(item) {
+    return '<label class="sc-shop-addon"><input type="checkbox" class="sc-shop-addon-input"> ' + item.addon.label + ' (+' + fmt(item.addon.price) + '/stuk)</label>';
+  }
   function renderCatalog() {
     var html = '';
     SC_EXTRAS_CATALOG.forEach(function (group) {
@@ -71,6 +75,7 @@ window.ScExtrasShop = (function () {
               '<div class="sc-qty-field sc-qty-field-flat sc-shop-qty">' +
                 '<input type="number" class="sc-shop-qty-input" min="1"' + (max != null ? ' max="' + max + '"' : '') + ' value="1">' +
                 (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="' + (item.typePlaceholder || '') + '">' : '') +
+                (item.addon ? addonHtml(item) : '') +
               '</div>') +
           '</div>';
       });
@@ -90,6 +95,7 @@ window.ScExtrasShop = (function () {
       var qtyWrap = itemEl.querySelector('.sc-shop-qty');
       var qtyInput = itemEl.querySelector('.sc-shop-qty-input');
       var typeInput = itemEl.querySelector('.sc-shop-type-input');
+      var addonInput = itemEl.querySelector('.sc-shop-addon-input');
 
       var saved = cart[key];
       if (saved && saved.qty > 0) {
@@ -97,12 +103,15 @@ window.ScExtrasShop = (function () {
         qtyInput.value = saved.qty;
         qtyWrap.classList.add('sc-visible');
         if (typeInput && saved.type) typeInput.value = saved.type;
+        if (addonInput) addonInput.checked = !!saved.addon;
       }
 
       function sync() {
         var qty = check.checked ? (parseInt(qtyInput.value, 10) || 1) : 0;
         if (check.checked) { qtyWrap.classList.add('sc-visible'); } else { qtyWrap.classList.remove('sc-visible'); }
-        var extra = typeInput ? { type: typeInput.value } : null;
+        var extra = null;
+        if (typeInput) extra = { type: typeInput.value };
+        if (addonInput) { extra = extra || {}; extra.addon = addonInput.checked; }
         ScCart.setItem(key, qty, extra);
         if (onChange) onChange();
       }
@@ -118,6 +127,7 @@ window.ScExtrasShop = (function () {
         sync();
       });
       if (typeInput) typeInput.addEventListener('input', sync);
+      if (addonInput) addonInput.addEventListener('change', sync);
     });
   }
 
@@ -135,10 +145,11 @@ window.ScExtrasShop = (function () {
       if (item.price === null) {
         lines.push({ key: item.key, label: item.name + (entry.type ? ' (' + entry.type + ')' : '') + ' × ' + entry.qty, priceLabel: item.unit, overleg: true });
       } else {
-        var linePrice = item.price * entry.qty;
+        var withAddon = !!(item.addon && entry.addon);
+        var linePrice = (item.price + (withAddon ? item.addon.price : 0)) * entry.qty;
         subtotal += linePrice;
         if (item.priceFrom) hasFrom = true;
-        lines.push({ key: item.key, label: item.name + (entry.type ? ' (' + entry.type + ')' : '') + ' × ' + entry.qty, priceLabel: (item.priceFrom ? 'vanaf ' : '') + fmt(linePrice), overleg: false });
+        lines.push({ key: item.key, label: item.name + (entry.type ? ' (' + entry.type + ')' : '') + (withAddon ? ', ' + item.addon.label.toLowerCase() : '') + ' × ' + entry.qty, priceLabel: (item.priceFrom ? 'vanaf ' : '') + fmt(linePrice), overleg: false });
       }
     });
     return { lines: lines, subtotal: subtotal, hasFrom: hasFrom };

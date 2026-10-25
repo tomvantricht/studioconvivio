@@ -114,6 +114,9 @@
   border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); background: #fff; color: var(--sc-ink);
 }
 
+.sc-shop-addon { display: flex; align-items: center; gap: 6px; width: 100%; font-size: 13px; color: var(--ink-soft); cursor: pointer; }
+.sc-shop-addon input { accent-color: var(--moss-dark); }
+
 .xt-summary {
   margin-top: clamp(36px, 5vw, 56px); padding: 22px; background: var(--paper-alt);
   border-radius: var(--sc-radius-lg);
@@ -410,21 +413,48 @@
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
           </div>
-          <div class="sc-shop-item" data-key="handgemaakte-kaarten">
+          <div class="sc-shop-item" data-key="naamkaartjes">
             <label class="sc-shop-card">
               <input type="checkbox" class="sc-shop-check">
               <span class="sc-shop-photo">
-                <img src="images/extra-kaart-1.webp" srcset="images/extra-kaart-1-480.webp 480w, images/extra-kaart-1-800.webp 800w, images/extra-kaart-1.webp 1200w" sizes="(min-width: 900px) 251px, 43vw" alt="Handgemaakte ovale kaart met de tekst it's giving birthday girl" loading="lazy" decoding="async">
+                <img src="images/extra-kaart-2-480.webp" srcset="images/extra-kaart-2-480.webp 480w, images/extra-kaart-2-800.webp 800w" sizes="(min-width: 900px) 251px, 43vw" alt="Naamkaartje met blauwe bloemen en groene takjes, op een gedekte tafel" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
-                <button type="button" class="sc-shop-gallery-btn" data-gallery="handgemaakte-kaarten" aria-label="Bekijk alle 6 foto's van handgemaakte kaarten">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>6
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="naamkaartjes" aria-label="Bekijk alle 4 foto's van naamkaartjes">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>4
                 </button>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">vanaf €1,25/stuk<span class="sc-shop-stock">Ontwerp in overleg</span></span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Naamkaartjes</span><span class="sc-shop-price">€1,25/stuk<span class="sc-shop-stock">Ontwerp in overleg</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
               <input type="number" class="sc-shop-qty-input" min="1" value="1">
-              <input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menukaarten of naamkaartjes">
+            </div>
+          </div>
+          <div class="sc-shop-item" data-key="menukaarten">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <img src="images/extra-kaart-6-480.webp" srcset="images/extra-kaart-6-480.webp 480w, images/extra-kaart-6-800.webp 800w" sizes="(min-width: 900px) 251px, 43vw" alt="Menukaart in de vorm van een waaier met lelies en een kwastje" loading="lazy" decoding="async">
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Menukaarten</span><span class="sc-shop-price">€3,50/stuk<span class="sc-shop-stock">Ontwerp in overleg</span></span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
+              <input type="number" class="sc-shop-qty-input" min="1" value="1">
+              <label class="sc-shop-addon"><input type="checkbox" class="sc-shop-addon-input"> Met kwastje (+€0,50/stuk)</label>
+            </div>
+          </div>
+          <div class="sc-shop-item" data-key="bedankkaarten">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
+                <span class="sc-shop-ph-label">Ontwerp in overleg</span>
+                <span class="sc-shop-badge">&#10003;</span>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Bedankkaarten</span><span class="sc-shop-price">€1,25/stuk<span class="sc-shop-stock">Ontwerp in overleg</span></span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
+              <input type="number" class="sc-shop-qty-input" min="1" value="1">
             </div>
           </div>
         </div>
@@ -434,6 +464,7 @@
         <div class="xt-cards-body">
           <h2 id="xtCardsTitle">Handgemaakte kaarten, ontworpen in overleg</h2>
           <p>Menukaarten, naamkaartjes of bedankkaartjes: ik maak ze met de hand, passend bij jouw tafel. Hieronder zie je een paar voorbeelden van wat er kan. Elk ontwerp maak ik samen in overleg met jou.</p>
+          <p>Naamkaartjes en bedankkaarten kosten €1,25 per stuk, menukaarten €3,50 per stuk. Een kwastje aan de menukaart kost €0,50 extra.</p>
           <ol class="xt-cards-steps">
             <li>Vink de kaarten aan bij de extra's en vul in welk soort en hoeveel.</li>
             <li>Na je reservering overleggen we via de mail over de sfeer: kleuren, stijl, de tekst en eventueel de namen van je gasten.</li>
@@ -546,8 +577,8 @@
 </div>
 
 <script src="js/site.js?v=11"></script>
-<script src="js/extras-catalog.js?v=13"></script>
-<script src="js/extras-shop.js?v=8"></script>
+<script src="js/extras-catalog.js?v=14"></script>
+<script src="js/extras-shop.js?v=9"></script>
 <script>
 (function () {
   var root = document.querySelector('.xt-wrap');
