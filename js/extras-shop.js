@@ -25,6 +25,7 @@ window.ScExtrasShop = (function () {
   // totale voorraad, niet de beschikbaarheid op een specifieke datum; die
   // bevestigen we pas na controle.
   function stockLabel(item) {
+    if (item.note) return item.note;
     return item.stock != null ? 'Max. ' + item.stock + ' per aanvraag' : '';
   }
   // Prijslabel zoals op de kaartjes: "€0,75/stuk", "vanaf €1,25/stuk" of

@@ -131,6 +131,21 @@
 }
 .xt-summary-note { margin-top: 10px; font-size: 12px; color: var(--ink-faint); }
 .xt-summary-cta { margin-top: 18px; }
+
+.xt-cards {
+  margin-top: clamp(36px, 5vw, 56px); padding-top: clamp(28px, 4vw, 40px);
+  border-top: 1px solid var(--line);
+}
+.xt-cards-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; }
+@media (min-width: 760px) { .xt-cards-gallery { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+.xt-cards-gallery figure { margin: 0; }
+.xt-cards-gallery img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; border-radius: 4px; }
+.xt-cards-gallery figcaption { margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
+.xt-cards-body h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.6vw, 32px); }
+.xt-cards-body > p { margin-top: 12px; color: var(--ink-soft); max-width: 58ch; }
+.xt-cards-steps { margin: 18px 0 0; padding-left: 20px; color: var(--ink-soft); max-width: 58ch; }
+.xt-cards-steps li + li { margin-top: 8px; }
+.xt-cards-note { font-size: 13px; color: var(--ink-faint) !important; }
 </style>
 <!-- Microsoft Clarity: zonder cookies (consent geweigerd), formuliervelden worden gemaskeerd -->
 <script>
@@ -401,16 +416,59 @@
               <span class="sc-shop-photo">
                 <img src="images/extra-kaart-1.webp" srcset="images/extra-kaart-1-480.webp 480w, images/extra-kaart-1-800.webp 800w, images/extra-kaart-1.webp 1200w" sizes="(min-width: 900px) 251px, 43vw" alt="Handgemaakte ovale kaart met de tekst it's giving birthday girl" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="handgemaakte-kaarten" aria-label="Bekijk alle 6 foto's van handgemaakte kaarten">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>6
+                </button>
               </span>
-              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">vanaf €1,25/stuk</span></span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Handgemaakte kaarten</span><span class="sc-shop-price">vanaf €1,25/stuk<span class="sc-shop-stock">Ontwerp in overleg</span></span></span>
             </label>
             <div class="sc-qty-field sc-qty-field-flat sc-shop-qty">
               <input type="number" class="sc-shop-qty-input" min="1" value="1">
-              <input type="text" class="sc-shop-type-input" placeholder="Welk soort? bijv. menu-, naam-, welkom- of bedankkaarten">
+              <input type="text" class="sc-shop-type-input" placeholder="Welk soort en welke sfeer? bijv. naamkaarten, groen met goud">
             </div>
           </div>
         </div>
       </div>
+
+      <section class="xt-cards" id="kaarten" aria-labelledby="xtCardsTitle">
+        <div class="xt-cards-body">
+          <h2 id="xtCardsTitle">Handgemaakte kaarten, ontworpen in overleg</h2>
+          <p>Menukaarten, naamkaartjes, een welkomstbord of bedankkaartjes: ik maak ze met de hand, passend bij jouw tafel. Hieronder zie je een paar voorbeelden van wat er kan. Elk ontwerp maak ik samen met jou.</p>
+          <ol class="xt-cards-steps">
+            <li>Vink de kaarten aan bij de extra's en vul in welk soort en hoeveel.</li>
+            <li>Vertel me de sfeer: kleuren, stijl, de tekst en eventueel de namen van je gasten.</li>
+            <li>Heb je een sfeerbeeld als inspiratie? Stuur het gerust mee. Ik maak er een eigen ontwerp in die stijl van, geen kopie.</li>
+            <li>Je krijgt het ontwerp eerst te zien voordat ik ga maken.</li>
+          </ol>
+          <p class="xt-cards-note">Figuren en logo's van bekende merken kan ik niet gebruiken. Lever je zelf een logo, foto of tekening aan, dan ga ik ervan uit dat je die mag gebruiken; zie de <a class="link" href="algemene-voorwaarden.html#kaarten">algemene voorwaarden</a>.</p>
+        </div>
+        <div class="xt-cards-gallery">
+          <figure>
+            <img src="images/extra-kaart-1-480.webp" srcset="images/extra-kaart-1-480.webp 480w, images/extra-kaart-1-800.webp 800w" sizes="(min-width: 760px) 300px, 45vw" width="480" height="480" alt="Ovale verjaardagskaart met de tekst it&#39;s giving birthday girl, een cocktailglas en een discobal" loading="lazy" decoding="async">
+            <figcaption>Verjaardagskaartje: <i>it&#39;s giving birthday girl</i></figcaption>
+          </figure>
+          <figure>
+            <img src="images/extra-kaart-2-480.webp" srcset="images/extra-kaart-2-480.webp 480w, images/extra-kaart-2-800.webp 800w" sizes="(min-width: 760px) 300px, 45vw" width="480" height="480" alt="Naamkaartje met blauwe bloemen en groene takjes, op een gedekte tafel" loading="lazy" decoding="async">
+            <figcaption>Naamkaartje met blauwe bloemen</figcaption>
+          </figure>
+          <figure>
+            <img src="images/extra-kaart-3-480.webp" srcset="images/extra-kaart-3-480.webp 480w, images/extra-kaart-3-800.webp 800w" sizes="(min-width: 760px) 300px, 45vw" width="480" height="480" alt="Drie naamkaartjes in de vorm van een dennenboom op een servet" loading="lazy" decoding="async">
+            <figcaption>Kerst: naamkaartjes als dennenboom</figcaption>
+          </figure>
+          <figure>
+            <img src="images/extra-kaart-4-480.webp" srcset="images/extra-kaart-4-480.webp 480w, images/extra-kaart-4-800.webp 800w" sizes="(min-width: 760px) 300px, 45vw" width="480" height="480" alt="Witte papieren vlinder met een naam op de vleugel, op een bord" loading="lazy" decoding="async">
+            <figcaption>Vlinder als naamkaartje</figcaption>
+          </figure>
+          <figure>
+            <img src="images/extra-kaart-5-480.webp" srcset="images/extra-kaart-5-480.webp 480w, images/extra-kaart-5-800.webp 800w" sizes="(min-width: 760px) 300px, 45vw" width="480" height="480" alt="Uitgesneden tennisracket van wit papier met een naam op het handvat" loading="lazy" decoding="async">
+            <figcaption>Tennisracket als naamkaartje</figcaption>
+          </figure>
+          <figure>
+            <img src="images/extra-kaart-6-480.webp" srcset="images/extra-kaart-6-480.webp 480w, images/extra-kaart-6-800.webp 800w" sizes="(min-width: 760px) 300px, 45vw" width="480" height="480" alt="Menukaart in de vorm van een waaier met lelies en een kwastje" loading="lazy" decoding="async">
+            <figcaption>Menukaart in de vorm van een waaier</figcaption>
+          </figure>
+        </div>
+      </section>
 
       <div class="xt-summary">
         <h2>Jouw extra's</h2>
@@ -488,8 +546,8 @@
 </div>
 
 <script src="js/site.js?v=11"></script>
-<script src="js/extras-catalog.js?v=11"></script>
-<script src="js/extras-shop.js?v=7"></script>
+<script src="js/extras-catalog.js?v=12"></script>
+<script src="js/extras-shop.js?v=8"></script>
 <script>
 (function () {
   var root = document.querySelector('.xt-wrap');
