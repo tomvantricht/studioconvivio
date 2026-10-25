@@ -24,16 +24,6 @@ window.SC_EXTRAS_CATALOG = [
         ],
         name: 'Champagneglazen', price: 0.75, unit: 'stuk', stock: 50,
         icon: '<path d="M10.5 3h3l-.6 10a1 2.2 0 01-1.8 0L10.5 3zM12 13v6M9 21h6"/>' },
-      { key: 'servetringen',
-        photos: [
-          { src: 'images/img-ddd003eb.webp', alt: 'Unieke servetring, goudkleurige champagnedop' },
-          { src: 'images/img-a2ea5439.webp', alt: 'Unieke servetring, bruin-wit patroon' },
-          { src: 'images/img-2f8c3e29.webp', alt: 'Unieke servetring, rode Opera-dop' },
-          { src: 'images/img-0aedb310.webp', alt: 'Unieke servetring, zwarte dop' },
-          { src: 'images/extra-servetring-zilver.webp', alt: 'Unieke servetring, zilveren champagnedop om een katoenen servet' }
-        ],
-        name: 'Unieke servetringen', price: 0.50, unit: 'stuk', stock: 25,
-        icon: '<circle cx="12" cy="12" r="7"/><path d="M12 7.5l2 4.5-2 4.5-2-4.5z"/>' },
       { key: 'strikjes',
         photos: [
           { src: 'images/extra-strikje-1.webp', alt: 'Ivoorkleurig satijnen strikje om de voet van een glas' },
