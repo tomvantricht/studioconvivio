@@ -205,6 +205,7 @@
   .rsv-period { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
   .rsv-period[hidden] { display: none; }
   .rsv-period-head { font-size: 14px; font-weight: 700; }
+  .rsv-period-grid[hidden] { display: none; }
   .rsv-period-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
   @media (max-width: 400px) { .rsv-period-grid { grid-template-columns: 1fr; } }
   .rsv-period-grid .rsv-field + .rsv-field { margin-top: 0; }
@@ -647,8 +648,9 @@
               </div>
               <div class="rsv-period" id="rsvPeriod" role="group" aria-labelledby="rsvPeriodHead" hidden>
                 <p class="rsv-period-head" id="rsvPeriodHead">Huurperiode</p>
-                <p class="rsv-muted">Standaard 3 dagen: de dag ervoor, de dag zelf en de dag erna. Langer nodig? Pas de data aan; elke extra dag kost €35.</p>
-                <div class="rsv-period-grid">
+                <p class="rsv-muted" id="rsvPeriodStd">Standaard 3 dagen: de dag ervoor, de dag zelf en de dag erna. Langer nodig? Pas de data aan; elke extra dag kost €35.</p>
+                <p class="rsv-muted" id="rsvPeriodHoliday" hidden>Rond de feestdagen (20 december t/m 2 januari) spreken we de ophaal- en retourdag samen met je af, zodat zoveel mogelijk mensen een gedekte tafel kunnen hebben. De prijs per persoon blijft gelijk. Heb je al een voorkeur? Zet die bij de opmerkingen.</p>
+                <div class="rsv-period-grid" id="rsvPeriodGrid">
                   <div class="rsv-field"><label for="scStart">Ophalen of bezorgen</label><input type="date" id="scStart" name="ophaaldatum"></div>
                   <div class="rsv-field"><label for="scEnd">Terugbrengen of ophalen</label><input type="date" id="scEnd" name="retourdatum"></div>
                 </div>
@@ -927,8 +929,18 @@
   var endInput = document.getElementById('scEnd');
   var periodBox = document.getElementById('rsvPeriod');
   var periodSum = document.getElementById('rsvPeriodSum');
+  var periodStd = document.getElementById('rsvPeriodStd');
+  var periodHoliday = document.getElementById('rsvPeriodHoliday');
+  var periodGrid = document.getElementById('rsvPeriodGrid');
   var MIN_LEAD_DAYS = 3;
   var EXTRA_DAY_PRICE = 35;
+
+  // Feestdagen (20 december t/m 2 januari): geen vaste huurperiode, de
+  // ophaal- en retourdag spreken we per reservering af.
+  function isHoliday(d) {
+    return !!d && ((d.getMonth() === 11 && d.getDate() >= 20) || (d.getMonth() === 0 && d.getDate() <= 2));
+  }
+  function holidayPeriod() { return isHoliday(readDate(dateInput)); }
 
   function addDays(d, n) { var r = new Date(d.getFullYear(), d.getMonth(), d.getDate()); r.setDate(r.getDate() + n); return r; }
   function toISO(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -970,6 +982,11 @@
     periodBox.hidden = !ev;
     endInput.min = startInput.value || toISO(minDate);
     periodSum.className = 'rsv-period-sum';
+    var holiday = isHoliday(ev);
+    periodStd.hidden = holiday;
+    periodGrid.hidden = holiday;
+    periodHoliday.hidden = !holiday;
+    if (holiday) { daysInput.value = '3'; periodSum.textContent = ''; return; }
     if (!ev || !s || !e) { daysInput.value = '3'; periodSum.textContent = ''; return; }
     if (e < s) {
       daysInput.value = '3';
@@ -1123,11 +1140,13 @@
       if (!ev) return fail('Kies de datum van je diner of feest.', dateInput);
       if (ev < minDate) return fail('Aanvragen kan vanaf 3 dagen vooruit. Heb je de tafel eerder nodig? Mail dan naar info@studio-convivio.nl.', dateInput);
       if (outOfSeason(ev)) return fail('Winter Glow is te boeken voor een datum van 1 november tot en met 31 januari. Kies een andere datum of een andere collectie.', dateInput);
-      if (!s) return fail('Vul in wanneer je de spullen wilt ophalen of laten bezorgen.', startInput);
-      if (!e) return fail('Vul in wanneer je de spullen terugbrengt of laat ophalen.', endInput);
-      if (s < minDate) return fail('Ophalen of bezorgen kan vanaf ' + shortDate(minDate) + '.', startInput);
-      if (e < s) return fail('De retourdatum ligt vóór de ophaaldatum.', endInput);
-      if (ev < s || ev > e) return fail('De datum van je feest moet binnen de huurperiode vallen.', startInput);
+      if (!isHoliday(ev)) {
+        if (!s) return fail('Vul in wanneer je de spullen wilt ophalen of laten bezorgen.', startInput);
+        if (!e) return fail('Vul in wanneer je de spullen terugbrengt of laat ophalen.', endInput);
+        if (s < minDate) return fail('Ophalen of bezorgen kan vanaf ' + shortDate(minDate) + '.', startInput);
+        if (e < s) return fail('De retourdatum ligt vóór de ophaaldatum.', endInput);
+        if (ev < s || ev > e) return fail('De datum van je feest moet binnen de huurperiode vallen.', startInput);
+      }
       var cardsEntry = ScCart.getItem('handgemaakte-kaarten');
       if (cardsEntry && cardsEntry.qty > 0 && !(cardsEntry.type || '').trim()) {
         if (!silent) extrasDetails.open = true;
@@ -1537,7 +1556,8 @@
     if (OCCASIONS[occasionInput.value]) out.push({ text: 'Gelegenheid: ' + OCCASIONS[occasionInput.value] });
     var ev = readDate(dateInput), s = readDate(startInput), e = readDate(endInput);
     if (ev) out.push({ text: 'Datum: ' + shortDate(ev), step: 2 });
-    if (s && e && e >= s) out.push({ text: 'Huur: ' + shortDate(s) + ' t/m ' + shortDate(e), step: 2 });
+    if (isHoliday(ev)) out.push({ text: 'Huur: ophalen en retour in overleg (feestdagen)', step: 2 });
+    else if (s && e && e >= s) out.push({ text: 'Huur: ' + shortDate(s) + ' t/m ' + shortDate(e), step: 2 });
     return out;
   }
   // withEdit: toon "wijzig" bij regels van een eerdere stap dan de huidige.
@@ -1565,7 +1585,7 @@
   // uiterlijk 7 dagen voor de huurdatum, en de borg.
   var DEPOSIT = 150;
   function renderPay(total, isFrom) {
-    var start = readDate(startInput);
+    var start = holidayPeriod() ? readDate(dateInput) : readDate(startInput);
     var deadline = start ? addDays(start, -7) : null;
     var today = addDays(new Date(), 0);
     var when = !deadline ? 'uiterlijk 7 dagen voor de huurdatum'
@@ -1637,7 +1657,7 @@
         ? (pkg ? pkg.value : '')
         : 'Maatwerkpakket (' + checkedItems.length + ' tafel-items)';
 
-      lines.push({ label: labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + ' (3 dagen)', price: fmt(baseTableCost), step: 1 });
+      lines.push({ label: labelName + ' × ' + guests + (guests === 1 ? ' persoon' : ' personen') + (holidayPeriod() ? '' : ' (3 dagen)'), price: fmt(baseTableCost), step: 1 });
       if (extraDays > 0) {
         lines.push({ label: 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')', price: fmt(extraDaysCost), step: 2 });
       }
@@ -1883,11 +1903,17 @@
     var mode = getMode();
     formData.append('modus', mode === 'standard' ? 'Standaardpakket' : 'Maatwerkpakket');
     if (guestsInput.value === 'over30') formData.set('guests', 'Meer dan 30 personen');
-    var daysCount = dayDiff(readDate(startInput), readDate(endInput)) + 1;
-    formData.append('days', daysCount + (daysInput.value === 'over7' ? ' (meer dan 7 dagen)' : ''));
     formData.set('date', longDate(dateInput));
-    formData.set('ophaaldatum', longDate(startInput));
-    formData.set('retourdatum', longDate(endInput));
+    if (holidayPeriod()) {
+      formData.append('days', 'In overleg (feestdagen)');
+      formData.set('ophaaldatum', 'In overleg (feestdagen)');
+      formData.set('retourdatum', 'In overleg (feestdagen)');
+    } else {
+      var daysCount = dayDiff(readDate(startInput), readDate(endInput)) + 1;
+      formData.append('days', daysCount + (daysInput.value === 'over7' ? ' (meer dan 7 dagen)' : ''));
+      formData.set('ophaaldatum', longDate(startInput));
+      formData.set('retourdatum', longDate(endInput));
+    }
     if (OCCASIONS[occasionInput.value]) formData.set('gelegenheid', OCCASIONS[occasionInput.value]);
     else formData.delete('gelegenheid');
 
