@@ -871,7 +871,20 @@ body.gallery-open { overflow: hidden; }
   background: var(--line);
   border: 1px solid var(--line);
 }
-@media (min-width: 760px) { .occasion-grid { grid-template-columns: repeat(4, 1fr); } }
+/* Vijf gelegenheden: op mobiel 2 + 2 + 1 brede, op tablet 3 + 2 (zes
+   kolommen), op desktop vijf naast elkaar. "of .occasion-card" telt alleen
+   de kaarten, zodat het ook klopt als de kerststrook weg is. */
+@media (max-width: 759px) { .occasion-grid > .occasion-card:last-child:nth-child(odd of .occasion-card) { grid-column: span 2; aspect-ratio: 3 / 2; } }
+@media (min-width: 760px) {
+  .occasion-grid { grid-template-columns: repeat(6, 1fr); }
+  .occasion-grid > .occasion-card { grid-column: span 2; }
+  .occasion-grid > .occasion-card:nth-last-child(-n+2) { grid-column: span 3; aspect-ratio: 3 / 2; }
+}
+@media (min-width: 1180px) {
+  .occasion-grid { grid-template-columns: repeat(5, 1fr); }
+  .occasion-grid > .occasion-card,
+  .occasion-grid > .occasion-card:nth-last-child(-n+2) { grid-column: auto; aspect-ratio: 3 / 4; }
+}
 .occasion-card {
   position: relative;
   background: var(--ink);
