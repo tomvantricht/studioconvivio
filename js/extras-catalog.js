@@ -109,9 +109,10 @@ window.SC_EXTRAS_CATALOG = [
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' },
       { key: 'menukaarten',
         photos: [
-          { src: 'images/extra-kaart-6.webp', alt: 'Menukaart in de vorm van een waaier met lelies en een kwastje' }
+          { src: 'images/extra-kaart-6.webp', alt: 'Menukaart in de vorm van een waaier met lelies en een kwastje' },
+          { src: 'images/extra-kaart-7.webp', alt: 'Uitgesneden verjaardagskaart met een kinderfoto met feesthoedje, een cocktailglas, een discobal en de tekst "Wendy’s 26th birthday"' }
         ],
-        name: 'Menukaarten', price: 2.50, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
+        name: '(Menu)kaarten', price: 2.50, unit: 'stuk', stock: null, note: 'Ontwerp in overleg',
         addon: { label: 'Met kwastje', price: 0.50 },
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' },
       { key: 'bedankkaarten',
