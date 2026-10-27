@@ -145,12 +145,18 @@
 .next-coll .shot { aspect-ratio: 4 / 3; max-height: 260px; overflow: hidden; background: var(--paper-deep); }
 .next-coll .shot img { width: 100%; height: 100%; object-fit: cover; }
 </style>
-<!-- Microsoft Clarity: zonder cookies (consent geweigerd), formuliervelden worden gemaskeerd -->
+<!-- Microsoft Clarity: zonder cookies (consent geweigerd), formuliervelden worden gemaskeerd.
+     Pas geladen als de pagina klaar is en de browser even niets doet, zodat het
+     script het opbouwen van de pagina niet vertraagt. -->
 <script>
   (function(c,l,a,r,i,t,y){
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    function load(){
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    }
+    function idle(){ if (c.requestIdleCallback) c.requestIdleCallback(load, { timeout: 3000 }); else setTimeout(load, 1500); }
+    if (l.readyState === "complete") idle(); else c.addEventListener("load", idle);
   })(window, document, "clarity", "script", "z36smzb7r6");
   clarity("consentv2", { ad_Storage: "denied", analytics_Storage: "denied" });
 </script>
@@ -173,7 +179,7 @@
   <div class="site-header-inner">
     <p class="header-tagline">Tafelstyling &amp; verhuur</p>
     <a class="brand" href="index.html">
-      <img class="logo-img logo-img--onlight" src="images/logo.webp" alt="Studio Convivio" width="911" height="369">
+      <img class="logo-img logo-img--onlight" src="images/logo-480.webp" srcset="images/logo-240.webp 240w, images/logo-480.webp 480w, images/logo.webp 911w" sizes="168px" alt="Studio Convivio" width="911" height="369">
       <small>Tafelstyling &amp; verhuur</small>
     </a>
     <a class="header-cta" href="reserveren.html">Reserveren</a>
@@ -300,7 +306,7 @@
   <div class="footer-main">
     <div>
       <a class="brand" href="index.html">
-        <img class="logo-img" src="images/logo.webp" alt="Studio Convivio" width="911" height="369" loading="lazy">
+        <img class="logo-img" src="images/logo-240.webp" srcset="images/logo-240.webp 240w, images/logo-480.webp 480w, images/logo.webp 911w" sizes="110px" alt="Studio Convivio" width="911" height="369" loading="lazy">
         <small>Tafelstyling &amp; verhuur</small>
       </a>
       <p class="footer-blurb">Stijlvolle tafelaankleding voor bijzondere momenten: servies, glaswerk, linnen en decoratie, verhuurd en gestyled vanuit Wageningen.</p>
