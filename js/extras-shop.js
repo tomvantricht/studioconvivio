@@ -35,19 +35,35 @@ window.ScExtrasShop = (function () {
     return (item.priceFrom ? 'vanaf ' : '') + fmt(item.price) + '/' + item.unit;
   }
 
-  // Bouwt de itemlijst (per categorie) als HTML-string: een compacte
-  // vinklijst met een kleine foto per item (images/thumb-<key>.webp, 112px
-  // vierkant). Gebruikt op reserveren.html. Heeft het item foto's in de
-  // catalogus, dan is de miniatuur een knop die ze groot toont (de pagina
-  // vangt de klik af via data-zoom, zodat het vinkje niet omklapt).
-  // Ontbreekt een miniatuur, dan verdwijnt het lege vakje vanzelf.
-  function thumbHtml(item) {
-    var img = '<img class="sc-shop-thumb" src="images/thumb-' + item.key + '.webp" alt="" width="40" height="40" loading="lazy" decoding="async" onerror="this.remove()">';
-    if (!item.photos || !item.photos.length) return img;
+  // Bouwt de items (per categorie) als HTML-string: fototegels met een
+  // vinkje op de foto. Gebruikt op reserveren.html (extras.html heeft eigen
+  // HTML). De tegel toont de 480px-versie van de eerste productfoto; zonder
+  // foto komt het icoon uit de catalogus op een effen vlak. Heeft het item
+  // foto's, dan staat er een vergrootglas op de tegel dat ze groot toont (de
+  // pagina vangt de klik af via data-zoom).
+  function lowerFirst(s) { return s.charAt(0).toLowerCase() + s.slice(1); }
+  function photoHtml(item) {
+    if (!item.photos || !item.photos.length) {
+      return '<span class="sc-shop-ph" aria-hidden="true"><svg viewBox="0 0 24 24">' + item.icon + '</svg></span>';
+    }
+    var src = item.photos[0].src.replace(/\.webp$/, '-480.webp');
+    return '<img class="sc-shop-photo" src="' + src + '" alt="" width="480" height="480" loading="lazy" decoding="async">';
+  }
+  function zoomHtml(item) {
+    if (!item.photos || !item.photos.length) return '';
     var n = item.photos.length;
     var label = n > 1 ? 'Bekijk de ' + n + ' foto\'s van ' + item.name : 'Bekijk de foto van ' + item.name;
-    return '<button type="button" class="sc-shop-zoom" data-zoom="' + item.key + '" aria-label="' + label + '">' + img +
-      '<svg class="sc-shop-zoom-icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg></button>';
+    return '<button type="button" class="sc-shop-zoom" data-zoom="' + item.key + '" aria-label="' + label + '">' +
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></svg></button>';
+  }
+  // Aantal met min- en plusknop; typen kan ook.
+  function stepperHtml(item, max) {
+    var name = lowerFirst(item.name);
+    return '<div class="sc-qty-stepper">' +
+      '<button type="button" class="sc-qty-btn" data-qty="-1" aria-label="Minder ' + name + '"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>' +
+      '<input type="number" class="sc-shop-qty-input" min="1"' + (max != null ? ' max="' + max + '"' : '') + ' value="1" inputmode="numeric" aria-label="Aantal ' + name + '">' +
+      '<button type="button" class="sc-qty-btn" data-qty="1" aria-label="Meer ' + name + '"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M7 2v10"/></svg></button>' +
+    '</div>';
   }
   // Optie per stuk bij een item, bv. "Met kwastje (+€0,50/stuk)".
   function addonHtml(item) {
@@ -56,7 +72,9 @@ window.ScExtrasShop = (function () {
   function renderCatalog() {
     var html = '';
     SC_EXTRAS_CATALOG.forEach(function (group) {
-      html += '<div class="sc-shop-category"><span class="sc-shop-category-label">' + group.category + '</span><div class="sc-shop-grid sc-shop-grid--flat">';
+      html += '<div class="sc-shop-category"><span class="sc-shop-category-label">' + group.category + '</span>' +
+        (group.note ? '<p class="sc-shop-category-note">' + group.note + '</p>' : '') +
+        '<div class="sc-shop-grid sc-shop-grid--tiles">';
       group.items.forEach(function (item) {
         var soldOut = isSoldOut(item);
         var label = soldOut ? 'Uitverkocht' : priceLabel(item);
@@ -64,17 +82,20 @@ window.ScExtrasShop = (function () {
         var max = effectiveMax(item);
         html += '' +
           '<div class="sc-shop-item' + (soldOut ? ' is-soldout' : '') + '" data-key="' + item.key + '">' +
-            '<label class="sc-shop-card sc-shop-card--flat">' +
+            '<label class="sc-shop-card sc-shop-card--tile">' +
               '<input type="checkbox" class="sc-shop-check"' + (soldOut ? ' disabled' : '') + '>' +
+              '<span class="sc-shop-media">' + photoHtml(item) + '<span class="sc-shop-tick" aria-hidden="true"></span></span>' +
               '<span class="sc-shop-body">' +
-                '<span class="sc-shop-name"><span class="sc-shop-check-icon"></span>' + thumbHtml(item) + item.name + '</span>' +
-                '<span class="sc-shop-price">' + label + stockNote + '</span>' +
+                '<span class="sc-shop-name">' + (item.tileName || item.name) + '</span>' +
+                '<span class="sc-shop-price">' + label + '</span>' + stockNote +
               '</span>' +
             '</label>' +
+            zoomHtml(item) +
             (soldOut ? '' :
-              '<div class="sc-qty-field sc-qty-field-flat sc-shop-qty">' +
-                '<input type="number" class="sc-shop-qty-input" min="1"' + (max != null ? ' max="' + max + '"' : '') + ' value="1">' +
-                (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="' + (item.typePlaceholder || '') + '">' : '') +
+              '<div class="sc-qty-field sc-shop-qty">' +
+                stepperHtml(item, max) +
+                // Op de smalle tegel past alleen een korte hint; de volledige uitleg is de toegankelijke naam.
+                (item.hasType ? '<input type="text" class="sc-shop-type-input" placeholder="Wat moet erop?" aria-label="' + (item.typePlaceholder || 'Tekst voor ' + lowerFirst(item.name)) + '">' : '') +
                 (item.addon ? addonHtml(item) : '') +
               '</div>') +
           '</div>';
@@ -86,16 +107,28 @@ window.ScExtrasShop = (function () {
 
   // Koppelt checkbox/aantal-gedrag aan alle .sc-shop-item's binnen `root`,
   // leest de opgeslagen keuzes uit ScCart en schrijft wijzigingen terug.
-  function wire(root, onChange) {
+  // guestCount (optioneel) geeft het aantal personen; items met perGuest
+  // beginnen bij het aanvinken dan op dat aantal in plaats van op 1.
+  function wire(root, onChange, guestCount) {
     var cart = ScCart.read();
     root.querySelectorAll('.sc-shop-item').forEach(function (itemEl) {
       var key = itemEl.getAttribute('data-key');
+      var item = findItem(key);
       var check = itemEl.querySelector('.sc-shop-check');
       if (check.disabled) return; // Uitverkocht: niet aan te vinken, geen aantalveld.
       var qtyWrap = itemEl.querySelector('.sc-shop-qty');
       var qtyInput = itemEl.querySelector('.sc-shop-qty-input');
       var typeInput = itemEl.querySelector('.sc-shop-type-input');
       var addonInput = itemEl.querySelector('.sc-shop-addon-input');
+      // Min/plus-knoppen (alleen op reserveren.html): [0] is min, [1] is plus.
+      var stepBtns = itemEl.querySelectorAll('.sc-qty-btn');
+      function syncStepBtns() {
+        if (stepBtns.length < 2) return;
+        var v = parseInt(qtyInput.value, 10) || 1;
+        var max = parseInt(qtyInput.max, 10);
+        stepBtns[0].disabled = v <= 1;
+        stepBtns[1].disabled = !isNaN(max) && v >= max;
+      }
 
       var saved = cart[key];
       if (saved && saved.qty > 0) {
@@ -105,8 +138,10 @@ window.ScExtrasShop = (function () {
         if (typeInput && saved.type) typeInput.value = saved.type;
         if (addonInput) addonInput.checked = !!saved.addon;
       }
+      syncStepBtns();
 
       function sync() {
+        syncStepBtns();
         var qty = check.checked ? (parseInt(qtyInput.value, 10) || 1) : 0;
         if (check.checked) { qtyWrap.classList.add('sc-visible'); } else { qtyWrap.classList.remove('sc-visible'); }
         var extra = null;
@@ -117,7 +152,13 @@ window.ScExtrasShop = (function () {
       }
 
       check.addEventListener('change', function () {
-        if (check.checked && (!qtyInput.value || parseInt(qtyInput.value, 10) < 1)) qtyInput.value = 1;
+        if (check.checked && item && item.perGuest && guestCount) {
+          var max = parseInt(qtyInput.max, 10);
+          var n = Math.max(1, guestCount());
+          qtyInput.value = isNaN(max) ? n : Math.min(n, max);
+        } else if (check.checked && (!qtyInput.value || parseInt(qtyInput.value, 10) < 1)) {
+          qtyInput.value = 1;
+        }
         sync();
       });
       qtyInput.addEventListener('input', function () {
@@ -125,6 +166,17 @@ window.ScExtrasShop = (function () {
         var v = parseInt(qtyInput.value, 10);
         if (!isNaN(max) && !isNaN(v) && v > max) qtyInput.value = max;
         sync();
+      });
+      stepBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var v = (parseInt(qtyInput.value, 10) || 1) + parseInt(btn.getAttribute('data-qty'), 10);
+          var max = parseInt(qtyInput.max, 10);
+          if (!isNaN(max)) v = Math.min(v, max);
+          qtyInput.value = Math.max(1, v);
+          sync();
+          // Blijf op een bruikbare knop staan als deze net uitgeschakeld werd.
+          if (btn.disabled) stepBtns[btn === stepBtns[0] ? 1 : 0].focus();
+        });
       });
       if (typeInput) typeInput.addEventListener('input', sync);
       if (addonInput) addonInput.addEventListener('change', sync);

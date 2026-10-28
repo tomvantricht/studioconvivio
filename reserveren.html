@@ -26,7 +26,7 @@
 
 <style>
   /* ==================================================================
-     Reserveringswizard: vier stappen in één kaart. Alle velden staan in
+     Reserveringswizard: vijf stappen in één kaart. Alle velden staan in
      één <form>; de stappen tonen en verbergen alleen delen ervan, zodat
      het versturen precies hetzelfde werkt als het oude lange formulier.
      ================================================================== */
@@ -84,8 +84,7 @@
   .rsv-restored.is-plain .rsv-textlink { font-weight: 400; color: var(--ink-soft); }
   .rsv-body[hidden] { display: none; }
 
-  /* Voortgang: vijf benoemde stappen, waarvan "Start" al is afgevinkt.
-     Blijft bovenin staan tijdens het scrollen. */
+  /* Voortgang: vijf benoemde stappen. Blijft bovenin staan tijdens het scrollen. */
   .rsv-progress {
     position: sticky; top: 0; z-index: 6;
     margin: -22px calc(-1 * var(--rsv-pad)) 18px; padding: 18px var(--rsv-pad) 14px;
@@ -94,7 +93,7 @@
   .rsv-card.is-step1 .rsv-progress { border-radius: 22px 22px 0 0; }
   .rsv-progress.is-stuck { box-shadow: 0 10px 22px -18px rgba(43,44,36,0.45); border-radius: 0; }
   .rsv-steps {
-    --fill: 20%;
+    --fill: 0%;
     list-style: none; margin: 0; padding: 0; position: relative;
     display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
   }
@@ -128,6 +127,15 @@
 
   /* Stap 1: geen grote foto, de collectiekaarten zijn de foto's. */
   .rsv-card.is-step1 .rsv-hero { display: none; }
+  /* Op een telefoon vanaf stap 2 een lagere strook (14:5, ca. 120px hoog op
+     een gewone telefoon): hoog genoeg om elke collectie te herkennen, laag
+     genoeg om de stap meteen in beeld te houden. Het uitsnijpunt per foto
+     staat in HERO_FOCUS in het script. */
+  @media (max-width: 959px) {
+    .rsv-hero { aspect-ratio: 14 / 5; max-height: 160px; }
+    /* Linksboven: daar staat bij alle drie de collecties het minst belangrijke deel van de foto. */
+    .rsv-price-pill { top: 10px; left: 10px; right: auto; bottom: auto; padding: 7px 14px; font-size: 13.5px; }
+  }
 
   .rsv-step[hidden] { display: none; }
   .rsv-step.is-entering { animation: rsvIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -174,14 +182,12 @@
   .sc-item-tile input:checked + .sc-item-tile-card { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
   .sc-item-tile input:focus-visible + .sc-item-tile-card { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
   .sc-item-name { display: flex; align-items: center; gap: 9px; }
-  .sc-item-check-icon, .sc-shop-check-icon {
+  .sc-item-check-icon {
     width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--ink-faint); background: #fff;
     flex-shrink: 0; display: flex; align-items: center; justify-content: center;
   }
-  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon,
-  .sc-shop-card input:checked ~ .sc-shop-body .sc-shop-check-icon { background: var(--ink); border-color: var(--ink); }
-  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon::after,
-  .sc-shop-card input:checked ~ .sc-shop-body .sc-shop-check-icon::after {
+  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon { background: var(--ink); border-color: var(--ink); }
+  .sc-item-tile input:checked + .sc-item-tile-card .sc-item-check-icon::after {
     content: ""; width: 8px; height: 4px; border: solid var(--paper); border-width: 0 0 1.5px 1.5px; transform: translateY(-1px) rotate(-45deg);
   }
   .sc-item-price { color: var(--ink-soft); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
@@ -199,7 +205,13 @@
   .rsv-stepper button:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
   .rsv-stepper button:disabled { opacity: 0.3; cursor: default; }
   .rsv-stepper svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
-  .rsv-stepper output { min-width: 2.6ch; text-align: center; font-family: var(--serif); font-size: 26px; font-variant-numeric: lining-nums tabular-nums; }
+  .rsv-card .rsv-stepper input[type="number"] {
+    width: 72px; height: 48px; padding: 0 10px; text-align: center;
+    font-family: var(--serif); font-size: 26px; font-variant-numeric: lining-nums tabular-nums; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line); border-radius: 10px; -moz-appearance: textfield; appearance: textfield;
+  }
+  .rsv-stepper input::-webkit-outer-spin-button, .rsv-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .rsv-stepper input:focus-visible { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
   .rsv-after { margin-top: 14px; }
   .rsv-panel .rsv-field label.rsv-panel-label { font-size: 14px; }
   .rsv-period { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
@@ -212,62 +224,88 @@
   .rsv-period-sum { margin-top: 12px; font-size: 13px; font-weight: 700; }
   .rsv-period-sum.is-err { color: #a3402f; }
 
-  /* Extra's (uitklapbaar) */
-  .rsv-extras { margin-top: 14px; border: 1px solid var(--line); background: #fffdf8; }
-  .rsv-extras summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; }
-  .rsv-extras summary::-webkit-details-marker { display: none; }
-  .rsv-extras summary strong { font-size: 14px; }
-  .rsv-extras summary .rsv-muted { font-size: 12.5px; margin-top: 2px; }
-  .rsv-extras-count { font-size: 12px; font-weight: 700; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
-  .rsv-extras-count[hidden] { display: none; }
-  .rsv-chevron { width: 12px; height: 12px; flex-shrink: 0; stroke: var(--ink); stroke-width: 1.6; fill: none; transition: transform 0.25s ease; }
-  .rsv-extras[open] .rsv-chevron { transform: rotate(180deg); }
-  .rsv-extras-body { padding: 4px 18px 18px; border-top: 1px solid var(--line-soft); }
-  .rsv-extras-body > .rsv-muted { margin: 14px 0 16px; }
-  .sc-shop-category + .sc-shop-category { margin-top: 20px; }
-  .sc-shop-category-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mocha-dark); margin-bottom: 10px; }
-  .sc-shop-grid--flat { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
-  .sc-shop-item { display: flex; flex-direction: column; }
-  .sc-shop-card--flat {
-    position: relative; display: flex; align-items: center; gap: 8px; cursor: pointer;
-    border: 1px solid var(--line); background: var(--paper); padding: 11px 12px; transition: border-color 0.15s ease;
+  /* ---- Stap 3: extra's (optioneel) ---- */
+  .rsv-extras-intro { margin: -8px 0 16px; }
+  /* Wat je tot nu toe gekozen hebt, bovenaan de stap. */
+  .rsv-extras-sum {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    margin: 0 0 24px; padding: 12px 16px; border-radius: 12px;
+    background: var(--paper-deep); font-size: 13px; color: var(--ink-soft);
   }
-  .sc-shop-card--flat:hover { border-color: var(--ink-faint); }
-  .sc-shop-card--flat:has(input:checked) { border-color: var(--ink); }
-  .sc-shop-card--flat:has(input:focus-visible) { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  .rsv-extras-sum b { color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .sc-shop-category + .sc-shop-category { margin-top: 28px; }
+  .sc-shop-category-label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mocha-dark); margin-bottom: 12px; }
+  .sc-shop-category-note { margin: -6px 0 12px; font-size: 13px; color: var(--ink-soft); }
+
+  /* Fototegels: twee naast elkaar op een telefoon, drie vanaf 560px. */
+  .sc-shop-grid--tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (min-width: 560px) { .sc-shop-grid--tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  /* De rand zit om het hele item, zodat het aantal binnen de tegel valt en
+     tegels in dezelfde rij even hoog blijven. */
+  .sc-shop-item {
+    position: relative; display: flex; flex-direction: column; min-width: 0; overflow: hidden;
+    background: #fffdf8; border: 1px solid var(--line); border-radius: 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .sc-shop-item:hover { border-color: var(--ink-faint); }
+  .sc-shop-item:has(.sc-shop-check:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .sc-shop-item:has(.sc-shop-check:focus-visible) { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  .sc-shop-card--tile { display: flex; flex-direction: column; cursor: pointer; }
   .sc-shop-card input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
-  .sc-shop-card--flat .sc-shop-body { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; width: 100%; }
-  .sc-shop-card--flat .sc-shop-name { display: flex; align-items: center; gap: 9px; font-size: 13px; }
-  .sc-shop-card--flat .sc-shop-body > * { min-width: 0; }
-  /* Op smalle telefoons past naam + prijs niet naast vinkje en foto: prijs eronder. */
-  @media (max-width: 360px) {
-    .sc-shop-card--flat .sc-shop-body { flex-wrap: wrap; }
-    .sc-shop-card--flat .sc-shop-body .sc-shop-price { text-align: left; padding-left: 74px; }
+  .sc-shop-media { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: var(--paper-deep); }
+  .sc-shop-photo { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (hover: hover) { .sc-shop-card--tile:hover .sc-shop-photo { transform: scale(1.04); } }
+  .sc-shop-ph { display: grid; place-items: center; width: 100%; height: 100%; }
+  .sc-shop-ph svg { width: 38%; height: 38%; fill: none; stroke: var(--mocha-dark); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; opacity: 0.6; }
+  /* Vinkje linksboven op de foto. */
+  .sc-shop-tick {
+    position: absolute; left: 8px; top: 8px; width: 26px; height: 26px; border-radius: 50%;
+    display: grid; place-items: center; background: rgba(255,253,248,0.92); border: 1.5px solid var(--ink-faint);
+    box-shadow: 0 1px 3px rgba(43,44,36,0.25); transition: background 0.15s ease, border-color 0.15s ease;
   }
-  .sc-shop-zoom {
-    position: relative; flex-shrink: 0; padding: 0; border: 0; background: none;
-    border-radius: 4px; line-height: 0; cursor: zoom-in;
+  .sc-shop-card input:checked ~ .sc-shop-media .sc-shop-tick { background: var(--ink); border-color: var(--ink); }
+  .sc-shop-card input:checked ~ .sc-shop-media .sc-shop-tick::after {
+    content: ""; width: 10px; height: 5px; border: solid var(--paper); border-width: 0 0 1.8px 1.8px; transform: translateY(-1px) rotate(-45deg);
   }
-  .sc-shop-zoom:focus-visible { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
-  .sc-shop-zoom-icon {
-    position: absolute; right: -5px; bottom: -5px; width: 18px; height: 18px; padding: 2px;
-    background: var(--paper); border-radius: 50%; box-shadow: 0 1px 3px rgba(43,44,36,0.3);
-    fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round;
-  }
-  .sc-shop-zoom:hover .sc-shop-thumb { opacity: 0.85; }
-  .sc-shop-thumb { width: 40px; height: 40px; flex-shrink: 0; object-fit: cover; border-radius: 4px; background: var(--paper-deep); }
-  .sc-shop-card--flat .sc-shop-price { font-size: 12px; color: var(--ink-soft); white-space: normal; text-align: right; font-variant-numeric: tabular-nums; }
-  .sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); }
-  .sc-shop-item.is-soldout .sc-shop-card--flat { opacity: 0.5; cursor: default; }
+  .sc-shop-body { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 12px; }
+  .sc-shop-name { font-size: 13.5px; font-weight: 700; line-height: 1.3; color: var(--ink); overflow-wrap: break-word; -webkit-hyphens: manual; hyphens: manual; }
+  .sc-shop-price { font-size: 12.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .sc-shop-stock { font-size: 12px; color: var(--mocha-dark); }
+  .sc-shop-item.is-soldout { opacity: 0.5; }
+  .sc-shop-item.is-soldout .sc-shop-card--tile { cursor: default; }
   .sc-shop-item.is-soldout .sc-shop-price { font-style: italic; }
+  /* Vergrootglas rechtsboven op de foto. */
+  .sc-shop-zoom {
+    position: absolute; right: 8px; top: 8px; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 50%;
+    display: grid; place-items: center; cursor: zoom-in;
+    background: rgba(255,253,248,0.92); box-shadow: 0 1px 3px rgba(43,44,36,0.25);
+  }
+  .sc-shop-zoom svg { width: 16px; height: 16px; fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; }
+  .sc-shop-zoom:hover { background: var(--paper); }
+  .sc-shop-zoom:focus-visible { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  /* Aantal (en eventuele tekst of optie) onder een gekozen tegel. */
   .sc-qty-field { display: none; }
-  .sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 4px 25px; }
-  .sc-qty-field input[type="number"] { max-width: 90px; }
-  .sc-qty-field input[type="text"] { flex: 1; min-width: 160px; }
-  .sc-shop-addon { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-soft); }
+  .sc-qty-field.sc-visible { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 12px; }
+  .sc-qty-stepper { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .sc-qty-btn {
+    width: 34px; height: 34px; flex-shrink: 0; border-radius: 50%; border: 1px solid var(--ink);
+    background: transparent; color: var(--ink); display: grid; place-items: center; cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  }
+  .sc-qty-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .sc-qty-btn:disabled { opacity: 0.3; cursor: default; }
+  .sc-qty-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; }
+  .rsv-card .sc-qty-stepper input[type="number"] {
+    flex: 1 1 auto; width: 100%; min-width: 0; max-width: 72px; height: 34px; padding: 0 8px;
+    text-align: center; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums;
+    border-radius: 8px; -moz-appearance: textfield; appearance: textfield;
+  }
+  .rsv-card .sc-qty-field input[type="text"] { height: 36px; padding: 0 10px; font-size: 13px; border-radius: 8px; }
+  .sc-qty-stepper input::-webkit-outer-spin-button, .sc-qty-stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .sc-shop-addon { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-soft); }
   .sc-shop-addon input { accent-color: var(--moss-dark); }
 
-  /* ---- Stap 3: bezorging ---- */
+  /* ---- Stap 4: bezorging ---- */
   .rsv-choices { display: grid; gap: 10px; }
   .rsv-choice { position: relative; display: grid; grid-template-columns: 20px 1fr auto; gap: 4px 14px; align-items: start; padding: 16px; border: 1px solid var(--line); background: #fffdf8; cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
   .rsv-choice:hover { border-color: var(--ink-faint); }
@@ -313,7 +351,7 @@
   #scManualKmField label { font-size: 12px; color: var(--ink-soft); display: block; margin-bottom: 6px; }
   #scManualKmField input { max-width: 140px; }
 
-  /* ---- Velden (stap 3 en 4) ---- */
+  /* ---- Velden (stap 4 en 5) ---- */
   .rsv-field { display: block; }
   .rsv-field + .rsv-field { margin-top: 16px; }
   .rsv-address-grid .rsv-field + .rsv-field { margin-top: 0; }
@@ -348,7 +386,7 @@
   .rsv-email-hint[hidden] { display: none; }
   .sc-hint a { color: var(--ink); }
 
-  /* ---- Samenvatting (stap 4) ---- */
+  /* ---- Samenvatting (stap 5) ---- */
   .sc-summary { margin: 26px 0 20px; border-top: 1px solid var(--ink); padding-top: 16px; }
   .rsv-summary-head { font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
   .sc-summary-line { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; color: var(--ink-soft); padding: 4px 0; }
@@ -516,12 +554,12 @@
 
     <div class="rsv-intro">
       <h1>Reserveer <em>jouw tafel</em></h1>
-      <p class="lede">In vier korte stappen stel je je aanvraag samen en zie je meteen wat het kost. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
+      <p class="lede">In een paar korte stappen stel je je aanvraag samen en zie je meteen wat het kost. We streven ernaar je aanvraag binnen 2 dagen voorlopig te bevestigen.</p>
       <div class="rsv-side" id="rsvSide">
         <p class="rsv-side-head">Jouw aanvraag</p>
         <div id="rsvSideLines"></div>
-        <div class="rsv-side-total"><span>Totaal</span><strong id="rsvSideTotal">€16,75</strong></div>
-        <p class="rsv-side-note">Indicatie incl. btw, exclusief borg</p>
+        <div class="rsv-side-total"><span id="rsvSideTotalLabel">Per persoon</span><strong id="rsvSideTotal">€16,75</strong></div>
+        <p class="rsv-side-note" id="rsvSideNote">Incl. btw. Het totaal zie je zodra je het aantal personen kiest.</p>
       </div>
       <ul class="rsv-promises">
         <li><b>1</b><span>Voorlopige bevestiging binnen 2 dagen, nadat we de beschikbaarheid hebben gecontroleerd.</span></li>
@@ -540,13 +578,13 @@
         <form id="scReserveForm" action="https://api.web3forms.com/submit" method="POST" novalidate>
 
           <nav class="rsv-progress" aria-label="Voortgang van je aanvraag">
-            <p id="rsvStepLabel" class="rsv-visually-hidden" aria-live="polite">Stap 2 van 5: Collectie</p>
+            <p id="rsvStepLabel" class="rsv-visually-hidden" aria-live="polite">Stap 1 van 5: Collectie</p>
             <ol class="rsv-steps" id="rsvSteps">
-              <li class="is-done"><button type="button" class="rsv-step-btn" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>1</b></span><span class="rsv-step-name">Start</span></button></li>
-              <li><button type="button" class="rsv-step-btn" data-goto="1" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>2</b></span><span class="rsv-step-name">Collectie</span></button></li>
-              <li><button type="button" class="rsv-step-btn" data-goto="2" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>3</b></span><span class="rsv-step-name">Datum</span></button></li>
-              <li><button type="button" class="rsv-step-btn" data-goto="3" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>4</b></span><span class="rsv-step-name">Bezorging</span></button></li>
-              <li><button type="button" class="rsv-step-btn" data-goto="4" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>5</b></span><span class="rsv-step-name">Gegevens</span></button></li>
+              <li class="is-now"><button type="button" class="rsv-step-btn" data-goto="1" disabled aria-current="step"><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>1</b></span><span class="rsv-step-name">Collectie</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="2" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>2</b></span><span class="rsv-step-name">Datum</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="3" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>3</b></span><span class="rsv-step-name">Extra's</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="4" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>4</b></span><span class="rsv-step-name">Bezorging</span></button></li>
+              <li><button type="button" class="rsv-step-btn" data-goto="5" disabled><span class="rsv-dot"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.5l2.6 2.6L11 4.5"/></svg><b>5</b></span><span class="rsv-step-name">Gegevens</span></button></li>
             </ol>
           </nav>
           <p class="rsv-restored" id="rsvRestored" hidden><span id="rsvRestoredText">Je eerdere invoer staat nog klaar.</span> <button type="button" class="rsv-textlink" id="rsvStartOver">Opnieuw beginnen</button><button type="button" class="rsv-textlink" id="rsvStartOverNo" hidden>Nee, laat staan</button></p>
@@ -598,7 +636,7 @@
             </div>
 
             <div id="scCustomBlock" hidden>
-              <p class="rsv-muted" style="margin:-8px 0 16px;">Vink de tafelitems aan die je nodig hebt; ze worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Champagneglazen en decoratie zoals tafellampen, zijdebloemen en kaarten voeg je in de volgende stap toe bij de extra's.</p>
+              <p class="rsv-muted" style="margin:-8px 0 16px;">Vink de tafelitems aan die je nodig hebt; ze worden per persoon berekend. Tafelkleden stemmen we samen af, passend bij jouw tafel. Champagneglazen en decoratie zoals tafellampen, zijdebloemen en kaarten kies je verderop, in de stap Extra's.</p>
               <div class="sc-item-tiles" id="scItemsGrid" role="group" aria-label="Kies je tafelitems">
                 <label class="sc-item-tile">
                   <input type="checkbox" class="sc-item-check" value="Dinerborden" data-price="3.00">
@@ -643,10 +681,10 @@
             <span class="rsv-vat">Alle prijzen zijn per persoon en inclusief btw.</span>
           </section>
 
-          <!-- ====== Stap 2: personen, dagen en extra's ====== -->
+          <!-- ====== Stap 2: datum, huurperiode en personen ====== -->
           <section class="rsv-step" data-step="2" aria-labelledby="rsvTitle2" hidden>
             <h2 class="rsv-title" id="rsvTitle2" tabindex="-1">Wanneer is het, en voor hoeveel personen?</h2>
-            <input type="hidden" name="guests" id="scGuests" value="1">
+            <input type="hidden" name="guests" id="scGuests" value="8">
             <input type="hidden" id="scDays" value="3">
 
             <div class="rsv-panel">
@@ -668,35 +706,28 @@
             </div>
 
             <div class="rsv-panel" role="group" aria-labelledby="rsvGuestsLabel">
-              <span class="rsv-panel-label" id="rsvGuestsLabel">Aantal personen</span>
-              <p class="rsv-muted">Meer dan 30 personen? Mail naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>, dan kijken we wat er mogelijk is.</p>
+              <label class="rsv-panel-label" id="rsvGuestsLabel" for="rsvGuestsOut">Aantal personen</label>
+              <p class="rsv-muted">Typ het aantal of gebruik de knoppen. Meer dan 30 personen? Mail naar <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>, dan kijken we wat er mogelijk is.</p>
               <div class="rsv-stepper">
                 <button type="button" data-stepper="guests" data-dir="-1" aria-label="Eén persoon minder"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10"/></svg></button>
-                <output id="rsvGuestsOut" aria-live="polite">1</output>
+                <input type="number" id="rsvGuestsOut" min="1" max="30" step="1" inputmode="numeric" value="8">
                 <button type="button" data-stepper="guests" data-dir="1" aria-label="Eén persoon meer"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M7 2v10"/></svg></button>
               </div>
             </div>
-
-
-            <details class="rsv-extras" id="rsvExtras">
-              <summary>
-                <span><strong>Extra's toevoegen</strong><span class="rsv-muted" style="display:block;">Optioneel: glaswerk, decoratie, kaarten en meer</span></span>
-                <span style="display:flex;align-items:center;gap:12px;">
-                  <span class="rsv-extras-count" id="rsvExtrasCount" hidden></span>
-                  <svg class="rsv-chevron" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4"/></svg>
-                </span>
-              </summary>
-              <div class="rsv-extras-body">
-                <p class="rsv-muted">Wil je meer foto's zien van wat je aanvinkt? Bekijk ze op de <a href="extras.html">extra's-pagina</a>. Wat je daar toevoegt, staat hier automatisch klaar en je keuzes hier blijven bewaard. Prijzen incl. btw.</p>
-                <div id="scXtraCatalog"></div>
-              </div>
-            </details>
           </section>
 
-          <!-- ====== Stap 3: bezorging ====== -->
+          <!-- ====== Stap 3: extra's (optioneel) ====== -->
           <section class="rsv-step" data-step="3" aria-labelledby="rsvTitle3" hidden>
-            <h2 class="rsv-title" id="rsvTitle3" tabindex="-1">Hoe komt de tafel bij je?</h2>
-            <div class="rsv-choices" role="radiogroup" aria-labelledby="rsvTitle3">
+            <h2 class="rsv-title" id="rsvTitle3" tabindex="-1">Wil je de tafel nog verder aankleden?</h2>
+            <p class="rsv-muted rsv-extras-intro">Helemaal optioneel. Tik op wat je erbij wilt; met het vergrootglas zie je meer foto's. Niets nodig? Dan ga je met <strong>Overslaan</strong> door naar de bezorging. Wat je op de <a href="extras.html">extra's-pagina</a> kiest, staat hier al klaar. Prijzen incl. btw.</p>
+            <p class="rsv-extras-sum" id="rsvExtrasSum" aria-live="polite"><span>Jouw extra's</span><b>Nog niets gekozen</b></p>
+            <div id="scXtraCatalog"></div>
+          </section>
+
+          <!-- ====== Stap 4: bezorging ====== -->
+          <section class="rsv-step" data-step="4" aria-labelledby="rsvTitle4" hidden>
+            <h2 class="rsv-title" id="rsvTitle4" tabindex="-1">Hoe komt de tafel bij je?</h2>
+            <div class="rsv-choices" role="radiogroup" aria-labelledby="rsvTitle4">
               <label class="rsv-choice">
                 <input type="radio" name="deliveryMode" value="geen" checked>
                 <span class="rsv-choice-title">Zelf ophalen</span>
@@ -745,9 +776,9 @@
             </div>
           </section>
 
-          <!-- ====== Stap 4: gegevens ====== -->
-          <section class="rsv-step" data-step="4" aria-labelledby="rsvTitle4" hidden>
-            <h2 class="rsv-title" id="rsvTitle4" tabindex="-1">Waar mogen we je aanvraag naartoe sturen?</h2>
+          <!-- ====== Stap 5: gegevens ====== -->
+          <section class="rsv-step" data-step="5" aria-labelledby="rsvTitle5" hidden>
+            <h2 class="rsv-title" id="rsvTitle5" tabindex="-1">Waar mogen we je aanvraag naartoe sturen?</h2>
             <div class="rsv-field"><label for="scName">Naam</label><input type="text" id="scName" name="name" autocomplete="name" required></div>
             <div class="rsv-field"><label for="scEmail">E-mailadres</label><input type="email" id="scEmail" name="email" autocomplete="email" required>
               <p class="rsv-email-hint" id="scEmailHint" hidden>Bedoel je <button type="button" class="rsv-textlink" id="scEmailFix"></button>?</p></div>
@@ -793,7 +824,7 @@
 
           <div class="rsv-nav">
             <button type="button" class="rsv-back" id="rsvBack" aria-label="Vorige stap" disabled><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M15 9H3M8 4L3 9l5 5"/></svg></button>
-            <div class="rsv-nav-total" aria-hidden="true"><span>Totaal</span><strong id="rsvNavTotal">€16,75</strong></div>
+            <div class="rsv-nav-total" aria-hidden="true"><span id="rsvNavLabel">Per persoon</span><strong id="rsvNavTotal">€16,75</strong></div>
             <button type="button" class="rsv-next" id="rsvNext">Volgende</button>
             <button type="submit" class="rsv-next" id="scSubmitBtn" hidden>Verstuur aanvraag</button>
           </div>
@@ -882,8 +913,8 @@
 </div>
 
 <script src="js/site.js?v=11"></script>
-<script src="js/extras-catalog.js?v=16"></script>
-<script src="js/extras-shop.js?v=9"></script>
+<script src="js/extras-catalog.js?v=19"></script>
+<script src="js/extras-shop.js?v=13"></script>
 
 <script>
 (function () {
@@ -893,6 +924,10 @@
   var sideLinesEl = document.getElementById('rsvSideLines');
   var sideTotalEl = document.getElementById('rsvSideTotal');
   var navTotalEl = document.getElementById('rsvNavTotal');
+  var navLabelEl = document.getElementById('rsvNavLabel');
+  var extrasSumEl = document.querySelector('#rsvExtrasSum b');
+  var sideTotalLabelEl = document.getElementById('rsvSideTotalLabel');
+  var sideNoteEl = document.getElementById('rsvSideNote');
   var summaryNote = document.getElementById('scSummaryNote');
   var totalPriceEl = document.getElementById('scTotalPrice');
 
@@ -919,8 +954,6 @@
   var estKm = document.getElementById('rsvEstKm');
   var estCost = document.getElementById('rsvEstCost');
   var estNote = document.getElementById('rsvEstNote');
-  var extrasDetails = document.getElementById('rsvExtras');
-  var extrasCount = document.getElementById('rsvExtrasCount');
   var restoredNote = document.getElementById('rsvRestored');
 
   function fmt(n) { return '€' + n.toFixed(2).replace('.', ','); }
@@ -1016,21 +1049,18 @@
 
   var xtraCatalogEl = document.getElementById('scXtraCatalog');
   xtraCatalogEl.innerHTML = ScExtrasShop.renderCatalog();
-  ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); saveDraft(); });
-  // Staan er al extra's klaar vanaf de extra's-pagina, klap de lijst dan open.
-  if (ScExtrasShop.summary().lines.length) extrasDetails.open = true;
+  ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); saveDraft(); }, function () { return parseInt(guestsInput.value, 10) || 1; });
 
   // ---------------------------------------------------------------
   // Stappen
   // ---------------------------------------------------------------
-  var TOTAL_STEPS = 4;
+  var TOTAL_STEPS = 5;
   var currentStep = 1;
   var steps = form.querySelectorAll('.rsv-step');
-  // De klant begint bij stap 2 van 5: "Start" staat al afgevinkt. Intern
-  // blijven het vier stappen (collectie, datum, bezorging, gegevens).
+  // Vijf stappen: collectie, datum, extra's, bezorging, gegevens.
   var stepsList = document.getElementById('rsvSteps');
   var stepItems = stepsList.querySelectorAll('li');
-  var STEP_NAMES = ['Collectie', 'Datum en personen', 'Bezorging', 'Gegevens'];
+  var STEP_NAMES = ['Collectie', 'Datum en personen', "Extra's", 'Bezorging', 'Gegevens'];
   var stepLabel = document.getElementById('rsvStepLabel');
   var backBtn = document.getElementById('rsvBack');
   var nextBtn = document.getElementById('rsvNext');
@@ -1091,7 +1121,8 @@
   var historyDepth = 0;
   var restoredMsg = '', currentStepShown = 0; // melding bij een teruggezet concept
   // Knoptekst die zegt waar je heen gaat (kort genoeg voor de mobiele balk).
-  var NEXT_LABELS = { 1: 'Naar datum', 2: 'Naar bezorging', 3: 'Naar je gegevens' };
+  // Bij de extra's zet recalc() er "Overslaan" neer zolang er niets gekozen is.
+  var NEXT_LABELS = { 1: 'Naar datum', 2: "Naar extra's", 3: 'Naar bezorging', 4: 'Naar je gegevens' };
   function stepUrl(n) { return location.pathname + (n > 1 ? '#stap-' + n : ''); }
 
   function goTo(n, moveFocus, histMode) {
@@ -1101,25 +1132,25 @@
       s.hidden = !isCurrent;
       s.classList.toggle('is-entering', isCurrent && moveFocus);
     });
-    // Bol i (0 = Start) is klaar als hij vóór de huidige stap ligt.
+    // Bol i hoort bij stap i + 1 en is klaar als die vóór de huidige stap ligt.
     stepItems.forEach(function (li, i) {
-      var done = i < n, now = i === n;
+      var done = i + 1 < n, now = i + 1 === n;
       li.classList.toggle('is-done', done);
       li.classList.toggle('is-now', now);
       var btn = li.querySelector('.rsv-step-btn');
       if (now) btn.setAttribute('aria-current', 'step'); else btn.removeAttribute('aria-current');
-      // Afgeronde stappen zijn klikbaar om terug te gaan; "Start" niet.
-      btn.disabled = !(done && i > 0);
+      // Afgeronde stappen zijn klikbaar om terug te gaan.
+      btn.disabled = !done;
     });
-    stepsList.style.setProperty('--fill', (n * 20) + '%');
-    stepLabel.textContent = 'Stap ' + (n + 1) + ' van ' + (TOTAL_STEPS + 1) + ': ' + STEP_NAMES[n - 1];
+    stepsList.style.setProperty('--fill', ((n - 1) * 20) + '%');
+    stepLabel.textContent = 'Stap ' + n + ' van ' + TOTAL_STEPS + ': ' + STEP_NAMES[n - 1];
     card.classList.toggle('is-step1', n === 1);
     backBtn.disabled = n === 1;
     backBtn.hidden = n === 1;
     if (n !== currentStepShown) restoredMsg = currentStepShown ? '' : restoredMsg;
     currentStepShown = n;
     updateStartOver();
-    // In stap 4 staat de samenvatting al in de kaart; links niet nog eens.
+    // In de laatste stap staat de samenvatting al in de kaart; links niet nog eens.
     document.getElementById('rsvSide').hidden = n === TOTAL_STEPS;
     if (n === TOTAL_STEPS) syncHomeFromDelivery();
     nextBtn.hidden = n === TOTAL_STEPS;
@@ -1159,7 +1190,7 @@
         if (ev < s || ev > e) return fail('De datum van je feest moet binnen de huurperiode vallen.', startInput);
       }
     }
-    if (n === 3) {
+    if (n === 4) {
       var dRadio = getDeliveryMode();
       // Bij het terugzetten van een concept loopt de adreszoektocht nog; dan telt het ingevulde adres.
       if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm === null && !(restoringDraft && hasAddressInput())) {
@@ -1171,7 +1202,7 @@
         return fail('We zijn het adres nog aan het zoeken. Klik op "Bereken afstand" als het niet lukt.');
       }
     }
-    if (n === 4) {
+    if (n === 5) {
       var nameEl = document.getElementById('scName');
       var emailEl = document.getElementById('scEmail');
       var termsEl = document.getElementById('scTermsCheck');
@@ -1211,7 +1242,7 @@
     }
     goTo(target, true, 'none');
   });
-  // Enter in een veld van stap 1-3 gaat naar de volgende stap in plaats van
+  // Enter in een veld van stap 1-4 gaat naar de volgende stap in plaats van
   // het (nog onvolledige) formulier te versturen.
   form.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' || currentStep === TOTAL_STEPS) return;
@@ -1258,16 +1289,30 @@
   function getDeliveryMode() { return form.querySelector('input[name="deliveryMode"]:checked'); }
 
   // ---------------------------------------------------------------
-  // Stap 2: aantal personen via plus/min, 1 tot en met 30. Meer dan 30
-  // gaat per mail (zie de tekst boven de knoppen).
+  // Stap 2: aantal personen, 1 tot en met 30, te typen of via plus/min.
+  // Begint op 8, een gangbaar diner. Meer dan 30 gaat per mail (zie de
+  // tekst boven de knoppen).
   // ---------------------------------------------------------------
-  var GUESTS = { min: 1, max: 30, out: document.getElementById('rsvGuestsOut') };
+  var GUESTS = { min: 1, max: 30, def: 8, out: document.getElementById('rsvGuestsOut') };
   function renderGuests() {
     var n = parseInt(guestsInput.value, 10);
-    GUESTS.out.textContent = n;
+    GUESTS.out.value = n;
     form.querySelector('[data-stepper="guests"][data-dir="-1"]').disabled = n <= GUESTS.min;
     form.querySelector('[data-stepper="guests"][data-dir="1"]').disabled = n >= GUESTS.max;
   }
+  // Tijdens het typen telt elk geldig getal meteen mee; boven de 30 wordt het 30.
+  // Een leeg of ongeldig veld zet bij het verlaten het laatste geldige aantal terug.
+  GUESTS.out.addEventListener('input', function () {
+    var v = parseInt(GUESTS.out.value, 10);
+    if (isNaN(v) || v < GUESTS.min) return;
+    if (v > GUESTS.max) { v = GUESTS.max; GUESTS.out.value = v; }
+    guestsInput.value = String(v);
+    form.querySelector('[data-stepper="guests"][data-dir="-1"]').disabled = v <= GUESTS.min;
+    form.querySelector('[data-stepper="guests"][data-dir="1"]').disabled = v >= GUESTS.max;
+    recalc();
+    saveDraft();
+  });
+  GUESTS.out.addEventListener('change', renderGuests);
   form.querySelectorAll('[data-stepper="guests"]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var dir = parseInt(btn.getAttribute('data-dir'), 10);
@@ -1283,7 +1328,7 @@
   renderGuests();
 
   // ---------------------------------------------------------------
-  // Stap 3: bezorging en afstand
+  // Stap 4: bezorging en afstand
   // ---------------------------------------------------------------
   var DELIVERY_ROUTE_FACTOR = 1.3;
   var ORIGIN_COORDS = { lat: 51.978175, lon: 5.674950 };
@@ -1512,7 +1557,7 @@
   }
 
   // ---------------------------------------------------------------
-  // Prijsberekening + samenvatting (stap 4, linkerkolom en mobiele balk)
+  // Prijsberekening + samenvatting (stap 5, linkerkolom en mobiele balk)
   // ---------------------------------------------------------------
   var OCCASIONS = {
     'kerst-en-feestdagen': 'Kerst & feestdagen',
@@ -1525,6 +1570,15 @@
   var CUSTOM_PHOTO = 'images/img-728b3f21-800.webp';
   var lastComputedTotal = null;
   var currentPhoto = heroImg.getAttribute('src');
+  // Uitsnijpunt per foto in de brede strook bovenaan de kaart, zodat het
+  // hart van elke collectie in beeld blijft (ook bij de staande Mocha Sky-foto).
+  var HERO_FOCUS = {
+    'images/img-044ae929-800.webp': '50% 40%', // Moss & Mist: bloemen, kaarsen en borden
+    'images/img-beee9a1e.webp': '50% 47%',     // Mocha Sky: lamp, coupe en bruin servet
+    'images/kerst-tafel-800.webp': '50% 52%',  // Winter Glow: slinger met cadeautjes en kaars
+    'images/img-728b3f21-800.webp': '50% 30%'  // Maatwerk: couvert met glazen
+  };
+  heroImg.style.objectPosition = HERO_FOCUS[currentPhoto] || '';
 
   function setHeroPhoto(src) {
     if (src === currentPhoto) return;
@@ -1534,6 +1588,7 @@
     pre.onload = pre.onerror = function () {
       if (currentPhoto !== src) return;
       heroImg.src = src;
+      heroImg.style.objectPosition = HERO_FOCUS[src] || '';
       heroImg.classList.remove('is-swapping');
     };
     pre.src = src;
@@ -1567,7 +1622,7 @@
   function editLink(item, withEdit) {
     if (!withEdit || !item.step || item.step >= currentStep) return '';
     var text = item.text || item.label;
-    return ' <button type="button" class="rsv-edit" data-goto="' + item.step + '"' + (item.extras ? ' data-extras="1"' : '') + '>wijzig<span class="rsv-visually-hidden"> ' + esc(text) + '</span></button>';
+    return ' <button type="button" class="rsv-edit" data-goto="' + item.step + '">wijzig<span class="rsv-visually-hidden"> ' + esc(text) + '</span></button>';
   }
   function renderLines(meta, lines, withEdit) {
     return meta.map(function (m) { return '<div class="sc-summary-meta">' + esc(m.text) + editLink(m, withEdit) + '</div>'; }).join('') +
@@ -1579,7 +1634,6 @@
     el.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-goto]');
       if (!btn) return;
-      if (btn.hasAttribute('data-extras')) extrasDetails.open = true;
       goTo(parseInt(btn.getAttribute('data-goto'), 10), true, 'push');
     });
   });
@@ -1629,8 +1683,11 @@
     }
 
     var xtraSummary = ScExtrasShop.summary();
-    extrasCount.hidden = xtraSummary.lines.length === 0;
-    extrasCount.textContent = xtraSummary.lines.length + ' gekozen';
+    if (currentStep === 3) nextBtn.textContent = xtraSummary.lines.length ? NEXT_LABELS[3] : 'Overslaan';
+    var nXtra = xtraSummary.lines.length;
+    extrasSumEl.textContent = nXtra
+      ? nXtra + (nXtra === 1 ? ' extra' : " extra's") + ' · ' + (xtraSummary.hasFrom ? 'vanaf ' : '') + fmt(xtraSummary.subtotal)
+      : 'Nog niets gekozen';
 
     var dRadio = getDeliveryMode();
     var lines = [];
@@ -1661,13 +1718,13 @@
       if (extraDays > 0) {
         lines.push({ label: 'Extra huurdag' + (extraDays > 1 ? 'en' : '') + ' (' + extraDays + ' × ' + fmt(EXTRA_DAY_PRICE) + ')', price: fmt(extraDaysCost), step: 2 });
       }
-      xtraSummary.lines.forEach(function (line) { lines.push({ label: line.label, price: line.priceLabel, step: 2, extras: true }); });
+      xtraSummary.lines.forEach(function (line) { lines.push({ label: line.label, price: line.priceLabel, step: 3 }); });
 
       var deliveryPrice = 0;
       if (dRadio && dRadio.value !== 'geen' && deliveryDistanceKm !== null) {
         // Vier ritten: heen en terug bij bezorgen, heen en terug bij ophalen.
         deliveryPrice = parseFloat(dRadio.dataset.base) + deliveryDistanceKm * 4 * parseFloat(dRadio.dataset.perkm);
-        lines.push({ label: (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)', price: fmt(deliveryPrice), step: 3 });
+        lines.push({ label: (dRadio.value === 'styling' ? 'Tafelstyling op locatie' : 'Bezorgen en ophalen') + ' (4 × ' + deliveryDistanceKm + ' km)', price: fmt(deliveryPrice), step: 4 });
         updateEstimate(deliveryPrice);
       } else {
         updateEstimate(null);
@@ -1685,12 +1742,22 @@
     lastSummaryHtml = renderLines(meta, lines, false);
     var editableHtml = renderLines(meta, lines, true);
     summaryLinesEl.innerHTML = editableHtml;
-    sideLinesEl.innerHTML = editableHtml;
     lastPayHtml = renderPay(lastComputedTotal, totalText.indexOf('vanaf') === 0);
     payEl.innerHTML = lastPayHtml;
     totalPriceEl.textContent = totalText;
-    sideTotalEl.textContent = totalText;
-    navTotalEl.textContent = totalText;
+
+    // In stap 1 is het aantal personen nog niet gekozen: dan nog geen
+    // totaal, alleen de prijs per persoon van de gekozen collectie.
+    var perPersonOnly = currentStep === 1 && doneEl.hidden;
+    if (perPersonOnly) {
+      var pkgName = mode === 'standard' ? (pkg ? pkg.value : '') : 'Maatwerkpakket (' + checkedItems.length + ' tafel-items)';
+      sideLinesEl.innerHTML = renderLines(meta, [{ label: pkgName, price: fmt(perPerson) + ' p.p.' }], false);
+    } else {
+      sideLinesEl.innerHTML = editableHtml;
+    }
+    sideTotalLabelEl.textContent = navLabelEl.textContent = perPersonOnly ? 'Per persoon' : 'Totaal';
+    sideTotalEl.textContent = navTotalEl.textContent = perPersonOnly ? fmt(perPerson) : totalText;
+    sideNoteEl.textContent = perPersonOnly ? 'Incl. btw. Het totaal zie je zodra je het aantal personen kiest.' : 'Indicatie incl. btw, exclusief borg';
 
     // Op de foto: de gekozen collectie met de prijs per persoon (het totaal staat onderin).
     if (doneEl.hidden) pricePill.textContent = (mode === 'standard' ? (pkg ? pkg.value : '') : 'Maatwerk') + ' · ' + fmt(perPerson) + ' p.p.';
@@ -1703,7 +1770,7 @@
   form.addEventListener('change', function () { recalc(); saveDraft(); });
 
   // ---------------------------------------------------------------
-  // Adres van de klant (stap 4). Altijd verplicht. Is er een afleveradres
+  // Adres van de klant (stap 5). Altijd verplicht. Is er een afleveradres
   // ingevuld, dan nemen we dat over zolang de klant het hier niet zelf
   // aanpast. Postcode + huisnummer vult straat en plaats aan via PDOK.
   // ---------------------------------------------------------------
@@ -2065,12 +2132,11 @@
     ScCart.clear();
     clearDraft();
     xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
-    guestsInput.value = '1';
+    guestsInput.value = String(GUESTS.def);
     daysInput.value = '3';
     occasionInput.value = '';
     renderGuests();
     setMode('standard');
-    extrasDetails.open = false;
     applyDeliveryModeVisibility('geen');
     deliveryDistanceKm = null; resolvedAddressLabel = null; usingManualKm = false; lastCalculatedAddress = null;
     addressStatus.textContent = '';
@@ -2095,7 +2161,7 @@
   // "Opnieuw beginnen" staat er zodra er iets is ingevuld of gekozen. Na het
   // terugzetten van een concept staat de melding erbij tot je verder klikt.
   function hasAnyInput() {
-    return currentStep > 1 || !!dateInput.value || getMode() === 'custom' || guestsInput.value !== '1' ||
+    return currentStep > 1 || !!dateInput.value || getMode() === 'custom' || guestsInput.value !== String(GUESTS.def) ||
       ScExtrasShop.summary().lines.length > 0 || !!document.getElementById('scName').value.trim() || !!document.getElementById('scEmail').value.trim();
   }
   function updateStartOver() {
