@@ -46,6 +46,172 @@ window.ScCart = (function () {
   return { read: read, setItem: setItem, getItem: getItem, count: count, clear: clear, setDeliveryMode: setDeliveryMode, getDeliveryMode: getDeliveryMode };
 })();
 
+// Foto's groot bekijken (lightbox), één viewer voor de hele site.
+// - Links met data-lightbox="<reeks>" om een foto openen die foto; alle links
+//   met dezelfde waarde vormen samen de reeks waar je doorheen bladert. Zonder
+//   script opent de link gewoon het grote bestand.
+// - Extra's en reserveren roepen ScLightbox.open() aan met een fotolijst uit
+//   extras-catalog.js.
+// De foto wordt pas geladen bij openen, in het formaat dat bij het scherm past.
+window.ScLightbox = (function () {
+  var box, img, count, closeBtn, prevBtn, nextBtn;
+  var photos = [], index = 0, opener = null, touchX = null, touchY = null;
+
+  function build() {
+    box = document.createElement('div');
+    box.className = 'gallery-lightbox';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.hidden = true;
+    box.innerHTML =
+      '<button type="button" class="gallery-close" aria-label="Sluiten">&times;</button>' +
+      '<button type="button" class="gallery-nav gallery-nav--prev" aria-label="Vorige foto">&#8249;</button>' +
+      '<button type="button" class="gallery-nav gallery-nav--next" aria-label="Volgende foto">&#8250;</button>' +
+      '<figure class="gallery-lightbox-media"><figcaption class="gallery-count"></figcaption></figure>';
+    document.body.appendChild(box);
+    count = box.querySelector('.gallery-count');
+    img = document.createElement('img');
+    count.parentNode.insertBefore(img, count);
+    closeBtn = box.querySelector('.gallery-close');
+    prevBtn = box.querySelector('.gallery-nav--prev');
+    nextBtn = box.querySelector('.gallery-nav--next');
+
+    closeBtn.addEventListener('click', close);
+    prevBtn.addEventListener('click', function () { go(-1); });
+    nextBtn.addEventListener('click', function () { go(1); });
+    // Klik naast de foto sluit; een klik op de foto zelf niet.
+    box.addEventListener('click', function (e) {
+      if (e.target === box || e.target.classList.contains('gallery-lightbox-media')) close();
+    });
+    img.addEventListener('load', function () { fit(); img.classList.remove('is-loading'); });
+    // Vegen op telefoon: links/rechts bladert.
+    box.addEventListener('touchstart', function (e) {
+      touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+    }, { passive: true });
+    box.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX, dy = e.changedTouches[0].clientY - touchY;
+      touchX = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (box.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowLeft') go(-1);
+      if (e.key === 'Tab') {
+        // Focus binnen de viewer houden.
+        var f = [closeBtn, prevBtn, nextBtn].filter(function (b) { return !b.hidden && !b.disabled; });
+        var i = f.indexOf(document.activeElement);
+        e.preventDefault();
+        f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+      }
+    });
+    window.addEventListener('resize', function () { if (!box.hidden) fit(); });
+  }
+
+  // Breedste bestand in de srcset: verder vergroten maakt de foto alleen wazig.
+  function widest(srcset) {
+    var max = 0;
+    (srcset || '').replace(/\s(\d+)w/g, function (_, w) { max = Math.max(max, +w); });
+    return max;
+  }
+
+  // Afmeting op het scherm: zo groot mogelijk binnen 84% van de hoogte. In de
+  // breedte 92% op telefoon; vanaf 700px blijft er links en rechts ruimte
+  // voor de pijlen, zodat die niet over de foto vallen (zelfde maat als in site.css).
+  function ratioOf(p) {
+    return p.ratio || (p === photos[index] && img.naturalWidth ? img.naturalWidth / img.naturalHeight : 1);
+  }
+  function widthOf(p) {
+    var vw = window.innerWidth;
+    var maxW = vw >= 700 ? vw - 136 : vw * 0.92;
+    var w = Math.min(maxW, window.innerHeight * 0.84 * ratioOf(p));
+    var cap = widest(p.srcset);
+    return Math.round(cap ? Math.min(w, cap) : w);
+  }
+  function fit() {
+    var p = photos[index], w = widthOf(p);
+    img.style.width = w + 'px';
+    img.style.height = Math.round(w / ratioOf(p)) + 'px';
+  }
+
+  function load(target, p) {
+    if (p.srcset) { target.sizes = widthOf(p) + 'px'; target.srcset = p.srcset; }
+    else target.removeAttribute('srcset');
+    target.src = p.src;
+  }
+
+  function render() {
+    var p = photos[index];
+    img.classList.add('is-loading');
+    img.alt = p.alt || '';
+    fit();
+    load(img, p);
+    if (img.complete && img.naturalWidth) img.classList.remove('is-loading');
+    var many = photos.length > 1;
+    prevBtn.hidden = nextBtn.hidden = !many;
+    prevBtn.disabled = index === 0;
+    nextBtn.disabled = index === photos.length - 1;
+    count.textContent = many ? (index + 1) + ' / ' + photos.length : '';
+    // De buren alvast ophalen, zodat bladeren direct is.
+    [index - 1, index + 1].forEach(function (i) {
+      if (photos[i]) load(new Image(), photos[i]);
+    });
+  }
+
+  function go(dir) {
+    var i = index + dir;
+    if (i < 0 || i >= photos.length) return;
+    index = i;
+    render();
+  }
+
+  // list: [{ src, srcset?, alt, ratio? }]; start: index; from: element dat
+  // na sluiten de focus terugkrijgt; label: naam van de viewer voor schermlezers.
+  function open(list, start, from, label) {
+    if (!list || !list.length) return;
+    if (!box) build();
+    photos = list;
+    index = start || 0;
+    opener = from || null;
+    box.setAttribute('aria-label', label || 'Foto\'s');
+    box.hidden = false;
+    document.body.classList.add('gallery-open');
+    render();
+    closeBtn.focus();
+  }
+
+  function close() {
+    box.hidden = true;
+    document.body.classList.remove('gallery-open');
+    img.removeAttribute('srcset');
+    img.removeAttribute('src');
+    if (opener) opener.focus();
+  }
+
+  // Links met data-lightbox: de grote foto staat in href, het formaat en de
+  // kleinere versies komen van de <img> in de link.
+  function photoFromLink(a) {
+    var t = a.querySelector('img');
+    var w = +t.getAttribute('width'), h = +t.getAttribute('height');
+    return { src: a.getAttribute('href'), srcset: t.getAttribute('srcset'), alt: t.alt, ratio: w && h ? w / h : 0 };
+  }
+  document.querySelectorAll('a[data-lightbox]').forEach(function (a) {
+    var alt = a.querySelector('img').alt;
+    a.setAttribute('aria-label', 'Foto vergroten' + (alt ? ': ' + alt : ''));
+    a.addEventListener('click', function (e) {
+      // Ctrl/Cmd-klik en middelste knop: gewoon in een nieuw tabblad.
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      var group = Array.prototype.slice.call(document.querySelectorAll('a[data-lightbox="' + a.getAttribute('data-lightbox') + '"]'));
+      open(group.map(photoFromLink), group.indexOf(a), a);
+    });
+  });
+
+  return { open: open };
+})();
+
 (function () {
   // Vangnet: de homepage draait binnen een paginaskelet waarvan het
   // <html>-element geen lang-attribuut meesturt. Schermlezers kiezen dan de

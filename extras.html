@@ -20,7 +20,7 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
 <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/site.css?v=18">
+<link rel="stylesheet" href="css/site.css?v=19">
 <style>
 /* ---- Pagina-specifiek: Extra's ---------------------------------------- */
 
@@ -547,17 +547,7 @@
   </div>
 </footer>
 
-<div class="gallery-lightbox" id="galleryLightbox" hidden>
-  <button type="button" class="gallery-close" id="galleryClose" aria-label="Sluiten">&times;</button>
-  <button type="button" class="gallery-nav gallery-nav--prev" id="galleryPrev" aria-label="Vorige foto">&#8249;</button>
-  <button type="button" class="gallery-nav gallery-nav--next" id="galleryNext" aria-label="Volgende foto">&#8250;</button>
-  <div class="gallery-lightbox-media">
-    <img id="galleryImg" src="" alt="">
-    <div class="gallery-dots" id="galleryDots"></div>
-  </div>
-</div>
-
-<script src="js/site.js?v=11"></script>
+<script src="js/site.js?v=12"></script>
 <script src="js/extras-catalog.js?v=19"></script>
 <script src="js/extras-shop.js?v=13"></script>
 <script>
@@ -603,65 +593,21 @@
 
   // Fotogalerij per product: meerdere foto's van hetzelfde item (andere hoek
   // of variant). De foto's staan in extras-catalog.js; hier alleen de items
-  // met meer dan één foto, zoals voorheen.
-  var GALLERY_IMAGES = {};
+  // met meer dan één foto, zoals voorheen. De viewer zelf is ScLightbox (site.js).
+  var GALLERY_ITEMS = {};
   SC_EXTRAS_CATALOG.forEach(function (group) {
     group.items.forEach(function (item) {
-      if (item.photos && item.photos.length > 1) GALLERY_IMAGES[item.key] = item.photos;
+      if (item.photos && item.photos.length > 1) GALLERY_ITEMS[item.key] = item;
     });
   });
-
-  var galleryLightbox = document.getElementById('galleryLightbox');
-  var galleryImg = document.getElementById('galleryImg');
-  var galleryDots = document.getElementById('galleryDots');
-  var galleryClose = document.getElementById('galleryClose');
-  var galleryPrev = document.getElementById('galleryPrev');
-  var galleryNext = document.getElementById('galleryNext');
-  var galleryPhotos = [];
-  var galleryIndex = 0;
-
-  function renderGallery() {
-    var photo = galleryPhotos[galleryIndex];
-    galleryImg.src = photo.src;
-    galleryImg.alt = photo.alt;
-    galleryDots.innerHTML = galleryPhotos.map(function (_, i) {
-      return '<span' + (i === galleryIndex ? ' class="is-active"' : '') + '></span>';
-    }).join('');
-    galleryPrev.disabled = galleryIndex === 0;
-    galleryNext.disabled = galleryIndex === galleryPhotos.length - 1;
-  }
-  function openGallery(key) {
-    galleryPhotos = GALLERY_IMAGES[key];
-    if (!galleryPhotos) return;
-    galleryIndex = 0;
-    renderGallery();
-    galleryLightbox.hidden = false;
-    document.body.classList.add('gallery-open');
-    galleryClose.focus();
-  }
-  function closeGallery() {
-    galleryLightbox.hidden = true;
-    document.body.classList.remove('gallery-open');
-  }
 
   document.querySelectorAll('.sc-shop-gallery-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-      openGallery(btn.getAttribute('data-gallery'));
+      var item = GALLERY_ITEMS[btn.getAttribute('data-gallery')];
+      if (item) ScLightbox.open(item.photos, 0, btn, 'Foto\'s van ' + item.name);
     });
-  });
-  galleryClose.addEventListener('click', closeGallery);
-  galleryPrev.addEventListener('click', function () { if (galleryIndex > 0) { galleryIndex--; renderGallery(); } });
-  galleryNext.addEventListener('click', function () { if (galleryIndex < galleryPhotos.length - 1) { galleryIndex++; renderGallery(); } });
-  galleryLightbox.addEventListener('click', function (e) {
-    if (e.target === galleryLightbox) closeGallery();
-  });
-  document.addEventListener('keydown', function (e) {
-    if (galleryLightbox.hidden) return;
-    if (e.key === 'Escape') closeGallery();
-    if (e.key === 'ArrowRight' && galleryIndex < galleryPhotos.length - 1) { galleryIndex++; renderGallery(); }
-    if (e.key === 'ArrowLeft' && galleryIndex > 0) { galleryIndex--; renderGallery(); }
   });
 })();
 </script>

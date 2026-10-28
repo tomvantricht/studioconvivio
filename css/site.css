@@ -284,34 +284,58 @@ textarea:focus-visible,
 .sc-shop-gallery-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 .sc-shop-gallery-btn:hover { background: rgba(20,19,17,0.95); }
 
+/* De lightbox zelf wordt door ScLightbox in site.js opgebouwd en is voor
+   de hele site dezelfde: collectiepagina's, kerstgalerij, extra's en
+   reserveren. De foto houdt zijn eigen verhouding, niets wordt bijgesneden. */
 .gallery-lightbox {
   position: fixed; inset: 0; z-index: 220;
   background: rgba(20,19,17,0.94);
   display: flex; align-items: center; justify-content: center;
+  overscroll-behavior: contain;
 }
 .gallery-lightbox[hidden] { display: none; }
 body.gallery-open { overflow: hidden; }
 .gallery-lightbox-media {
-  position: relative; width: min(92vw, 520px); aspect-ratio: 1 / 1;
+  margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px;
 }
-.gallery-lightbox-media img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 6px; }
+.gallery-lightbox-media img {
+  display: block; max-width: 92vw; max-height: 84vh; object-fit: contain;
+  border-radius: 4px; background: rgba(255,255,255,0.04);
+  transition: opacity 0.2s ease;
+}
+@media (min-width: 700px) { .gallery-lightbox-media img { max-width: calc(100vw - 136px); } }
+.gallery-lightbox-media img.is-loading { opacity: 0; }
+.gallery-count {
+  min-height: 1.4em; font-size: 13px; letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.7); font-variant-numeric: tabular-nums;
+}
 .gallery-close {
-  position: absolute; top: 18px; right: 18px; z-index: 3;
-  width: 36px; height: 36px; border-radius: 50%; border: none;
-  background: rgba(255,255,255,0.12); color: #fff; font-size: 20px; line-height: 1; cursor: pointer;
+  position: absolute; top: 14px; right: 14px; z-index: 3;
+  width: 40px; height: 40px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,0.12); color: #fff; font-size: 22px; line-height: 1; cursor: pointer;
 }
 .gallery-nav {
   position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
-  width: 40px; height: 40px; border-radius: 50%; border: none;
-  background: rgba(255,255,255,0.12); color: #fff; font-size: 22px; cursor: pointer;
+  width: 44px; height: 44px; border-radius: 50%; border: none;
+  background: rgba(20,19,17,0.55); color: #fff; font-size: 24px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
 }
-.gallery-nav--prev { left: max(4vw, 10px); }
-.gallery-nav--next { right: max(4vw, 10px); }
+.gallery-nav[hidden] { display: none; }
+.gallery-nav--prev { left: max(2vw, 8px); }
+.gallery-nav--next { right: max(2vw, 8px); }
 .gallery-nav[disabled] { opacity: 0.25; cursor: default; }
-.gallery-dots { position: absolute; left: 0; right: 0; bottom: -30px; display: flex; justify-content: center; gap: 7px; }
-.gallery-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); }
-.gallery-dots span.is-active { background: #fff; }
+.gallery-close:hover, .gallery-nav:not([disabled]):hover { background: rgba(255,255,255,0.22); }
+.gallery-lightbox button:focus-visible { outline-color: var(--gold); }
+@media (prefers-reduced-motion: reduce) { .gallery-lightbox-media img { transition: none; } }
+
+/* Een foto die je groot kunt bekijken: link naar het grote bestand met
+   data-lightbox. Bewust geen vergrootglas op de foto; de muisaanwijzer en
+   een lichte zoom bij hover laten zien dat je erop kunt klikken. */
+a[data-lightbox] { display: block; position: relative; height: 100%; cursor: zoom-in; }
+a[data-lightbox] img { transition: transform 0.5s ease; }
+a[data-lightbox]:hover img { transform: scale(1.03); }
+a[data-lightbox]:focus-visible { outline-offset: -4px; outline-color: #fff; }
+@media (prefers-reduced-motion: reduce) { a[data-lightbox] img { transition: none; } a[data-lightbox]:hover img { transform: none; } }
 
 /* ---------------------------------------------------------------------- */
 /* Header / navigatie                                                     */
