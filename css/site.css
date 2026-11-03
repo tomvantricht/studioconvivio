@@ -1187,3 +1187,81 @@ a[data-lightbox]:focus-visible { outline-offset: -4px; outline-color: #fff; }
    verwijderd; .field-row blijft staan omdat contact.html erop terugvalt) */
 .text-muted { color: var(--ink-soft); }
 .center { text-align: center; }
+
+/* ---------------------------------------------------------------------- */
+/* Zwevende WhatsApp-knop (alleen homepage, zie js/whatsapp.js)            */
+/* ---------------------------------------------------------------------- */
+/* Rechtsonder, met ruimte voor de iPhone-randen. Sticky in plaats van fixed:
+   de knop staat als laatste in <main>, blijft onderin beeld staan zolang je
+   door de inhoud scrolt en stopt 16px boven de footer, zodat hij die nooit
+   afdekt. De negatieve marge voorkomt dat hij zelf ruimte inneemt (hij valt
+   in de ondermarge van de laatste sectie). Onder het mobiele menu (z-index
+   50) en de header (60). */
+.wa-float {
+  --wa-right: calc(16px + env(safe-area-inset-right, 0px));
+  position: sticky;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: fit-content;
+  min-width: 56px;
+  height: 56px;
+  margin: -72px var(--wa-right) 16px auto;
+  padding: 0 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(43,44,36,0.22), 0 1px 3px rgba(43,44,36,0.18);
+}
+@media (min-width: 760px) {
+  .wa-float {
+    --wa-right: calc(24px + env(safe-area-inset-right, 0px));
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    margin-top: -80px;
+    margin-bottom: 24px;
+  }
+}
+.wa-float-icon { flex: none; width: 28px; height: 28px; }
+/* Ronde focusring met een rand papier ertussen, zodat hij ook op de donkere
+   sectie en op foto's zichtbaar is. */
+.wa-float:focus-visible {
+  outline: 2px solid var(--mocha-dark);
+  outline-offset: 3px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px var(--paper), 0 6px 18px rgba(43,44,36,0.22);
+}
+body.nav-open .wa-float { visibility: hidden; }
+
+/* A. Klassiek: WhatsApp-groen. Iets donkerder dan het merkgroen (#25d366),
+   zodat het witte logo 3,5:1 contrast haalt en de knop 3,2:1 op --paper. */
+.wa-float--a { background: #1a9e4d; color: #fff; }
+.wa-float--a:hover { background: #168a43; }
+
+/* B. Huisstijl: inkt met goud, label in Fraunces. Op smalle schermen alleen
+   het icoon. */
+.wa-float--b { background: var(--ink); color: var(--paper); padding: 0 22px 0 16px; }
+.wa-float--b .wa-float-icon { color: var(--gold); }
+.wa-float--b:hover { background: var(--moss-dark); }
+.wa-float-label { font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1; }
+@media (max-width: 559px) {
+  .wa-float--b { padding: 0 14px; }
+  .wa-float--b .wa-float-label { display: none; }
+}
+
+/* C. Subtiel: rond in mosgroen; klapt één keer uit (klasse .is-open). */
+.wa-float--c { background: var(--moss-dark); color: var(--paper); gap: 0; }
+.wa-float--c:hover { background: var(--ink); }
+.wa-float--c .wa-float-label { max-width: 0; opacity: 0; overflow: hidden; }
+.wa-float--c.is-open { gap: 10px; padding-right: 20px; }
+.wa-float--c.is-open .wa-float-label { max-width: 16em; opacity: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .wa-float { animation: wa-in 0.5s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; transition: background 0.2s ease; }
+  .wa-float--c { transition: background 0.2s ease, gap 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), padding 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .wa-float--c .wa-float-label { transition: max-width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s ease; }
+  @keyframes wa-in { from { opacity: 0; translate: 0 12px; } }
+}
+@media print { .wa-float { display: none; } }
