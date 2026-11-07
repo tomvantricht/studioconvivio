@@ -378,3 +378,49 @@ window.ScLightbox = (function () {
     }
   });
 })();
+
+// Formulieren versturen via Web3Forms, gedeeld door reserveren.html en
+// contact.html. send() slaagt alleen als Web3Forms de inzending aanneemt;
+// anders volgt een afwijzing met { reason, status, detail }.
+window.ScFormSend = (function () {
+  var ENDPOINT = 'https://api.web3forms.com/submit';
+  var TIMEOUT_MS = 20000;
+
+  function send(formData) {
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS);
+    return fetch(ENDPOINT, { method: 'POST', body: formData, signal: ctrl.signal })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          if (data.success) return;
+          throw { reason: res.status === 429 ? 'te_veel_verzoeken' : 'geweigerd', status: res.status, detail: data.message || '' };
+        });
+      }, function (err) {
+        throw { reason: err && err.name === 'AbortError' ? 'tijd_verstreken' : 'netwerk', status: 0, detail: '' };
+      })
+      .finally(function () { clearTimeout(timer); });
+  }
+
+  // noun: 'aanvraag' of 'bericht'.
+  function message(reason, noun) {
+    var viaMail = 'stuur je ' + noun + ' met één klik per mail.';
+    if (reason === 'te_veel_verzoeken') return 'Versturen lukt nu even niet door te veel pogingen achter elkaar. Je gegevens staan nog hier. Probeer het over een uur opnieuw, of ' + viaMail;
+    if (reason === 'netwerk') return 'Het versturen lukte niet. Je gegevens staan nog hier. Controleer je internetverbinding en probeer het opnieuw, of ' + viaMail;
+    if (reason === 'tijd_verstreken') return 'We kregen geen antwoord terug, dus we weten niet of je ' + noun + ' is aangekomen. Je gegevens staan nog hier. Probeer het opnieuw, of ' + viaMail;
+    return 'Het versturen lukte niet, dat ligt aan ons. Je gegevens staan nog hier. Probeer het opnieuw, of ' + viaMail;
+  }
+
+  // Naar Clarity gaan alleen de soort fout en de statuscode, nooit ingevulde gegevens.
+  function report(eventName, err) {
+    if (window.console) console.warn('Formulier: ' + eventName, err.reason, err.status, err.detail);
+    try {
+      if (window.clarity) {
+        clarity('set', 'fout_reden', err.reason);
+        clarity('set', 'fout_status', String(err.status));
+        clarity('event', eventName);
+      }
+    } catch (e) {}
+  }
+
+  return { send: send, message: message, report: report };
+})();

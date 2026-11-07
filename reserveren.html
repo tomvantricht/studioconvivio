@@ -447,6 +447,9 @@
   .sc-status:empty { margin-top: 0; }
   .sc-status.sc-ok { color: var(--moss-dark); }
   .sc-status.sc-err { color: #a3402f; }
+  .rsv-mail-fallback { margin-top: 14px; text-align: center; }
+  .rsv-mail-fallback .btn { border-radius: 999px; }
+  .rsv-mail-fallback p { margin: 10px 0 0; font-size: 13px; color: var(--ink-soft); }
 
   /* ---- Bedankt ---- */
   .rsv-done { padding: clamp(28px, 6vw, 44px) clamp(18px, 4vw, 30px); text-align: center; }
@@ -829,6 +832,10 @@
             <button type="submit" class="rsv-next" id="scSubmitBtn" hidden>Verstuur aanvraag</button>
           </div>
           <p class="sc-status" id="scStatus" role="status"></p>
+          <div class="rsv-mail-fallback" id="rsvMailFallback" hidden>
+            <a class="btn btn-outline" id="rsvMailFallbackLink" href="#">Stuur je aanvraag per mail</a>
+            <p>Gebeurt er niets? Mail ons dan op <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p>
+          </div>
         </form>
       </div>
 
@@ -904,7 +911,7 @@
   </div>
 </footer>
 
-<script src="js/site.js?v=12"></script>
+<script src="js/site.js?v=13"></script>
 <script src="js/extras-catalog.js?v=19"></script>
 <script src="js/extras-shop.js?v=13"></script>
 
@@ -941,6 +948,7 @@
   var usingManualKm = false;
 
   var statusEl = document.getElementById('scStatus');
+  var mailFallback = document.getElementById('rsvMailFallback');
   var heroImg = document.getElementById('rsvHeroImg');
   var pricePill = document.getElementById('rsvPricePill');
   var estKm = document.getElementById('rsvEstKm');
@@ -1099,7 +1107,7 @@
       statusEl.textContent = msg;
     }
   }
-  function clearStatus() { statusEl.textContent = ''; statusEl.className = 'sc-status'; }
+  function clearStatus() { statusEl.textContent = ''; statusEl.className = 'sc-status'; mailFallback.hidden = true; }
   form.addEventListener('input', function (e) { clearFieldError(e.target); });
   form.addEventListener('change', function (e) {
     clearFieldError(e.target);
@@ -1956,6 +1964,7 @@
     }
 
     submitBtn.disabled = true;
+    mailFallback.hidden = true;
     statusEl.textContent = 'Versturen...';
     statusEl.className = 'sc-status';
 
@@ -2004,17 +2013,62 @@
     formData.append('geschatte_totaalprijs', totalPriceEl.textContent);
     formData.append('geschatte_totaalprijs_numeriek', lastComputedTotal !== null ? lastComputedTotal.toFixed(2) : '');
 
-    fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data.success) showDone();
-        else showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
-      })
-      .catch(function () {
-        showError('Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.');
-      })
-      .finally(function () { submitBtn.disabled = false; });
+    ScFormSend.send(formData).then(function () {
+      try {
+        showDone();
+        submitBtn.disabled = false;
+      } catch (err) {
+        // De aanvraag is binnen, alleen het bedankscherm lukte niet. Geen
+        // foutmelding, anders verstuurt de klant hem nog een keer.
+        ScFormSend.report('reservering_bedankscherm_fout', { reason: 'bedankscherm', status: 0, detail: String(err) });
+        clearDraft();
+        statusEl.className = 'sc-status sc-ok';
+        statusEl.textContent = 'Je aanvraag is verstuurd. We bevestigen hem binnen 2 dagen voorlopig per e-mail.';
+      }
+    }, function (err) {
+      ScFormSend.report('reservering_fout', err);
+      showError(ScFormSend.message(err.reason, 'aanvraag'));
+      submitBtn.disabled = false;
+      showMailFallback();
+    });
   });
+
+  // De samenvatting en contactgegevens, voor het bedankscherm en de mails.
+  function requestSummaryHtml() {
+    return lastSummaryHtml +
+      '<div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>' + esc(totalPriceEl.textContent) + '</strong></div>' +
+      '<p class="vat-note">Incl. btw, exclusief borg</p>' +
+      '<div class="rsv-pay">' + lastPayHtml + '</div>';
+  }
+  function requestContactLines() {
+    return [
+      'Naam: ' + document.getElementById('scName').value.trim(),
+      'E-mail: ' + document.getElementById('scEmail').value.trim(),
+      document.getElementById('scPhone').value.trim() ? 'Telefoon: ' + document.getElementById('scPhone').value.trim() : '',
+      'Adres: ' + getHomeAddress(),
+      getDeliveryMode() && getDeliveryMode().value !== 'geen' ? 'Afleveradres: ' + getAddress() : '',
+      document.getElementById('scNotes').value.trim() ? 'Opmerkingen: ' + document.getElementById('scNotes').value.trim() : ''
+    ].filter(Boolean);
+  }
+  // Elke regel als "omschrijving: bedrag" in platte tekst.
+  function summaryAsText(root) {
+    return [].map.call(root.querySelectorAll('.sc-summary-meta, .sc-summary-line, .sc-summary-total, .rsv-pay-row, .rsv-pay-note'), function (row) {
+      var parts = [].map.call(row.children.length ? row.children : [row], function (c) { return c.textContent.trim(); }).filter(Boolean);
+      return parts.join(': ');
+    }).join('\n');
+  }
+
+  // Lukt versturen niet, dan kan de klant de aanvraag alsnog per mail sturen.
+  function showMailFallback() {
+    var summary = document.createElement('div');
+    summary.innerHTML = requestSummaryHtml();
+    var body = 'Hoi Wendy,\n\nHet formulier op de website lukte niet, daarom stuur ik mijn aanvraag per mail.\n\n' +
+      summaryAsText(summary) + '\n\n' + requestContactLines().join('\n');
+    document.getElementById('rsvMailFallbackLink').href = 'mailto:info@studio-convivio.nl' +
+      '?subject=' + encodeURIComponent('Reserveringsaanvraag via de website') +
+      '&body=' + encodeURIComponent(body);
+    mailFallback.hidden = false;
+  }
 
   // Bedankt-scherm: wat er verstuurd is, met de foto van de bestelde collectie.
   function showDone() {
@@ -2022,18 +2076,8 @@
     var email = document.getElementById('scEmail').value.trim();
     var sentPhoto = currentPhoto;
     var sentTotal = totalPriceEl.textContent;
-    var contactLines = [
-      'Naam: ' + document.getElementById('scName').value.trim(),
-      'E-mail: ' + email,
-      document.getElementById('scPhone').value.trim() ? 'Telefoon: ' + document.getElementById('scPhone').value.trim() : '',
-      'Adres: ' + getHomeAddress(),
-      getDeliveryMode() && getDeliveryMode().value !== 'geen' ? 'Afleveradres: ' + getAddress() : '',
-      document.getElementById('scNotes').value.trim() ? 'Opmerkingen: ' + document.getElementById('scNotes').value.trim() : ''
-    ].filter(Boolean);
-    document.getElementById('rsvDoneSummary').innerHTML = lastSummaryHtml +
-      '<div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>' + esc(sentTotal) + '</strong></div>' +
-      '<p class="vat-note">Incl. btw, exclusief borg</p>' +
-      '<div class="rsv-pay">' + lastPayHtml + '</div>';
+    var contactLines = requestContactLines();
+    document.getElementById('rsvDoneSummary').innerHTML = requestSummaryHtml();
     document.getElementById('rsvDoneTitle').textContent = name ? 'Bedankt, ' + name + '!' : 'Bedankt!';
     document.getElementById('rsvDoneStep1').textContent = 'We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail' + (email ? ' naar ' + email : '') + '.';
 
@@ -2043,12 +2087,7 @@
     // Kopie per e-mail: opent het mailprogramma van de klant met de
     // samenvatting al ingevuld, gericht aan het eigen adres. (Een
     // automatische bevestiging vanuit Web3Forms vraagt een betaald abonnement.)
-    // Elke regel als "omschrijving: bedrag" in platte tekst.
-    var summaryText = [].map.call(document.getElementById('rsvDoneSummary').querySelectorAll('.sc-summary-meta, .sc-summary-line, .sc-summary-total, .rsv-pay-row, .rsv-pay-note'), function (row) {
-      var parts = [].map.call(row.children.length ? row.children : [row], function (c) { return c.textContent.trim(); }).filter(Boolean);
-      return parts.join(': ');
-    }).join('\n');
-    var body = 'Mijn reserveringsaanvraag bij Studio Convivio\n\n' + summaryText +
+    var body = 'Mijn reserveringsaanvraag bij Studio Convivio\n\n' + summaryAsText(document.getElementById('rsvDoneSummary')) +
       '\n\n' + contactLines.join('\n') +
       '\n\nStudio Convivio bevestigt de aanvraag binnen 2 dagen voorlopig. Vragen? Mail naar info@studio-convivio.nl.';
     document.getElementById('rsvMailCopy').href = 'mailto:' + encodeURIComponent(email) +

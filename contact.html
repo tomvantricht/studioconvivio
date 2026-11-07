@@ -150,6 +150,10 @@
 
           <button type="submit" class="btn" id="ccSubmitBtn" style="width:100%;justify-content:center;">Stuur bericht</button>
           <p id="ccStatus" style="margin-top:14px;font-size:14px;"></p>
+          <div id="ccMailFallback" style="margin-top:14px;" hidden>
+            <a class="btn btn-outline" id="ccMailFallbackLink" href="#">Stuur je bericht per mail</a>
+            <p style="margin-top:10px;font-size:13px;color:var(--ink-soft);">Gebeurt er niets? Mail ons dan op <a href="mailto:info@studio-convivio.nl">info@studio-convivio.nl</a>.</p>
+          </div>
         </form>
       </div>
     </div>
@@ -207,38 +211,42 @@
     </ul>
   </div>
 </footer>
-<script src="js/site.js?v=12"></script>
+<script src="js/site.js?v=13"></script>
 
 <script>
 (function () {
   var form = document.getElementById('scContactForm');
   var status = document.getElementById('ccStatus');
   var btn = document.getElementById('ccSubmitBtn');
+  var mailFallback = document.getElementById('ccMailFallback');
+
+  // Lukt versturen niet, dan kan de bezoeker het bericht alsnog per mail sturen.
+  function showMailFallback() {
+    var body = document.getElementById('ccMessage').value.trim() + '\n\n' +
+      document.getElementById('ccName').value.trim() + '\n' +
+      document.getElementById('ccEmail').value.trim();
+    document.getElementById('ccMailFallbackLink').href = 'mailto:info@studio-convivio.nl' +
+      '?subject=' + encodeURIComponent('Bericht via de website') +
+      '&body=' + encodeURIComponent(body);
+    mailFallback.hidden = false;
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     btn.disabled = true;
+    mailFallback.hidden = true;
     status.textContent = 'Versturen...';
     status.style.color = 'var(--ink-soft)';
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: new FormData(form)
-    })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data.success) {
-          status.textContent = 'Bedankt! We nemen zo snel mogelijk contact met je op.';
-          status.style.color = 'var(--moss-dark)';
-          form.reset();
-        } else {
-          throw new Error('failed');
-        }
-      })
-      .catch(function () {
-        status.textContent = 'Er ging iets mis. Probeer het opnieuw of mail ons direct op info@studio-convivio.nl.';
-        status.style.color = '#a3402f';
-      })
-      .finally(function () { btn.disabled = false; });
+    ScFormSend.send(new FormData(form)).then(function () {
+      status.textContent = 'Bedankt! We nemen zo snel mogelijk contact met je op.';
+      status.style.color = 'var(--moss-dark)';
+      form.reset();
+    }, function (err) {
+      ScFormSend.report('contact_fout', err);
+      status.textContent = ScFormSend.message(err.reason, 'bericht');
+      status.style.color = '#a3402f';
+      showMailFallback();
+    }).finally(function () { btn.disabled = false; });
   });
 })();
 </script>
