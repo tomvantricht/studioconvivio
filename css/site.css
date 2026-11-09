@@ -214,7 +214,8 @@ textarea:focus-visible,
 .btn-outline:hover { background: var(--ink); color: var(--paper); }
 
 .btn-mocha { background: var(--mocha-dark); border-color: var(--mocha-dark); }
-.btn-mocha:hover { background: var(--mocha); border-color: var(--mocha); }
+/* Hover wordt donkerder, net als bij .btn: lichte tekst op --mocha haalde maar 3,6:1. */
+.btn-mocha:hover { background: #5a3620; border-color: #5a3620; }
 
 .link {
   display: inline-block;
@@ -660,6 +661,10 @@ a[data-lightbox]:focus-visible { outline-offset: -4px; outline-color: #fff; }
   .hero--overlay .link:hover { color: var(--gold); }
 }
 
+/* Collectiepagina's: rekenvoorbeeld onder de prijs per persoon. */
+.coll-example { margin-top: 12px; font-size: 14.5px; color: var(--ink-soft); max-width: 48ch; }
+.coll-example strong { color: var(--ink); font-weight: 700; }
+
 /* ---------------------------------------------------------------------- */
 /* Vertrouwensstrook (direct onder de hero)                                */
 /* ---------------------------------------------------------------------- */
@@ -897,8 +902,13 @@ a[data-lightbox]:focus-visible { outline-offset: -4px; outline-color: #fff; }
 }
 /* Vijf gelegenheden: op mobiel 2 + 2 + 1 brede, op tablet 3 + 2 (zes
    kolommen), op desktop vijf naast elkaar. "of .occasion-card" telt alleen
-   de kaarten, zodat het ook klopt als de kerststrook weg is. */
-@media (max-width: 759px) { .occasion-grid > .occasion-card:last-child:nth-child(odd of .occasion-card) { grid-column: span 2; aspect-ratio: 3 / 2; } }
+   de kaarten, zodat het ook klopt als de kerststrook weg is.
+   De brede kaart op mobiel is 2:1 (was 3:2, nam te veel hoogte in); de foto
+   schuift iets omhoog zodat de zwaan van de babyshower heel in beeld blijft. */
+@media (max-width: 759px) {
+  .occasion-grid > .occasion-card:last-child:nth-child(odd of .occasion-card) { grid-column: span 2; aspect-ratio: 2 / 1; }
+  .occasion-grid > .occasion-card:last-child:nth-child(odd of .occasion-card) img { object-position: 50% 25%; }
+}
 @media (min-width: 760px) {
   .occasion-grid { grid-template-columns: repeat(6, 1fr); }
   .occasion-grid > .occasion-card { grid-column: span 2; }
