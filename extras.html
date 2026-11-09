@@ -122,6 +122,23 @@
   border-radius: var(--sc-radius-lg);
 }
 .xt-summary h2 { font-size: 22px; }
+.xt-summary-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+
+/* Opnieuw beginnen: bewust een tekstknop, geen opvallende knop. */
+.xt-reset {
+  background: none; border: 0; padding: 0; margin: 0; cursor: pointer;
+  font: inherit; font-size: 13px; color: var(--ink-soft);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line);
+}
+.xt-reset:hover { color: var(--ink); text-decoration-color: currentColor; }
+.xt-reset:focus-visible { outline: 2px solid var(--moss); outline-offset: 2px; border-radius: 2px; }
+.xt-reset-done { margin-top: 12px; font-size: 14px; color: var(--ink-soft); }
+.xt-reset-done .xt-reset { margin-left: 6px; font-size: 14px; }
+
+/* Korte stand van zaken bovenaan: hoeveel je gekozen hebt. */
+.xt-status { margin-top: 14px; font-size: 14px; color: var(--ink-soft); }
+.xt-status a, .xt-status .xt-reset { font-size: 14px; }
+.xt-status-sep { color: var(--line); margin: 0 6px; }
 .xt-summary-empty { margin-top: 12px; font-size: 14px; color: var(--ink-faint); }
 .xt-summary-line {
   display: flex; justify-content: space-between; gap: 12px;
@@ -226,6 +243,7 @@
       <h1>Extra's</h1>
       <p class="lede">Onze pakketten Moss &amp; Mist, Mocha Sky en Winter Glow zijn compleet, maar soms wil je net iets meer. Blader hieronder door losse tafelitems en decoratie en voeg toe wat je wilt: je keuze staat automatisch klaar zodra je verdergaat naar <a class="link" href="reserveren.html">reserveren</a>.</p>
       <span class="vat-note" style="margin-top:14px;">Alle prijzen op deze pagina zijn incl. btw</span>
+      <p class="xt-status" id="xtStatus" hidden><span id="xtStatusText"></span><span class="xt-status-sep" aria-hidden="true">·</span><a class="link" href="#xtSummary">Bekijk je keuze</a><span class="xt-status-sep" aria-hidden="true">·</span><button type="button" class="xt-reset" data-reset>Opnieuw beginnen</button></p>
     </div>
   </section>
 
@@ -334,6 +352,20 @@
       <div class="xt-category sc-shop-category">
         <span class="xt-category-label sc-shop-category-label">Decoratie &amp; sfeer</span>
         <div class="sc-shop-grid">
+          <div class="sc-shop-item" data-key="tafelloper">
+            <label class="sc-shop-card">
+              <input type="checkbox" class="sc-shop-check">
+              <span class="sc-shop-photo">
+                <img src="images/extra-tafelloper-1.webp" srcset="images/extra-tafelloper-1-480.webp 480w, images/extra-tafelloper-1-800.webp 800w, images/extra-tafelloper-1.webp 1200w" sizes="(min-width: 900px) 251px, 43vw" alt="Witte tafelloper van luchtige gaasstof over een houten tafel, met theelichtjes in glas" loading="lazy" decoding="async">
+                <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="tafelloper" aria-label="Bekijk alle 2 foto's van de tafelloper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
+                </button>
+              </span>
+              <span class="sc-shop-body"><span class="sc-shop-name">Tafelloper</span><span class="sc-shop-price">€4,95/stuk<span class="sc-shop-stock">Max. 4 per aanvraag</span></span></span>
+            </label>
+            <div class="sc-qty-field sc-qty-field-flat sc-shop-qty"><input type="number" class="sc-shop-qty-input" min="1" max="4" value="1"></div>
+          </div>
           <div class="sc-shop-item" data-key="tafellampen">
             <label class="sc-shop-card">
               <input type="checkbox" class="sc-shop-check">
@@ -452,9 +484,11 @@
             <label class="sc-shop-card">
               <input type="checkbox" class="sc-shop-check">
               <span class="sc-shop-photo">
-                <svg class="sc-shop-ph-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/></svg>
-                <span class="sc-shop-ph-label">Ontwerp in overleg</span>
+                <img src="images/extra-bedankkaart-1.webp" srcset="images/extra-bedankkaart-1-480.webp 480w, images/extra-bedankkaart-1-800.webp 800w, images/extra-bedankkaart-1.webp 1200w" sizes="(min-width: 900px) 251px, 43vw" alt="Handgemaakte bedankkaart met bloemenrand, bordeauxrode strepen en een rond label met &quot;Bedankt&quot;" loading="lazy" decoding="async">
                 <span class="sc-shop-badge">&#10003;</span>
+                <button type="button" class="sc-shop-gallery-btn" data-gallery="bedankkaarten" aria-label="Bekijk alle 2 foto's van bedankkaarten">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="14" height="14" rx="2"/><path d="M7 7V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2"/></svg>2
+                </button>
               </span>
               <span class="sc-shop-body"><span class="sc-shop-name">Bedankkaarten</span><span class="sc-shop-price">€1,25/stuk<span class="sc-shop-stock">Ontwerp in overleg</span></span></span>
             </label>
@@ -480,8 +514,12 @@
         </div>
       </section>
 
-      <div class="xt-summary">
-        <h2>Jouw extra's</h2>
+      <div class="xt-summary" id="xtSummary">
+        <div class="xt-summary-head">
+          <h2>Jouw extra's</h2>
+          <button type="button" class="xt-reset" id="xtSummaryReset" data-reset hidden>Alles wissen</button>
+        </div>
+        <p class="xt-reset-done" id="xtResetDone" role="status" hidden>Je keuzes zijn gewist.<button type="button" class="xt-reset" id="xtResetUndo">Ongedaan maken</button></p>
         <p class="xt-summary-empty" id="xtSummaryEmpty">Je hebt nog niets toegevoegd. Klik op een item hierboven om het aan je offerte toe te voegen.</p>
         <div class="xt-summary-lines" id="xtSummaryLines"></div>
         <div class="xt-summary-total" id="xtSummaryTotal" style="display:none;"><span>Subtotaal extra's</span><span id="xtSummaryTotalPrice"></span></div>
@@ -548,7 +586,7 @@
 </footer>
 
 <script src="js/site.js?v=12"></script>
-<script src="js/extras-catalog.js?v=19"></script>
+<script src="js/extras-catalog.js?v=20"></script>
 <script src="js/extras-shop.js?v=13"></script>
 <script>
 (function () {
@@ -558,9 +596,27 @@
   var summaryTotalEl = document.getElementById('xtSummaryTotal');
   var summaryTotalPriceEl = document.getElementById('xtSummaryTotalPrice');
   var summaryVatNoteEl = document.getElementById('xtSummaryVatNote');
+  var statusEl = document.getElementById('xtStatus');
+  var statusTextEl = document.getElementById('xtStatusText');
+  var summaryResetBtn = document.getElementById('xtSummaryReset');
+  var resetDoneEl = document.getElementById('xtResetDone');
+  var resetUndoBtn = document.getElementById('xtResetUndo');
+  var deliveryRadios = document.querySelectorAll('input[name="xtDeliveryMode"]');
+  var undoSnapshot = null;
+
+  // Stand van zaken bovenaan en de wisknop: alleen zichtbaar als er iets gekozen is.
+  function renderStatus(lineCount) {
+    var delivery = ScCart.getDeliveryMode();
+    statusEl.hidden = lineCount === 0;
+    statusTextEl.textContent = lineCount === 1 ? 'Je hebt 1 extra gekozen' : 'Je hebt ' + lineCount + ' extra\'s gekozen';
+    summaryResetBtn.hidden = lineCount === 0 && !delivery;
+  }
 
   function renderSummary() {
     var s = ScExtrasShop.summary();
+    renderStatus(s.lines.length);
+    // Iets nieuws gekozen na het wissen: dan valt er niets meer ongedaan te maken.
+    if (undoSnapshot && (s.lines.length || ScCart.getDeliveryMode())) { undoSnapshot = null; resetDoneEl.hidden = true; }
     if (s.lines.length === 0) {
       summaryEmpty.style.display = 'block';
       summaryLinesEl.innerHTML = '';
@@ -580,7 +636,6 @@
   ScExtrasShop.wire(root, renderSummary);
   renderSummary();
 
-  var deliveryRadios = document.querySelectorAll('input[name="xtDeliveryMode"]');
   var savedDeliveryMode = ScCart.getDeliveryMode();
   if (savedDeliveryMode) {
     deliveryRadios.forEach(function (r) { if (r.value === savedDeliveryMode) r.checked = true; });
@@ -588,7 +643,54 @@
   deliveryRadios.forEach(function (r) {
     r.addEventListener('change', function () {
       if (r.checked) ScCart.setDeliveryMode(r.value);
+      renderSummary();
     });
+  });
+
+  // Zet de vinkjes, aantallen en bezorgkeuze op de pagina gelijk aan wat er
+  // in ScCart staat (na wissen of ongedaan maken).
+  function applyCartToPage() {
+    var cart = ScCart.read();
+    root.querySelectorAll('.sc-shop-item').forEach(function (el) {
+      var saved = cart[el.getAttribute('data-key')];
+      var on = !!(saved && saved.qty > 0);
+      var check = el.querySelector('.sc-shop-check');
+      var qtyWrap = el.querySelector('.sc-shop-qty');
+      var qtyInput = el.querySelector('.sc-shop-qty-input');
+      var typeInput = el.querySelector('.sc-shop-type-input');
+      var addonInput = el.querySelector('.sc-shop-addon-input');
+      check.checked = on;
+      if (qtyWrap) qtyWrap.classList.toggle('sc-visible', on);
+      if (qtyInput) qtyInput.value = on ? saved.qty : 1;
+      if (typeInput) typeInput.value = on && saved.type ? saved.type : '';
+      if (addonInput) addonInput.checked = on && !!saved.addon;
+    });
+    var mode = ScCart.getDeliveryMode() || 'geen';
+    deliveryRadios.forEach(function (r) { r.checked = r.value === mode; });
+  }
+
+  // Opnieuw beginnen: alle extra's en de bezorgkeuze wissen, met de
+  // mogelijkheid het direct ongedaan te maken.
+  document.querySelectorAll('[data-reset]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var snapshot = { cart: ScCart.read(), delivery: ScCart.getDeliveryMode() };
+      ScCart.clear();
+      applyCartToPage();
+      renderSummary();
+      undoSnapshot = snapshot;
+      resetDoneEl.hidden = false;
+      summaryEmpty.style.display = 'none'; // "Gewist" zegt al genoeg.
+      if (btn !== summaryResetBtn) document.getElementById('xtSummary').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      resetUndoBtn.focus({ preventScroll: true });
+    });
+  });
+  resetUndoBtn.addEventListener('click', function () {
+    var snapshot = undoSnapshot;
+    if (!snapshot) return;
+    Object.keys(snapshot.cart).forEach(function (k) { ScCart.setItem(k, snapshot.cart[k].qty, snapshot.cart[k]); });
+    ScCart.setDeliveryMode(snapshot.delivery);
+    applyCartToPage();
+    renderSummary();
   });
 
   // Fotogalerij per product: meerdere foto's van hetzelfde item (andere hoek

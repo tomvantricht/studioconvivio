@@ -62,6 +62,13 @@ window.SC_EXTRAS_CATALOG = [
   {
     category: 'Decoratie & sfeer',
     items: [
+      { key: 'tafelloper',
+        photos: [
+          { src: 'images/extra-tafelloper-1.webp', alt: 'Witte tafelloper van luchtige gaasstof over een houten tafel, met theelichtjes in glas' },
+          { src: 'images/extra-tafelloper-2.webp', alt: 'Witte tafelloper van gaasstof die tot over de rand van de tafel valt' }
+        ],
+        name: 'Tafelloper', tileName: 'Tafel­loper', price: 4.95, unit: 'stuk', stock: 4,
+        icon: '<path d="M3 8h18M3 16h18"/><path d="M10 4v16M14 4v16"/>' },
       { key: 'tafellampen',
         photos: [
           { src: 'images/img-2fb20330.webp', alt: 'Tafellamp, aan in het donker' },
@@ -127,6 +134,10 @@ window.SC_EXTRAS_CATALOG = [
         addon: { label: 'Met kwastje', price: 0.50 },
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' },
       { key: 'bedankkaarten',
+        photos: [
+          { src: 'images/extra-bedankkaart-1.webp', alt: 'Handgemaakte bedankkaart met bloemenrand, bordeauxrode strepen en een rond label met "Bedankt"' },
+          { src: 'images/extra-bedankkaart-2.webp', alt: 'Close-up van het ronde label met "Bedankt" op de bedankkaart' }
+        ],
         name: 'Bedankkaarten', tileName: 'Bedank\u00ADkaarten', price: 1.25, unit: 'stuk', stock: null, note: 'Ontwerp in overleg', perGuest: true,
         icon: '<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M8 10h8M8 14h5"/>' }
     ]
