@@ -164,6 +164,7 @@
 
 /* Fotografie door Celeste's Visuals: één brede kaart, foto boven (mobiel)
    of links (vanaf 620px). Telt niet mee in het subtotaal. */
+.xt-photo-section { margin-top: clamp(36px, 5vw, 56px); padding-top: clamp(28px, 4vw, 40px); border-top: 1px solid var(--line); }
 .xt-photo-item { border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg); background: #fff; overflow: hidden; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
 .xt-photo-item:has(#xtPhotoCheck:checked) { border-color: var(--sc-moss); box-shadow: inset 0 0 0 2px rgba(107,122,94,0.2); }
 .xt-photo-item:has(#xtPhotoCheck:focus-visible) { outline: 2px solid var(--moss-dark); outline-offset: 2px; }
@@ -316,31 +317,6 @@
         </div>
         <p style="font-size:12px;color:var(--ink-faint);margin-top:12px;max-width:56ch;">De uiteindelijke prijs hangt af van de afstand; die bereken je op de reserveringspagina. De kilometerprijs geldt voor alle vier de ritten: heen en terug bij het bezorgen en heen en terug bij het ophalen. Je keuze hier staat daar al klaar.</p>
         <span class="vat-note" style="margin-top:6px;">Incl. btw</span>
-      </div>
-
-      <div class="xt-category sc-shop-category" id="fotografie">
-        <span class="xt-category-label sc-shop-category-label">Fotografie</span>
-        <div class="xt-photo-item">
-          <label class="sc-shop-card">
-            <input type="checkbox" id="xtPhotoCheck" aria-describedby="xtPhotoFine">
-            <span class="sc-shop-photo">
-              <img src="images/partners/celeste/celeste-tafel-avond-480.webp" srcset="images/partners/celeste/celeste-tafel-avond-480.webp 480w, images/partners/celeste/celeste-tafel-avond-800.webp 800w" sizes="(min-width: 620px) 240px, 92vw" width="1000" height="1500" alt="Gedekte tafel bij avondlicht met brandende kaarsen en een lichtslinger, gefotografeerd door Celeste's Visuals" loading="lazy" decoding="async">
-              <span class="sc-shop-badge" aria-hidden="true">&#10003;</span>
-            </span>
-            <span class="xt-photo-body">
-              <span class="xt-photo-name">Fotografie op locatie</span>
-              <span class="xt-photo-sub">door Celeste's Visuals</span>
-              <span class="xt-photo-text">Laat je avond vastleggen: de gedekte tafel, je gasten en de momenten tussendoor. Celeste fotografeert op locatie en levert gemiddeld 30 tot 60 bewerkte foto's per uur in een online galerij.</span>
-              <span class="sc-shop-price">€225 voor 2 uur · €95 per extra uur · + reiskosten</span>
-            </span>
-          </label>
-          <div class="xt-photo-hours" id="xtPhotoHours" hidden>
-            <label for="xtPhotoHoursInput">Aantal uur</label>
-            <input type="number" id="xtPhotoHoursInput" min="2" max="8" step="1" value="2" inputmode="numeric">
-            <span class="xt-photo-est" aria-live="polite">Indicatie: <b id="xtPhotoEst">€225</b> + reiskosten</span>
-          </div>
-        </div>
-        <p class="xt-photo-fine" id="xtPhotoFine">Tarief van Celeste's Visuals. Je keuze staat klaar op de reserveringspagina; zodra je tafel voorlopig bevestigd is, geven we je aanvraag door. Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af. Het telt niet mee in het subtotaal van je extra's, je aanbetaling of borg. <a class="link" href="samenwerking-celeste.html">Meer over Celeste's Visuals</a></p>
       </div>
 
       <div class="xt-category sc-shop-category">
@@ -572,6 +548,31 @@
           <p class="xt-cards-note">Figuren en logo's van bekende merken kan ik niet gebruiken. Lever je zelf een logo, foto of tekening aan, dan ga ik ervan uit dat ik die mag gebruiken voor het ontwerp; zie de <a class="link" href="algemene-voorwaarden.html#kaarten">algemene voorwaarden</a>.</p>
         </div>
       </section>
+
+      <div class="xt-category sc-shop-category xt-photo-section" id="fotografie">
+        <span class="xt-category-label sc-shop-category-label">Fotografie</span>
+        <div class="xt-photo-item">
+          <label class="sc-shop-card">
+            <input type="checkbox" id="xtPhotoCheck" aria-describedby="xtPhotoFine">
+            <span class="sc-shop-photo">
+              <img src="images/partners/celeste/celeste-tafel-avond-480.webp" srcset="images/partners/celeste/celeste-tafel-avond-480.webp 480w, images/partners/celeste/celeste-tafel-avond-800.webp 800w" sizes="(min-width: 620px) 240px, 92vw" width="1000" height="1500" alt="Gedekte tafel bij avondlicht met brandende kaarsen en een lichtslinger, gefotografeerd door Celeste's Visuals" loading="lazy" decoding="async">
+              <span class="sc-shop-badge" aria-hidden="true">&#10003;</span>
+            </span>
+            <span class="xt-photo-body">
+              <span class="xt-photo-name">Fotografie op locatie</span>
+              <span class="xt-photo-sub">door Celeste's Visuals</span>
+              <span class="xt-photo-text">Laat je avond vastleggen: de gedekte tafel, je gasten en de momenten tussendoor. Celeste fotografeert op locatie en levert gemiddeld 30 tot 60 bewerkte foto's per uur in een online galerij.</span>
+              <span class="sc-shop-price">€225 voor 2 uur · €95 per extra uur · + reiskosten</span>
+            </span>
+          </label>
+          <div class="xt-photo-hours" id="xtPhotoHours" hidden>
+            <label for="xtPhotoHoursInput">Aantal uur</label>
+            <input type="number" id="xtPhotoHoursInput" min="2" max="8" step="1" value="2" inputmode="numeric">
+            <span class="xt-photo-est" aria-live="polite">Indicatie: <b id="xtPhotoEst">€225</b> + reiskosten</span>
+          </div>
+        </div>
+        <p class="xt-photo-fine" id="xtPhotoFine">Tarief van Celeste's Visuals. Je keuze staat klaar op de reserveringspagina; zodra je tafel voorlopig bevestigd is, geven we je aanvraag door. Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af. Het telt niet mee in het subtotaal van je extra's, je aanbetaling of borg. <a class="link" href="samenwerking-celeste.html">Meer over Celeste's Visuals</a></p>
+      </div>
 
       <div class="xt-summary" id="xtSummary">
         <div class="xt-summary-head">
