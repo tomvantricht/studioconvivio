@@ -38,12 +38,24 @@ window.ScCart = (function () {
   function getDeliveryMode() {
     try { return localStorage.getItem(DELIVERY_KEY); } catch (e) { return null; }
   }
-  // Na een verstuurde aanvraag: mandje en bezorgkeuze leeg, zodat oude
-  // extra's niet ongemerkt in een volgende aanvraag terugkomen.
-  function clear() {
-    try { localStorage.removeItem(KEY); localStorage.removeItem(DELIVERY_KEY); } catch (e) {}
+  // Fotografie door Celeste's Visuals: aantal uur (0 = niet aangevraagd).
+  // Telt niet mee in het subtotaal; Celeste rekent zelf af.
+  var PHOTO_KEY = 'sc_photo_v1';
+  function setPhoto(hours) {
+    try {
+      if (hours > 0) { localStorage.setItem(PHOTO_KEY, String(hours)); }
+      else { localStorage.removeItem(PHOTO_KEY); }
+    } catch (e) {}
   }
-  return { read: read, setItem: setItem, getItem: getItem, count: count, clear: clear, setDeliveryMode: setDeliveryMode, getDeliveryMode: getDeliveryMode };
+  function getPhoto() {
+    try { return parseInt(localStorage.getItem(PHOTO_KEY), 10) || 0; } catch (e) { return 0; }
+  }
+  // Na een verstuurde aanvraag: mandje, bezorgkeuze en fotografie leeg, zodat
+  // oude keuzes niet ongemerkt in een volgende aanvraag terugkomen.
+  function clear() {
+    try { localStorage.removeItem(KEY); localStorage.removeItem(DELIVERY_KEY); localStorage.removeItem(PHOTO_KEY); } catch (e) {}
+  }
+  return { read: read, setItem: setItem, getItem: getItem, count: count, clear: clear, setDeliveryMode: setDeliveryMode, getDeliveryMode: getDeliveryMode, setPhoto: setPhoto, getPhoto: getPhoto };
 })();
 
 // Foto's groot bekijken (lightbox), één viewer voor de hele site.

@@ -541,6 +541,7 @@
   <button type="button" class="announce-bar-prev" aria-label="Vorige melding" aria-controls="announceList">&lsaquo;</button>
   <ul class="announce-bar-list" id="announceList" aria-label="Goed om te weten">
     <li class="is-active">3 dagen in huis, dus geen haast</li>
+    <li>Nu ook fotografie bij je tafel <a href="samenwerking-celeste.html">Bekijk</a></li>
     <li>Compleet: servies, glas en linnen</li>
     <li>Binnen 2 dagen voorlopig bevestigd</li>
   </ul>
@@ -984,7 +985,7 @@
   </div>
 </footer>
 
-<script src="js/site.js?v=13"></script>
+<script src="js/site.js?v=14"></script>
 <script src="js/extras-catalog.js?v=20"></script>
 <script src="js/extras-shop.js?v=13"></script>
 
@@ -1150,6 +1151,8 @@
     photoEstEl.textContent = '€' + photoPrice(h);
     photoHoursBox.querySelector('[data-photo-dir="-1"]').disabled = h <= PHOTO.min;
     photoHoursBox.querySelector('[data-photo-dir="1"]').disabled = h >= PHOTO.max;
+    // Gedeeld met de extra's-pagina, net als het mandje.
+    ScCart.setPhoto(photoCheck.checked ? h : 0);
   }
   photoCheck.addEventListener('change', syncPhoto);
   photoHoursInput.addEventListener('input', function () {
@@ -1168,6 +1171,12 @@
       saveDraft();
     });
   });
+  // Op de extra's-pagina kan fotografie al aangevraagd zijn.
+  var savedPhotoHours = ScCart.getPhoto();
+  if (savedPhotoHours) {
+    photoCheck.checked = true;
+    photoHoursInput.value = String(Math.min(PHOTO.max, Math.max(PHOTO.min, savedPhotoHours)));
+  }
   syncPhoto();
 
   // ---------------------------------------------------------------
@@ -2033,9 +2042,7 @@
     if (/^\d+$/.test(d.guests || '')) guestsInput.value = String(Math.min(GUESTS.max, Math.max(GUESTS.min, +d.guests)));
     renderGuests();
     if (OCCASIONS[d.occasion]) occasionInput.value = d.occasion;
-    photoCheck.checked = d.photo > 0;
-    if (d.photo > 0) photoHoursInput.value = String(Math.min(PHOTO.max, Math.max(PHOTO.min, parseInt(d.photo, 10) || PHOTO.min)));
-    syncPhoto();
+    // Fotografie komt uit ScCart (gedeeld met de extra's-pagina), niet uit het concept.
     var k;
     for (k in CHOICE_FIELDS) if (typeof d[k] === 'string') CHOICE_FIELDS[k].value = d[k];
     for (k in PERSONAL_FIELDS) if (typeof personal[k] === 'string') PERSONAL_FIELDS[k].value = personal[k];

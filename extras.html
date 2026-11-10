@@ -161,6 +161,39 @@
 .xt-cards-steps { margin: 18px 0 0; padding-left: 20px; color: var(--ink-soft); max-width: 58ch; }
 .xt-cards-steps li + li { margin-top: 8px; }
 .xt-cards-note { font-size: 13px; color: var(--ink-faint) !important; }
+
+/* Fotografie door Celeste's Visuals: één brede kaart, foto boven (mobiel)
+   of links (vanaf 620px). Telt niet mee in het subtotaal. */
+.xt-photo-item { border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg); background: #fff; overflow: hidden; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+.xt-photo-item:has(#xtPhotoCheck:checked) { border-color: var(--sc-moss); box-shadow: inset 0 0 0 2px rgba(107,122,94,0.2); }
+.xt-photo-item:has(#xtPhotoCheck:focus-visible) { outline: 2px solid var(--moss-dark); outline-offset: 2px; }
+.xt-photo-item .sc-shop-card { display: grid; grid-template-columns: 1fr; border: 0; border-radius: 0; box-shadow: none; }
+.xt-photo-item .sc-shop-photo { aspect-ratio: 16 / 9; }
+.xt-photo-item .sc-shop-photo img { object-position: 50% 55%; }
+.xt-photo-body { display: block; padding: 14px 16px 16px; }
+.xt-photo-name { display: block; font-family: var(--serif); font-size: 20px; color: var(--ink); line-height: 1.25; }
+.xt-photo-sub { display: block; font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+.xt-photo-text { display: block; margin-top: 10px; font-size: 14px; line-height: 1.55; color: var(--ink-soft); max-width: 60ch; }
+.xt-photo-body .sc-shop-price { margin-top: 10px; font-size: 13px; color: var(--ink); }
+.xt-photo-hours { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 12px 16px 14px; border-top: 1px solid var(--line-soft); font-size: 13px; }
+.xt-photo-hours[hidden] { display: none; }
+.xt-photo-hours label { font-weight: 700; color: var(--ink); }
+.xt-photo-hours input {
+  width: 72px; font-family: inherit; font-size: 14px; padding: 9px 10px;
+  border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); background: #fff; color: var(--sc-ink);
+}
+.xt-photo-est { color: var(--ink); }
+.xt-photo-fine { font-size: 12px; line-height: 1.55; color: var(--ink-faint); margin-top: 12px; max-width: 62ch; }
+@media (min-width: 620px) {
+  .xt-photo-item .sc-shop-card { grid-template-columns: 240px 1fr; }
+  .xt-photo-item .sc-shop-photo { aspect-ratio: auto; height: 100%; min-height: 200px; }
+  .xt-photo-body { padding: 18px 20px 20px; }
+}
+.xt-summary-partner {
+  margin-top: 14px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: var(--sc-radius-md);
+  font-size: 13px; line-height: 1.55; color: var(--ink-soft); background: #fff;
+}
+.xt-summary-partner[hidden] { display: none; }
 </style>
 <!-- Microsoft Clarity: zonder cookies (consent geweigerd), formuliervelden worden gemaskeerd.
      Pas geladen als de pagina klaar is en de browser even niets doet, zodat het
@@ -186,6 +219,7 @@
   <button type="button" class="announce-bar-prev" aria-label="Vorige melding" aria-controls="announceList">&lsaquo;</button>
   <ul class="announce-bar-list" id="announceList" aria-label="Goed om te weten">
     <li class="is-active">3 dagen in huis, dus geen haast</li>
+    <li>Nu ook fotografie bij je tafel <a href="samenwerking-celeste.html">Bekijk</a></li>
     <li>Compleet: servies, glas en linnen</li>
     <li>Binnen 2 dagen voorlopig bevestigd</li>
   </ul>
@@ -282,6 +316,31 @@
         </div>
         <p style="font-size:12px;color:var(--ink-faint);margin-top:12px;max-width:56ch;">De uiteindelijke prijs hangt af van de afstand; die bereken je op de reserveringspagina. De kilometerprijs geldt voor alle vier de ritten: heen en terug bij het bezorgen en heen en terug bij het ophalen. Je keuze hier staat daar al klaar.</p>
         <span class="vat-note" style="margin-top:6px;">Incl. btw</span>
+      </div>
+
+      <div class="xt-category sc-shop-category" id="fotografie">
+        <span class="xt-category-label sc-shop-category-label">Fotografie</span>
+        <div class="xt-photo-item">
+          <label class="sc-shop-card">
+            <input type="checkbox" id="xtPhotoCheck" aria-describedby="xtPhotoFine">
+            <span class="sc-shop-photo">
+              <img src="images/partners/celeste/celeste-tafel-avond-480.webp" srcset="images/partners/celeste/celeste-tafel-avond-480.webp 480w, images/partners/celeste/celeste-tafel-avond-800.webp 800w" sizes="(min-width: 620px) 240px, 92vw" width="1000" height="1500" alt="Gedekte tafel bij avondlicht met brandende kaarsen en een lichtslinger, gefotografeerd door Celeste's Visuals" loading="lazy" decoding="async">
+              <span class="sc-shop-badge" aria-hidden="true">&#10003;</span>
+            </span>
+            <span class="xt-photo-body">
+              <span class="xt-photo-name">Fotografie op locatie</span>
+              <span class="xt-photo-sub">door Celeste's Visuals</span>
+              <span class="xt-photo-text">Laat je avond vastleggen: de gedekte tafel, je gasten en de momenten tussendoor. Celeste fotografeert op locatie en levert gemiddeld 30 tot 60 bewerkte foto's per uur in een online galerij.</span>
+              <span class="sc-shop-price">€225 voor 2 uur · €95 per extra uur · + reiskosten</span>
+            </span>
+          </label>
+          <div class="xt-photo-hours" id="xtPhotoHours" hidden>
+            <label for="xtPhotoHoursInput">Aantal uur</label>
+            <input type="number" id="xtPhotoHoursInput" min="2" max="8" step="1" value="2" inputmode="numeric">
+            <span class="xt-photo-est" aria-live="polite">Indicatie: <b id="xtPhotoEst">€225</b> + reiskosten</span>
+          </div>
+        </div>
+        <p class="xt-photo-fine" id="xtPhotoFine">Tarief van Celeste's Visuals. Je keuze staat klaar op de reserveringspagina; zodra je tafel voorlopig bevestigd is, geven we je aanvraag door. Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af. Het telt niet mee in het subtotaal van je extra's, je aanbetaling of borg. <a class="link" href="samenwerking-celeste.html">Meer over Celeste's Visuals</a></p>
       </div>
 
       <div class="xt-category sc-shop-category">
@@ -524,6 +583,7 @@
         <div class="xt-summary-lines" id="xtSummaryLines"></div>
         <div class="xt-summary-total" id="xtSummaryTotal" style="display:none;"><span>Subtotaal extra's</span><span id="xtSummaryTotalPrice"></span></div>
         <p class="vat-note" id="xtSummaryVatNote" style="display:none;">Incl. btw</p>
+        <p class="xt-summary-partner" id="xtSummaryPhoto" hidden></p>
         <p class="xt-summary-note">Dit subtotaal komt automatisch terug in de offerte op de reserveringspagina, samen met je tafelpakket.</p>
         <p class="xt-summary-cta"><a class="btn" href="reserveren.html">Ga verder naar reserveren</a></p>
       </div>
@@ -586,7 +646,7 @@
   </div>
 </footer>
 
-<script src="js/site.js?v=12"></script>
+<script src="js/site.js?v=14"></script>
 <script src="js/extras-catalog.js?v=20"></script>
 <script src="js/extras-shop.js?v=13"></script>
 <script>
@@ -605,21 +665,65 @@
   var deliveryRadios = document.querySelectorAll('input[name="xtDeliveryMode"]');
   var undoSnapshot = null;
 
+  // Fotografie door Celeste's Visuals: gedeeld met reserveren.html via
+  // ScCart (aantal uur, 0 = niet aangevraagd). Telt niet mee in het subtotaal.
+  var PHOTO = { base: 225, baseHours: 2, perHour: 95, min: 2, max: 8 };
+  var photoCheck = document.getElementById('xtPhotoCheck');
+  var photoHoursBox = document.getElementById('xtPhotoHours');
+  var photoHoursInput = document.getElementById('xtPhotoHoursInput');
+  var photoEstEl = document.getElementById('xtPhotoEst');
+  var summaryPhotoEl = document.getElementById('xtSummaryPhoto');
+  function photoHours() {
+    var h = parseInt(photoHoursInput.value, 10);
+    return isNaN(h) ? PHOTO.min : Math.min(PHOTO.max, Math.max(PHOTO.min, h));
+  }
+  function photoPrice(h) { return PHOTO.base + Math.max(0, h - PHOTO.baseHours) * PHOTO.perHour; }
+  function renderPhoto() {
+    photoHoursBox.hidden = !photoCheck.checked;
+    photoEstEl.textContent = '€' + photoPrice(photoHours());
+  }
+  function savePhoto() {
+    ScCart.setPhoto(photoCheck.checked ? photoHours() : 0);
+    renderPhoto();
+    renderSummary();
+  }
+  function applyPhotoToPage() {
+    var h = ScCart.getPhoto();
+    photoCheck.checked = h > 0;
+    photoHoursInput.value = String(h > 0 ? Math.min(PHOTO.max, Math.max(PHOTO.min, h)) : PHOTO.min);
+    renderPhoto();
+  }
+  photoCheck.addEventListener('change', savePhoto);
+  photoHoursInput.addEventListener('input', function () {
+    var v = parseInt(photoHoursInput.value, 10);
+    if (!isNaN(v) && v > PHOTO.max) photoHoursInput.value = String(PHOTO.max);
+    if (!isNaN(v) && v >= PHOTO.min) savePhoto(); else renderPhoto();
+  });
+  photoHoursInput.addEventListener('change', function () { photoHoursInput.value = String(photoHours()); savePhoto(); });
+
   // Stand van zaken bovenaan en de wisknop: alleen zichtbaar als er iets gekozen is.
   function renderStatus(lineCount) {
     var delivery = ScCart.getDeliveryMode();
-    statusEl.hidden = lineCount === 0;
-    statusTextEl.textContent = lineCount === 1 ? 'Je hebt 1 extra gekozen' : 'Je hebt ' + lineCount + ' extra\'s gekozen';
-    summaryResetBtn.hidden = lineCount === 0 && !delivery;
+    var photo = ScCart.getPhoto() > 0;
+    statusEl.hidden = lineCount === 0 && !photo;
+    var text = lineCount === 0 ? '' : lineCount === 1 ? 'Je hebt 1 extra gekozen' : 'Je hebt ' + lineCount + ' extra\'s gekozen';
+    if (photo) text = text ? text + ' en fotografie aangevraagd' : 'Je hebt fotografie aangevraagd';
+    statusTextEl.textContent = text;
+    summaryResetBtn.hidden = lineCount === 0 && !delivery && !photo;
   }
 
   function renderSummary() {
     var s = ScExtrasShop.summary();
     renderStatus(s.lines.length);
     // Iets nieuws gekozen na het wissen: dan valt er niets meer ongedaan te maken.
-    if (undoSnapshot && (s.lines.length || ScCart.getDeliveryMode())) { undoSnapshot = null; resetDoneEl.hidden = true; }
+    if (undoSnapshot && (s.lines.length || ScCart.getDeliveryMode() || ScCart.getPhoto())) { undoSnapshot = null; resetDoneEl.hidden = true; }
+    var photoH = ScCart.getPhoto();
+    summaryPhotoEl.hidden = !photoH;
+    summaryPhotoEl.textContent = photoH
+      ? 'Fotografie aangevraagd: ' + photoH + ' uur, indicatie €' + photoPrice(photoH) + ' + reiskosten. Rechtstreeks via Celeste\'s Visuals, niet in het subtotaal.'
+      : '';
     if (s.lines.length === 0) {
-      summaryEmpty.style.display = 'block';
+      summaryEmpty.style.display = photoH ? 'none' : 'block';
       summaryLinesEl.innerHTML = '';
       summaryTotalEl.style.display = 'none';
       summaryVatNoteEl.style.display = 'none';
@@ -635,6 +739,7 @@
   }
 
   ScExtrasShop.wire(root, renderSummary);
+  applyPhotoToPage();
   renderSummary();
 
   var savedDeliveryMode = ScCart.getDeliveryMode();
@@ -674,9 +779,10 @@
   // mogelijkheid het direct ongedaan te maken.
   document.querySelectorAll('[data-reset]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var snapshot = { cart: ScCart.read(), delivery: ScCart.getDeliveryMode() };
+      var snapshot = { cart: ScCart.read(), delivery: ScCart.getDeliveryMode(), photo: ScCart.getPhoto() };
       ScCart.clear();
       applyCartToPage();
+      applyPhotoToPage();
       renderSummary();
       undoSnapshot = snapshot;
       resetDoneEl.hidden = false;
@@ -690,7 +796,9 @@
     if (!snapshot) return;
     Object.keys(snapshot.cart).forEach(function (k) { ScCart.setItem(k, snapshot.cart[k].qty, snapshot.cart[k]); });
     ScCart.setDeliveryMode(snapshot.delivery);
+    ScCart.setPhoto(snapshot.photo);
     applyCartToPage();
+    applyPhotoToPage();
     renderSummary();
   });
 
