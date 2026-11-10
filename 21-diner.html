@@ -23,6 +23,19 @@
 
 <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/site.css?v=19">
+<style>
+/* Blok "Ook vastleggen?": fotografie door Celeste's Visuals. */
+.occ-photo { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: center; }
+@media (min-width: 760px) { .occ-photo { grid-template-columns: 0.8fr 1.2fr; gap: 48px; } }
+.occ-photo-media { margin: 0; aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden; background: var(--paper-deep); }
+@media (min-width: 760px) { .occ-photo-media { aspect-ratio: 4 / 5; } }
+.occ-photo-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+.occ-photo h2 { font-size: clamp(26px, 3vw, 36px); }
+.occ-photo p { margin-top: 16px; color: var(--ink-soft); max-width: 54ch; }
+.occ-photo .hero-actions { margin-top: 24px; align-items: center; }
+.occ-photo .btn { white-space: normal; text-align: center; }
+.occ-photo-credit { margin-top: 8px; font-size: 12px; color: var(--ink-faint); }
+</style>
 
 <script type="application/ld+json">
 {
@@ -196,6 +209,27 @@
     </div>
   </section>
 
+  <section class="section" aria-labelledby="occPhotoTitle">
+    <div class="wrap occ-photo" style="max-width:980px;">
+      <div>
+        <figure class="occ-photo-media">
+          <img src="images/partners/celeste/celeste-glazen-detail-800.webp" srcset="images/partners/celeste/celeste-glazen-detail-480.webp 480w, images/partners/celeste/celeste-glazen-detail-800.webp 800w, images/partners/celeste/celeste-glazen-detail.webp 1000w" sizes="(min-width: 760px) 380px, 92vw" width="1000" height="1500" alt="Wijnglazen met roze en groene strikjes om de voet op een gedekte tafel voor een 21-diner" loading="lazy" decoding="async">
+        </figure>
+        <p class="occ-photo-credit">Foto: Celeste's Visuals</p>
+      </div>
+      <div>
+        <div class="kicker"><span>Fotografie</span></div>
+        <h2 id="occPhotoTitle">Ook vastleggen?</h2>
+        <p>De toost, de speeches, de lange tafel vol vrienden: laat het vastleggen, zodat jij er gewoon bij kunt zijn. Boek bij je tafel een fotograaf erbij. Celeste's Visuals fotografeert op locatie: 2 uur voor €225, elk extra uur €95, plus reiskosten.</p>
+        <p>Je vraagt het aan bij je reservering. Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af.</p>
+        <div class="hero-actions">
+          <a class="btn" href="reserveren.html?gelegenheid=21-diner&amp;fotografie=ja">Reserveer je tafel met fotografie</a>
+          <a class="link" href="samenwerking-celeste.html">Meer over Celeste's Visuals</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="wrap" style="max-width:760px;">
       <div class="section-head">
@@ -222,7 +256,7 @@
   <section class="section section--paper-alt center">
     <div class="wrap" style="max-width:520px;">
       <h2 style="font-size:28px;">Klaar om je 21-diner te dekken?</h2>
-      <p style="margin-top:14px;color:var(--ink-soft);">Kies je collectie, vul je datum en aantal personen in, en je ziet direct een prijsindicatie.</p>
+      <p style="margin-top:14px;color:var(--ink-soft);">Kies je collectie, vul je datum en aantal personen in, en je ziet direct een prijsindicatie. Fotografie vraag je in dezelfde aanvraag aan.</p>
       <p style="margin-top:26px;"><a class="btn" href="reserveren.html?gelegenheid=21-diner">Reserveer jouw tafelsetting</a></p>
     </div>
   </section>
@@ -244,6 +278,7 @@
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html">Reserveren</a></li>
         <li><a href="extras.html">Extra's</a></li>
+        <li><a href="samenwerking-celeste.html">Fotografie</a></li>
         <li><a href="bezorggebied.html">Bezorggebied</a></li>
         <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
         <li><a href="contact.html">Contact</a></li>      </ul>

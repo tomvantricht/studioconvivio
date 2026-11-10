@@ -3,11 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fotografie met Celeste's Visuals (voorbeeld) | Studio Convivio</title>
-<meta name="description" content="Voorbeeldpagina voor de samenwerking tussen Studio Convivio en Celeste's Visuals.">
-<!-- Concept: niet vindbaar. Bewust geen canonical, geen Open Graph, niet in
-     sitemap.xml, robots.txt, navigatie of footer, en geen interne links hierheen. -->
-<meta name="robots" content="noindex, nofollow">
+<title>Fotografie bij je tafel met Celeste's Visuals | Studio Convivio</title>
+<meta name="description" content="Boek bij je gedekte tafel een fotograaf: Celeste's Visuals legt je diner of feest vast op locatie. 2 uur voor €225, aan te vragen bij je reservering.">
+<link rel="canonical" href="https://www.studio-convivio.nl/samenwerking-celeste">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Studio Convivio">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Fotografie bij je tafel met Celeste's Visuals | Studio Convivio">
+<meta property="og:description" content="Boek bij je gedekte tafel een fotograaf: Celeste's Visuals legt je diner of feest vast op locatie. 2 uur voor €225, aan te vragen bij je reservering.">
+<meta property="og:url" content="https://www.studio-convivio.nl/samenwerking-celeste">
+<meta property="og:image" content="https://www.studio-convivio.nl/images/og-celeste-21-diner.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="images/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -15,7 +24,7 @@
 <link rel="preload" href="fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/site.css?v=19">
 <style>
-/* ---- Pagina-specifiek: voorbeeldpagina samenwerking Celeste's Visuals ---- */
+/* ---- Pagina-specifiek: fotografie met Celeste's Visuals ---- */
 
 /* Mobiel: gutter van 16px op deze pagina. */
 @media (max-width: 480px) { :root { --edge: 16px; } }
@@ -89,110 +98,36 @@
 .cv-gallery a:hover img { transform: scale(1.03); }
 .cv-gallery a:focus-visible { outline: 2px solid var(--moss-dark); outline-offset: 2px; }
 
-/* ---- Demo-blokken: statisch, reageren niet op klikken ---- */
-.cv-demo { position: relative; margin-top: 28px; padding: 34px 16px 18px; border: 1px dashed var(--line); border-radius: 6px; background: var(--paper); }
-@media (min-width: 620px) { .cv-demo { padding: 46px 24px 24px; } }
-.cv-demo + .cv-demo { margin-top: 20px; }
-.cv-demo-tag {
-  position: absolute; top: 10px; left: 12px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--mocha-dark); background: var(--mocha-pale); border-radius: 3px; padding: 3px 8px;
-}
-.cv-demo-body { pointer-events: none; user-select: none; }
-
-/* Extra-kaart: zelfde opmaak als de kaarten op extras.html (overgenomen). */
-.xt-wrap {
-  --sc-ink: var(--ink);
-  --sc-moss: var(--moss);
-  --sc-line: var(--line);
-  --sc-radius-lg: 6px;
-  --sc-radius-md: 4px;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-}
-.xt-category-label {
-  display: block; font-family: var(--serif); font-style: italic;
-  font-size: clamp(20px, 2.2vw, 26px); color: var(--ink); margin-bottom: 16px;
-}
-.sc-shop-card {
-  position: relative; display: block;
-  border: 1px solid var(--sc-line); border-radius: var(--sc-radius-lg);
-  overflow: hidden; background: #fff;
-}
-.sc-shop-card:has(input:checked) { border-color: var(--sc-moss); box-shadow: inset 0 0 0 2px rgba(107,122,94,0.2); }
-.sc-shop-card > input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
-.sc-shop-photo { display: block; position: relative; background: linear-gradient(155deg, #eee7d8, #e3ded2); }
-.sc-shop-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.sc-shop-badge {
-  position: absolute; top: 6px; right: 6px; width: 22px; height: 22px;
-  border-radius: 50%; background: #fff; border: 1px solid var(--sc-line);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; color: transparent;
-}
-.sc-shop-card input:checked ~ .sc-shop-photo .sc-shop-badge { background: var(--sc-moss); border-color: var(--sc-moss); color: #fff; }
-.sc-shop-body { display: block; padding: 10px 12px 12px; }
-.sc-shop-name { display: block; font-size: 13.5px; color: var(--sc-ink); line-height: 1.3; }
-.sc-shop-price { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
-.sc-shop-stock { display: block; font-size: 12px; color: var(--mocha-dark); margin-top: 1px; }
-.sc-qty-field { margin: 4px 0 10px 0; display: none; }
-.sc-qty-field.sc-visible { display: flex; gap: 8px; flex-wrap: wrap; }
-.sc-shop-addon { display: flex; align-items: center; gap: 6px; width: 100%; font-size: 13px; color: var(--ink-soft); }
-.sc-shop-addon input { accent-color: var(--moss-dark); margin: 0; }
-
-/* Eén brede kaart: foto boven (mobiel) of links (vanaf 620px). */
-.cv-shop-card { display: grid; grid-template-columns: 1fr; }
-.cv-shop-card .sc-shop-photo { aspect-ratio: 4 / 3; }
-.cv-shop-card .sc-shop-photo img { object-position: 50% 40%; }
-.cv-shop-card .sc-shop-body { padding: 14px 16px 16px; }
-.cv-shop-card .sc-shop-name { font-family: var(--serif); font-size: 20px; }
-.cv-shop-sub { display: block; font-family: var(--sans); font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
-.cv-shop-text { display: block; margin-top: 10px; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
-.cv-shop-card .sc-shop-price { margin-top: 10px; font-size: 13px; color: var(--ink); }
-.cv-shop-controls { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--line-soft); align-items: center; }
-.cv-stepper { display: inline-flex; align-items: center; border: 1px solid var(--sc-line); border-radius: var(--sc-radius-md); background: #fff; }
-.cv-stepper button {
-  width: 36px; height: 36px; border: 0; background: none; font: inherit; font-size: 16px;
-  color: var(--ink-soft); cursor: default;
-}
-.cv-stepper output { min-width: 56px; text-align: center; font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; }
-.cv-indication { font-size: 13px; color: var(--ink); }
-.cv-indication strong { font-weight: 700; }
-.cv-shop-fine { display: block; margin-top: 12px; font-size: 12px; line-height: 1.55; color: var(--ink-faint); }
-@media (min-width: 620px) {
-  .cv-shop-card { grid-template-columns: 220px 1fr; }
-  .cv-shop-card .sc-shop-photo { aspect-ratio: auto; min-height: 100%; }
-  .cv-shop-card .sc-shop-body { padding: 18px 20px 20px; }
-}
-
-/* Offerte-overzicht: zelfde opmaak als op reserveren.html (overgenomen). */
-.sc-summary { border-top: 1px solid var(--ink); padding-top: 16px; }
-.rsv-summary-head { font-family: var(--serif); font-size: 19px; margin-bottom: 8px; }
-.sc-summary-line { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; color: var(--ink-soft); padding: 4px 0; }
-.sc-summary-line span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.sc-summary-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--serif); font-size: 21px; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
-.sc-summary-total strong { font-weight: 500; font-variant-numeric: tabular-nums; }
-.sc-summary .vat-note { margin-top: 2px; text-align: right; }
-.cv-summary-partner {
-  margin-top: 16px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 4px;
-  font-size: 12px; line-height: 1.55; color: var(--ink-faint); background: var(--paper-alt);
-}
-
-/* Gelegenheidsblok "Ook vastleggen?" */
-.cv-occasion { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: center; }
-@media (min-width: 760px) { .cv-occasion { grid-template-columns: 0.8fr 1.2fr; gap: 36px; } }
-.cv-occasion-photo { aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden; background: var(--paper-deep); }
-@media (min-width: 760px) { .cv-occasion-photo { aspect-ratio: 4 / 5; } }
-.cv-occasion-photo img { width: 100%; height: 100%; object-fit: cover; }
-.cv-occasion h3 { font-size: clamp(24px, 2.6vw, 32px); }
-.cv-occasion p { margin-top: 14px; color: var(--ink-soft); max-width: 54ch; }
-.cv-occasion .hero-actions { margin-top: 22px; align-items: center; }
-.cv-occasion .btn { white-space: normal; text-align: left; }
-
 .cv-close .hero-actions { justify-content: center; margin-top: 26px; }
 
 @media (prefers-reduced-motion: reduce) {
   .cv-gallery img { transition: none; }
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Kan ik er ook een fotograaf bij boeken?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. We werken samen met Celeste's Visuals. Je kunt fotografie op locatie aanvragen bij je reservering: 2 uur voor €225, elk extra uur €95, plus reiskosten. Wij geven je aanvraag door; Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af. Het telt niet mee in je aanbetaling of borg."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kan ik ook alleen een fotograaf boeken, zonder tafel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Via ons vraag je fotografie aan samen met je tafel. Wil je alleen een fotograaf, neem dan rechtstreeks contact op met Celeste's Visuals."
+      }
+    }
+  ]
+}
+</script>
 <!-- Microsoft Clarity: zonder cookies (consent geweigerd), formuliervelden worden gemaskeerd.
      Pas geladen als de pagina klaar is en de browser even niets doet, zodat het
      script het opbouwen van de pagina niet vertraagt. -->
@@ -281,8 +216,8 @@
       <h1>Jouw tafel <em>én</em> avond, vastgelegd</h1>
       <p class="lede">Wij dekken de tafel, Celeste's Visuals legt het vast. Boek bij je tafelsetting een fotograaf die op locatie de tafel, je gasten en de momenten tussendoor fotografeert.</p>
       <div class="hero-actions">
-        <a class="btn" href="https://celestesvisuals.nl/" target="_blank" rel="noopener">Bekijk het werk van Celeste</a>
-        <a class="link" href="#zo-werkt-het">Zo werkt het</a>
+        <a class="btn" href="reserveren.html?fotografie=ja">Vraag fotografie aan</a>
+        <a class="link" href="https://celestesvisuals.nl/" target="_blank" rel="noopener">Bekijk het werk van Celeste</a>
       </div>
     </div>
   </section>
@@ -324,7 +259,7 @@
         <li class="cv-tl-step">
           <span class="cv-tl-dot" aria-hidden="true">1</span>
           <h3>Vraag het aan bij je reservering.</h3>
-          <p>Zet in stap 3 "Fotografie op locatie" aan en kies het aantal uur.</p>
+          <p>Zet bij de extra's in het <a href="reserveren.html?fotografie=ja">reserveringsformulier</a> "Fotografie op locatie" aan en kies het aantal uur.</p>
         </li>
         <li class="cv-tl-step">
           <span class="cv-tl-dot" aria-hidden="true">2</span>
@@ -357,96 +292,19 @@
   </section>
 
   <section class="section section--paper-alt">
-    <div class="wrap" style="max-width:820px;">
-      <div class="section-head" style="margin-bottom:0;">
-        <div class="kicker"><span>Voorbeeld</span></div>
-        <h2>Zo ziet het eruit in de reserveringsflow</h2>
-      </div>
-
-      <div class="cv-demo" aria-disabled="true">
-        <span class="cv-demo-tag">Voorbeeld</span>
-        <div class="cv-demo-body xt-wrap">
-          <div class="xt-category sc-shop-category">
-            <span class="xt-category-label sc-shop-category-label">Samen met Celeste's Visuals</span>
-            <div class="sc-shop-item">
-              <div class="sc-shop-card cv-shop-card">
-                <input type="checkbox" class="sc-shop-check" checked disabled tabindex="-1" aria-hidden="true">
-                <span class="sc-shop-photo">
-                  <img src="images/partners/celeste/celeste-tafel-avond-480.webp" srcset="images/partners/celeste/celeste-tafel-avond-480.webp 480w, images/partners/celeste/celeste-tafel-avond-800.webp 800w" sizes="(min-width: 620px) 220px, 90vw" width="1000" height="1500" alt="" loading="lazy" decoding="async">
-                  <span class="sc-shop-badge" aria-hidden="true">&#10003;</span>
-                </span>
-                <span class="sc-shop-body">
-                  <span class="sc-shop-name">Fotografie op locatie<span class="cv-shop-sub">door Celeste's Visuals</span></span>
-                  <span class="cv-shop-text">Laat je avond vastleggen: de gedekte tafel, je gasten en de momenten tussendoor. Celeste fotografeert op locatie en levert gemiddeld 30 tot 60 bewerkte foto's per uur in een online galerij.</span>
-                  <span class="sc-shop-price">€225 voor 2 uur · €95 per extra uur · + reiskosten</span>
-                  <span class="sc-qty-field sc-shop-qty sc-visible cv-shop-controls">
-                    <label class="sc-shop-addon"><input type="checkbox" checked tabindex="-1" aria-disabled="true"> Ik wil fotografie aanvragen</label>
-                    <span class="cv-stepper" aria-label="Aantal uur">
-                      <button type="button" disabled tabindex="-1" aria-disabled="true" aria-label="Uur minder">&minus;</button>
-                      <output>3 uur</output>
-                      <button type="button" disabled tabindex="-1" aria-disabled="true" aria-label="Uur meer">+</button>
-                    </span>
-                    <span class="cv-indication">Indicatie: <strong>€320</strong> + reiskosten</span>
-                  </span>
-                  <span class="cv-shop-fine">Tarief van Celeste's Visuals. Je vraagt het hier aan; Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af.</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cv-demo" aria-disabled="true">
-        <span class="cv-demo-tag">Voorbeeld</span>
-        <div class="cv-demo-body">
-          <div class="sc-summary">
-            <p class="rsv-summary-head">Jouw aanvraag</p>
-            <div class="sc-summary-line"><span>Mocha Sky, 20 personen</span><span>€355,00</span></div>
-            <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>€355,00</strong></div>
-            <p class="vat-note">Incl. btw</p>
-            <p class="cv-summary-partner">Fotografie aangevraagd: 3 uur · indicatie €320 + reiskosten · rechtstreeks via Celeste's Visuals</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap" style="max-width:920px;">
-      <div class="section-head" style="margin-bottom:0;">
-        <div class="kicker"><span>Voorbeeld</span></div>
-        <h2>En zo op de 21-diner-pagina</h2>
-      </div>
-
-      <div class="cv-demo" aria-disabled="true">
-        <span class="cv-demo-tag">Voorbeeld</span>
-        <div class="cv-demo-body cv-occasion">
-          <div class="cv-occasion-photo">
-            <img src="images/partners/celeste/celeste-glazen-detail-480.webp" srcset="images/partners/celeste/celeste-glazen-detail-480.webp 480w, images/partners/celeste/celeste-glazen-detail-800.webp 800w" sizes="(min-width: 760px) 320px, 90vw" width="1000" height="1500" alt="" loading="lazy" decoding="async">
-          </div>
-          <div>
-            <h3>Ook vastleggen?</h3>
-            <p>De toost, de speeches, de lange tafel vol vrienden: laat het vastleggen, zodat jij er gewoon bij kunt zijn. Boek bij je tafel een fotograaf erbij. Celeste's Visuals fotografeert op locatie: 2 uur voor €225, elk extra uur €95, plus reiskosten. Je vraagt het aan bij je reservering; Celeste bevestigt en rekent zelf met je af.</p>
-            <div class="hero-actions">
-              <a class="btn" role="link" aria-disabled="true" tabindex="-1">Fotografie aanvragen bij je reservering</a>
-              <a class="link" role="link" aria-disabled="true" tabindex="-1">Bekijk het werk van Celeste</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--paper-alt">
     <div class="wrap" style="max-width:760px;">
       <div class="section-head">
-        <div class="kicker"><span>Veelgestelde vraag</span></div>
+        <div class="kicker"><span>Veelgestelde vragen</span></div>
         <h2>Over fotografie</h2>
       </div>
       <div class="faq-list">
         <details class="faq-item">
           <summary class="faq-q"><span>Kan ik er ook een fotograaf bij boeken?</span><span class="plus" aria-hidden="true"></span></summary>
           <div class="faq-a"><p>Ja. We werken samen met Celeste's Visuals. Je kunt fotografie op locatie aanvragen bij je reservering: 2 uur voor €225, elk extra uur €95, plus reiskosten. Wij geven je aanvraag door; Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af. Het telt niet mee in je aanbetaling of borg.</p></div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q"><span>Kan ik ook alleen een fotograaf boeken, zonder tafel?</span><span class="plus" aria-hidden="true"></span></summary>
+          <div class="faq-a"><p>Via ons vraag je fotografie aan samen met je tafel. Wil je alleen een fotograaf, neem dan rechtstreeks <a href="https://celestesvisuals.nl/contact/" target="_blank" rel="noopener">contact op met Celeste's Visuals</a>.</p></div>
         </details>
       </div>
     </div>
@@ -456,7 +314,7 @@
     <div class="wrap" style="max-width:560px;">
       <h2 style="font-size:28px;">Klaar om je tafel te dekken?</h2>
       <div class="hero-actions">
-        <a class="btn" href="reserveren.html">Reserveer jouw tafel</a>
+        <a class="btn" href="reserveren.html?fotografie=ja">Reserveer je tafel met fotografie</a>
         <a class="btn btn-outline" href="https://celestesvisuals.nl/contact/" target="_blank" rel="noopener">Neem contact op met Celeste</a>
       </div>
     </div>
@@ -479,6 +337,7 @@
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html">Reserveren</a></li>
         <li><a href="extras.html">Extra's</a></li>
+        <li><a href="samenwerking-celeste.html" aria-current="page">Fotografie</a></li>
         <li><a href="bezorggebied.html">Bezorggebied</a></li>
         <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
         <li><a href="contact.html">Contact</a></li>      </ul>

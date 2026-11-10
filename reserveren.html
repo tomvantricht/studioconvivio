@@ -305,6 +305,44 @@
   .sc-shop-addon { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-soft); }
   .sc-shop-addon input { accent-color: var(--moss-dark); }
 
+  /* Fotografie door Celeste's Visuals: aanvraag die we doorgeven. Telt niet
+     mee in het totaal; Celeste rekent zelf af. */
+  .rsv-photo { margin-top: 28px; }
+  .rsv-photo-item {
+    position: relative; overflow: hidden; background: #fffdf8; border: 1px solid var(--line); border-radius: 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .rsv-photo-item:hover { border-color: var(--ink-faint); }
+  .rsv-photo-item:has(#rsvPhotoCheck:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .rsv-photo-item:has(#rsvPhotoCheck:focus-visible) { outline: 2px solid var(--mocha-dark); outline-offset: 2px; }
+  .rsv-photo-card { display: grid; grid-template-columns: 1fr; cursor: pointer; }
+  .rsv-photo-card .sc-shop-media { aspect-ratio: 16 / 9; }
+  .rsv-photo-card .sc-shop-photo { object-position: 50% 55%; }
+  @media (hover: hover) { .rsv-photo-card:hover .sc-shop-photo { transform: scale(1.04); } }
+  @media (min-width: 560px) {
+    .rsv-photo-card { grid-template-columns: 170px 1fr; }
+    .rsv-photo-card .sc-shop-media { aspect-ratio: auto; height: 100%; min-height: 180px; }
+  }
+  .rsv-photo-body { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px 16px; }
+  .rsv-photo-name { font-size: 15px; font-weight: 700; line-height: 1.3; }
+  .rsv-photo-sub { font-size: 12px; color: var(--ink-faint); }
+  .rsv-photo-text { margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+  .rsv-photo-price { margin-top: 8px; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .rsv-photo-hours { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 12px 16px 14px; border-top: 1px solid var(--line-soft); }
+  .rsv-photo-hours[hidden] { display: none; }
+  .rsv-photo-hours-pick { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 700; }
+  .rsv-photo-hours .sc-qty-stepper { justify-content: flex-start; }
+  .rsv-card .rsv-photo-hours .sc-qty-stepper input[type="number"] { flex: 0 0 52px; width: 52px; }
+  .rsv-photo-est { font-size: 13px; font-variant-numeric: tabular-nums; }
+  .rsv-photo-fine { margin-top: 10px; font-size: 12px; line-height: 1.55; color: var(--ink-faint); }
+  .rsv-photo-fine a { color: var(--ink-soft); text-underline-offset: 2px; }
+  .sc-summary-partner, .rsv-side-partner {
+    margin-top: 12px; padding: 10px 12px; border: 1px dashed var(--line); background: var(--paper-alt);
+    font-size: 12px; line-height: 1.55; color: var(--ink-soft);
+  }
+  .sc-summary-partner[hidden], .rsv-side-partner[hidden] { display: none; }
+  .rsv-side-partner { background: transparent; }
+
   /* ---- Stap 4: bezorging ---- */
   .rsv-choices { display: grid; gap: 10px; }
   .rsv-choice { position: relative; display: grid; grid-template-columns: 20px 1fr auto; gap: 4px 14px; align-items: start; padding: 16px; border: 1px solid var(--line); background: #fffdf8; cursor: pointer; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
@@ -563,6 +601,7 @@
         <div id="rsvSideLines"></div>
         <div class="rsv-side-total"><span id="rsvSideTotalLabel">Per persoon</span><strong id="rsvSideTotal">€16,75</strong></div>
         <p class="rsv-side-note" id="rsvSideNote">Incl. btw. Het totaal zie je zodra je het aantal personen kiest.</p>
+        <p class="rsv-side-partner" id="rsvSidePhoto" hidden></p>
       </div>
       <ul class="rsv-promises">
         <li><b>1</b><span>Voorlopige bevestiging binnen 2 dagen, nadat we de beschikbaarheid hebben gecontroleerd.</span></li>
@@ -725,6 +764,37 @@
             <p class="rsv-muted rsv-extras-intro">Helemaal optioneel. Tik op wat je erbij wilt; met het vergrootglas zie je meer foto's. Niets nodig? Dan ga je met <strong>Overslaan</strong> door naar de bezorging. Wat je op de <a href="extras.html">extra's-pagina</a> kiest, staat hier al klaar. Prijzen incl. btw.</p>
             <p class="rsv-extras-sum" id="rsvExtrasSum" aria-live="polite"><span>Jouw extra's</span><b>Nog niets gekozen</b></p>
             <div id="scXtraCatalog"></div>
+
+            <div class="sc-shop-category rsv-photo" role="group" aria-labelledby="rsvPhotoHead">
+              <span class="sc-shop-category-label" id="rsvPhotoHead">Samen met Celeste's Visuals</span>
+              <div class="rsv-photo-item">
+                <label class="sc-shop-card rsv-photo-card">
+                  <input type="checkbox" id="rsvPhotoCheck" aria-describedby="rsvPhotoFine">
+                  <span class="sc-shop-media">
+                    <img class="sc-shop-photo" src="images/partners/celeste/celeste-tafel-avond-480.webp" srcset="images/partners/celeste/celeste-tafel-avond-480.webp 480w, images/partners/celeste/celeste-tafel-avond-800.webp 800w" sizes="(min-width: 560px) 170px, 90vw" width="1000" height="1500" alt="" loading="lazy" decoding="async">
+                    <span class="sc-shop-tick" aria-hidden="true"></span>
+                  </span>
+                  <span class="rsv-photo-body">
+                    <span class="rsv-photo-name">Fotografie op locatie</span>
+                    <span class="rsv-photo-sub">door Celeste's Visuals</span>
+                    <span class="rsv-photo-text">Laat je avond vastleggen: de gedekte tafel, je gasten en de momenten tussendoor. Celeste fotografeert op locatie en levert gemiddeld 30 tot 60 bewerkte foto's per uur in een online galerij.</span>
+                    <span class="rsv-photo-price">€225 voor 2 uur · €95 per extra uur · + reiskosten</span>
+                  </span>
+                </label>
+                <div class="rsv-photo-hours" id="rsvPhotoHours" hidden>
+                  <div class="rsv-photo-hours-pick">
+                    <span id="rsvPhotoHoursLabel">Aantal uur</span>
+                    <div class="sc-qty-stepper">
+                      <button type="button" class="sc-qty-btn" data-photo-dir="-1" aria-label="Eén uur minder"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8"/></svg></button>
+                      <input type="number" id="rsvPhotoHoursInput" min="2" max="8" step="1" value="2" inputmode="numeric" aria-labelledby="rsvPhotoHoursLabel">
+                      <button type="button" class="sc-qty-btn" data-photo-dir="1" aria-label="Eén uur meer"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2v8"/></svg></button>
+                    </div>
+                  </div>
+                  <span class="rsv-photo-est" aria-live="polite">Indicatie: <b id="rsvPhotoEst">€225</b> + reiskosten</span>
+                </div>
+              </div>
+              <p class="rsv-photo-fine" id="rsvPhotoFine">Tarief van Celeste's Visuals. Je vraagt het hier aan; zodra je tafel voorlopig bevestigd is, geven we je aanvraag door. Celeste bevestigt zelf of ze beschikbaar is en rekent rechtstreeks met je af. Het telt niet mee in je totaalprijs, aanbetaling of borg. <a href="samenwerking-celeste.html" target="_blank" rel="noopener">Meer over Celeste's Visuals</a></p>
+            </div>
           </section>
 
           <!-- ====== Stap 4: bezorging ====== -->
@@ -811,6 +881,7 @@
               <div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong id="scTotalPrice">€16,75</strong></div>
               <p class="vat-note">Incl. btw</p>
               <p class="sc-summary-note" id="scSummaryNote">Dit is een indicatie. De definitieve prijs bevestigen we samen met de beschikbaarheid.</p>
+              <p class="sc-summary-partner" id="scSummaryPhoto" hidden></p>
               <div class="rsv-pay" id="rsvPay"></div>
             </div>
 
@@ -847,6 +918,7 @@
           <li><b>1</b><span id="rsvDoneStep1">We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail.</span></li>
           <li><b>2</b><span>Na de definitieve bevestiging betaal je 25% van de totale pakketprijs als aanbetaling; dan staat je datum vast. Annuleer je, dan wordt de aanbetaling verrekend met de annuleringskosten; zie de <a href="algemene-voorwaarden.html#annulering">annuleringsvoorwaarden</a>.</span></li>
           <li><b>3</b><span>Het restbedrag betaal je uiterlijk 7 dagen voor de huurdatum, samen met de borg van €150; die krijg je binnen 7 werkdagen na retour terug. Zie de <a href="algemene-voorwaarden.html#borg">algemene voorwaarden</a>.</span></li>
+          <li id="rsvDonePhoto" hidden><b>4</b><span>Fotografie: zodra je tafel voorlopig bevestigd is, geven we je aanvraag door aan Celeste's Visuals. Celeste neemt zelf contact met je op over haar beschikbaarheid en stuurt je zelf de factuur.</span></li>
         </ol>
         <div class="rsv-done-actions">
           <a class="rsv-ghost" id="rsvMailCopy" href="#">Mail mezelf een kopie</a>
@@ -874,6 +946,7 @@
         <li><a href="hoe-werkt-het.html">Hoe werkt het?</a></li>
         <li><a href="reserveren.html">Reserveren</a></li>
         <li><a href="extras.html">Extra's</a></li>
+        <li><a href="samenwerking-celeste.html">Fotografie</a></li>
         <li><a href="bezorggebied.html">Bezorggebied</a></li>
         <li><a href="wie-ben-ik.html">Wie ben ik?</a></li>
         <li><a href="contact.html">Contact</a></li>      </ul>
@@ -1050,6 +1123,52 @@
   var xtraCatalogEl = document.getElementById('scXtraCatalog');
   xtraCatalogEl.innerHTML = ScExtrasShop.renderCatalog();
   ScExtrasShop.wire(xtraCatalogEl, function () { recalc(); saveDraft(); }, function () { return parseInt(guestsInput.value, 10) || 1; });
+
+  // ---------------------------------------------------------------
+  // Fotografie door Celeste's Visuals (stap 3). Dit is een aanvraag die
+  // we doorgeven: Celeste bevestigt en rekent zelf af, dus het telt niet
+  // mee in het totaal, de aanbetaling of de borg.
+  // ---------------------------------------------------------------
+  var PHOTO = { base: 225, baseHours: 2, perHour: 95, min: 2, max: 8 };
+  var photoCheck = document.getElementById('rsvPhotoCheck');
+  var photoHoursBox = document.getElementById('rsvPhotoHours');
+  var photoHoursInput = document.getElementById('rsvPhotoHoursInput');
+  var photoEstEl = document.getElementById('rsvPhotoEst');
+  var summaryPhotoEl = document.getElementById('scSummaryPhoto');
+  var sidePhotoEl = document.getElementById('rsvSidePhoto');
+  var lastPhotoNote = '';
+  function photoRequested() { return photoCheck.checked; }
+  function photoHours() {
+    var h = parseInt(photoHoursInput.value, 10);
+    return isNaN(h) ? PHOTO.min : Math.min(PHOTO.max, Math.max(PHOTO.min, h));
+  }
+  function photoPrice(h) { return PHOTO.base + Math.max(0, h - PHOTO.baseHours) * PHOTO.perHour; }
+  function photoText() { var h = photoHours(); return h + ' uur, indicatie €' + photoPrice(h) + ' + reiskosten'; }
+  function syncPhoto() {
+    var h = photoHours();
+    photoHoursBox.hidden = !photoCheck.checked;
+    photoEstEl.textContent = '€' + photoPrice(h);
+    photoHoursBox.querySelector('[data-photo-dir="-1"]').disabled = h <= PHOTO.min;
+    photoHoursBox.querySelector('[data-photo-dir="1"]').disabled = h >= PHOTO.max;
+  }
+  photoCheck.addEventListener('change', syncPhoto);
+  photoHoursInput.addEventListener('input', function () {
+    var v = parseInt(photoHoursInput.value, 10);
+    if (!isNaN(v) && v > PHOTO.max) photoHoursInput.value = String(PHOTO.max);
+    syncPhoto();
+  });
+  photoHoursInput.addEventListener('change', function () { photoHoursInput.value = String(photoHours()); syncPhoto(); });
+  photoHoursBox.querySelectorAll('[data-photo-dir]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var dir = parseInt(btn.getAttribute('data-photo-dir'), 10);
+      photoHoursInput.value = String(Math.min(PHOTO.max, Math.max(PHOTO.min, photoHours() + dir)));
+      syncPhoto();
+      if (btn.disabled) photoHoursBox.querySelector('[data-photo-dir="' + (-dir) + '"]').focus();
+      recalc();
+      saveDraft();
+    });
+  });
+  syncPhoto();
 
   // ---------------------------------------------------------------
   // Stappen
@@ -1630,7 +1749,7 @@
         return '<div class="sc-summary-line"><span>' + esc(l.label) + editLink(l, withEdit) + '</span><span>' + esc(l.price) + '</span></div>';
       }).join('');
   }
-  [summaryLinesEl, sideLinesEl].forEach(function (el) {
+  [summaryLinesEl, sideLinesEl, summaryPhotoEl, sidePhotoEl].forEach(function (el) {
     el.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-goto]');
       if (!btn) return;
@@ -1683,11 +1802,19 @@
     }
 
     var xtraSummary = ScExtrasShop.summary();
-    if (currentStep === 3) nextBtn.textContent = xtraSummary.lines.length ? NEXT_LABELS[3] : 'Overslaan';
+    var wantsPhoto = photoRequested();
+    if (currentStep === 3) nextBtn.textContent = (xtraSummary.lines.length || wantsPhoto) ? NEXT_LABELS[3] : 'Overslaan';
     var nXtra = xtraSummary.lines.length;
-    extrasSumEl.textContent = nXtra
+    var xtraText = nXtra
       ? nXtra + (nXtra === 1 ? ' extra' : " extra's") + ' · ' + (xtraSummary.hasFrom ? 'vanaf ' : '') + fmt(xtraSummary.subtotal)
-      : 'Nog niets gekozen';
+      : '';
+    extrasSumEl.textContent = wantsPhoto ? (xtraText ? xtraText + ' + fotografie' : 'Fotografie aangevraagd') : (xtraText || 'Nog niets gekozen');
+
+    // Fotografie staat onder het totaal, apart van de prijsregels.
+    lastPhotoNote = wantsPhoto ? "Fotografie aangevraagd: " + photoText() + ". Rechtstreeks via Celeste's Visuals, niet in het totaal." : '';
+    var photoEdit = editLink({ text: 'fotografie', step: 3 }, true);
+    summaryPhotoEl.hidden = sidePhotoEl.hidden = !wantsPhoto;
+    summaryPhotoEl.innerHTML = sidePhotoEl.innerHTML = wantsPhoto ? esc(lastPhotoNote) + photoEdit : '';
 
     var dRadio = getDeliveryMode();
     var lines = [];
@@ -1879,6 +2006,7 @@
     var d = { t: Date.now(), step: currentStep, mode: getMode(), pkg: getSelectedPackage() ? getSelectedPackage().value : '', guests: guestsInput.value, occasion: occasionInput.value, items: [] };
     form.querySelectorAll('.sc-item-check:checked').forEach(function (el) { d.items.push(el.value); });
     for (var k in CHOICE_FIELDS) d[k] = CHOICE_FIELDS[k].value;
+    d.photo = photoRequested() ? photoHours() : 0;
     var personal = { t: Date.now(), manualKm: usingManualKm ? manualKmInput.value : '', homeSynced: homeSynced };
     for (var p in PERSONAL_FIELDS) personal[p] = PERSONAL_FIELDS[p].value;
     d.personal = personal;
@@ -1905,6 +2033,9 @@
     if (/^\d+$/.test(d.guests || '')) guestsInput.value = String(Math.min(GUESTS.max, Math.max(GUESTS.min, +d.guests)));
     renderGuests();
     if (OCCASIONS[d.occasion]) occasionInput.value = d.occasion;
+    photoCheck.checked = d.photo > 0;
+    if (d.photo > 0) photoHoursInput.value = String(Math.min(PHOTO.max, Math.max(PHOTO.min, parseInt(d.photo, 10) || PHOTO.min)));
+    syncPhoto();
     var k;
     for (k in CHOICE_FIELDS) if (typeof d[k] === 'string') CHOICE_FIELDS[k].value = d[k];
     for (k in PERSONAL_FIELDS) if (typeof personal[k] === 'string') PERSONAL_FIELDS[k].value = personal[k];
@@ -1917,19 +2048,22 @@
   }
   function hasContent(d) {
     var personal = d.personal || {};
-    return d.step > 1 || d.date || personal.name || personal.email || d.mode === 'custom';
+    return d.step > 1 || d.date || personal.name || personal.email || d.mode === 'custom' || d.photo > 0;
   }
 
   // ---------------------------------------------------------------
   // Vooraf invullen vanaf andere pagina's:
-  // ?collectie=moss-mist|mocha-sky|winter-glow|maatwerk en ?gelegenheid=21-diner enz.
+  // ?collectie=moss-mist|mocha-sky|winter-glow|maatwerk, ?gelegenheid=21-diner enz.
+  // en ?fotografie=ja (zet fotografie door Celeste's Visuals alvast aan).
   // ---------------------------------------------------------------
   var PACKAGE_PARAMS = { 'moss-mist': 'Moss & Mist', 'moss-and-mist': 'Moss & Mist', 'mocha-sky': 'Mocha Sky', 'winter-glow': 'Winter Glow' };
   function applyParams() {
     var params = new URLSearchParams(location.search);
     var col = (params.get('collectie') || '').toLowerCase();
     var occ = (params.get('gelegenheid') || '').toLowerCase();
+    var foto = (params.get('fotografie') || '').toLowerCase();
     if (OCCASIONS[occ]) occasionInput.value = occ;
+    if (foto === 'ja' || foto === '1') { photoCheck.checked = true; syncPhoto(); }
     var picked = false;
     if (col === 'maatwerk') { setMode('custom'); picked = true; }
     else if (PACKAGE_PARAMS[col]) {
@@ -2000,6 +2134,12 @@
     });
     formData.append('extra_items', xtraLines.length ? xtraLines.join(', ') : 'Geen');
     formData.append('adres', getHomeAddress());
+    if (photoRequested()) {
+      formData.append('fotografie', 'Ja, ' + photoText() + ". Doorgeven aan Celeste's Visuals.");
+      formData.set('subject', 'Studio Convivio: nieuwe reserveringsaanvraag (met fotografie)');
+    } else {
+      formData.append('fotografie', 'Nee');
+    }
 
     var dRadio = getDeliveryMode();
     if (dRadio && dRadio.value !== 'geen') {
@@ -2038,7 +2178,8 @@
     return lastSummaryHtml +
       '<div class="sc-summary-total"><span>Geschatte totaalprijs</span><strong>' + esc(totalPriceEl.textContent) + '</strong></div>' +
       '<p class="vat-note">Incl. btw, exclusief borg</p>' +
-      '<div class="rsv-pay">' + lastPayHtml + '</div>';
+      '<div class="rsv-pay">' + lastPayHtml + '</div>' +
+      (lastPhotoNote ? '<p class="sc-summary-partner">' + esc(lastPhotoNote) + '</p>' : '');
   }
   function requestContactLines() {
     return [
@@ -2052,7 +2193,7 @@
   }
   // Elke regel als "omschrijving: bedrag" in platte tekst.
   function summaryAsText(root) {
-    return [].map.call(root.querySelectorAll('.sc-summary-meta, .sc-summary-line, .sc-summary-total, .rsv-pay-row, .rsv-pay-note'), function (row) {
+    return [].map.call(root.querySelectorAll('.sc-summary-meta, .sc-summary-line, .sc-summary-total, .rsv-pay-row, .rsv-pay-note, .sc-summary-partner'), function (row) {
       var parts = [].map.call(row.children.length ? row.children : [row], function (c) { return c.textContent.trim(); }).filter(Boolean);
       return parts.join(': ');
     }).join('\n');
@@ -2079,7 +2220,8 @@
     var contactLines = requestContactLines();
     document.getElementById('rsvDoneSummary').innerHTML = requestSummaryHtml();
     document.getElementById('rsvDoneTitle').textContent = name ? 'Bedankt, ' + name + '!' : 'Bedankt!';
-    document.getElementById('rsvDoneStep1').textContent = 'We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail' + (email ? ' naar ' + email : '') + '.';
+    document.getElementById('rsvDonePhoto').hidden = !photoRequested();
+    document.getElementById('rsvDoneStep1').textContent ='We controleren de beschikbaarheid en bevestigen je aanvraag binnen 2 dagen voorlopig per e-mail' + (email ? ' naar ' + email : '') + '.';
 
     document.getElementById('rsvBody').hidden = true;
     doneEl.hidden = false;
@@ -2160,6 +2302,7 @@
   // Alles terug naar de beginstand, inclusief het gedeelde mandje en het concept.
   function resetAll() {
     form.reset();
+    syncPhoto();
     ScCart.clear();
     clearDraft();
     xtraCatalogEl.querySelectorAll('.sc-shop-qty').forEach(function (el) { el.classList.remove('sc-visible'); });
@@ -2193,7 +2336,7 @@
   // terugzetten van een concept staat de melding erbij tot je verder klikt.
   function hasAnyInput() {
     return currentStep > 1 || !!dateInput.value || getMode() === 'custom' || guestsInput.value !== String(GUESTS.def) ||
-      ScExtrasShop.summary().lines.length > 0 || !!document.getElementById('scName').value.trim() || !!document.getElementById('scEmail').value.trim();
+      ScExtrasShop.summary().lines.length > 0 || photoRequested() || !!document.getElementById('scName').value.trim() || !!document.getElementById('scEmail').value.trim();
   }
   function updateStartOver() {
     if (!restoredText || !doneEl.hidden) return;
