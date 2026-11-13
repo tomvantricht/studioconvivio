@@ -891,110 +891,46 @@ a[data-lightbox]:focus-visible { outline-offset: -4px; outline-color: #fff; }
 .step p { font-size: 14px; color: var(--ink-soft); }
 
 /* ---------------------------------------------------------------------- */
-/* Collectiekaarten (home), bewust géén identieke 3-koloms iconenkaarten     */
+/* Gelegenheden (home)                                                     */
 /* ---------------------------------------------------------------------- */
-.occasion-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+/* Gelegenheden (home): vier kaarten, foto boven en tekst eronder op het
+   papier, met lucht ertussen. Was eerder een strak raster van zes donkere
+   foto's met tekst erop plus een kerststrook; dat oogde te druk (Tom,
+   13-11-2026). Op mobiel 2 × 2, vanaf 900px vier naast elkaar. */
+.occasion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 16px; }
+@media (min-width: 900px) { .occasion-grid { grid-template-columns: repeat(4, 1fr); gap: 28px; } }
+.occasion-card { display: block; text-decoration: none; color: var(--ink); }
+.occasion-photo { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--paper-deep); }
+/* Iets minder verzadigd en een tikje warmer, zodat daglicht- en
+   kaarslichtfoto's naast elkaar rustig ogen. */
+.occasion-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(0.85) sepia(0.06); transition: transform 0.6s ease;
 }
-/* Vijf gelegenheden: op mobiel 2 + 2 + 1 brede, op tablet 3 + 2 (zes
-   kolommen), op desktop vijf naast elkaar. "of .occasion-card" telt alleen
-   de kaarten, zodat het ook klopt als de kerststrook weg is.
-   De brede kaart op mobiel is 2:1 (was 3:2, nam te veel hoogte in); de foto
-   schuift iets omhoog zodat de zwaan van de babyshower heel in beeld blijft. */
-@media (max-width: 759px) {
-  .occasion-grid > .occasion-card:last-child:nth-child(odd of .occasion-card) { grid-column: span 2; aspect-ratio: 2 / 1; }
-  .occasion-grid > .occasion-card:last-child:nth-child(odd of .occasion-card) img { object-position: 50% 25%; }
-}
-@media (min-width: 760px) {
-  .occasion-grid { grid-template-columns: repeat(6, 1fr); }
-  .occasion-grid > .occasion-card { grid-column: span 2; }
-  .occasion-grid > .occasion-card:nth-last-child(-n+2) { grid-column: span 3; aspect-ratio: 3 / 2; }
-}
-@media (min-width: 1180px) {
-  .occasion-grid { grid-template-columns: repeat(5, 1fr); }
-  .occasion-grid > .occasion-card,
-  .occasion-grid > .occasion-card:nth-last-child(-n+2) { grid-column: auto; aspect-ratio: 3 / 4; }
-}
-.occasion-card {
-  position: relative;
-  background: var(--ink);
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  text-decoration: none;
-  display: flex;
-  align-items: flex-end;
-  color: var(--paper);
-}
-.occasion-card img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  transition: transform 0.5s ease;
-  filter: saturate(0.9);
-}
-.occasion-card:hover img { transform: scale(1.06); }
-.occasion-card::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(20,18,10,0.82) 0%, rgba(20,18,10,0.15) 55%, rgba(20,18,10,0) 75%);
-}
-.occasion-card-body { position: relative; padding: 18px 16px; }
-.occasion-card-body h3 {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 16px; color: var(--paper); margin-bottom: 4px;
-  /* Lange woorden als "Verjaardagsjubileum" mogen afbreken i.p.v. de kaart
-     (en op mobiel de hele pagina) breder te duwen. */
+.occasion-card:hover .occasion-photo img { transform: scale(1.04); }
+.occasion-photo .season-tag { position: absolute; top: 12px; left: 12px; }
+.occasion-card h3 {
+  margin-top: 14px; font-size: clamp(17px, 1.8vw, 21px);
+  /* Lange woorden als "Verjaardagsjubileum" mogen afbreken. */
   -webkit-hyphens: auto; hyphens: auto; overflow-wrap: anywhere;
 }
-@media (max-width: 420px) { .occasion-card-body { padding: 16px 12px; } .occasion-card-body h3 { font-size: 15px; } }
-/* De kaarten zijn links; dit pijltje maakt dat zichtbaar zonder een knop
-   of badge aan het ontwerp toe te voegen. */
-.occasion-card-body h3::after {
-  content: "→";
-  font-family: var(--sans);
-  font-size: 13px;
-  opacity: 0.7;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+/* De kaarten zijn links; het pijltje maakt dat zichtbaar. */
+.occasion-card h3::after {
+  content: "→"; display: inline-block; margin-left: 8px;
+  font-family: var(--sans); font-size: 14px; color: var(--mocha-dark);
+  transition: transform 0.2s ease;
 }
 .occasion-card:hover h3::after,
-.occasion-card:focus-visible h3::after { transform: translateX(3px); opacity: 1; }
-.occasion-card-body p { font-size: 12px; color: rgba(248,246,239,0.78); line-height: 1.45; }
-
-/* Seizoensstrook (home): een lage, brede kaart bovenaan het gelegenheden-
-   raster, in dezelfde beeldtaal als de kaarten eronder. */
-.occasion-strip {
-  grid-column: 1 / -1; position: relative; overflow: hidden;
-  display: flex; align-items: center; min-height: 128px;
-  background: var(--ink); color: var(--paper); text-decoration: none;
-}
-.occasion-strip img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  filter: saturate(0.9); transition: transform 0.5s ease;
-}
-.occasion-strip:hover img { transform: scale(1.04); }
-.occasion-strip::before {
-  content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to right, rgba(20,18,10,0.88) 0%, rgba(20,18,10,0.6) 45%, rgba(20,18,10,0.1) 100%);
-}
-.occasion-strip:focus-visible { outline: 2px solid var(--moss-dark); outline-offset: 3px; }
-.occasion-strip-body { position: relative; z-index: 2; padding: 18px 22px; max-width: 560px; }
-.occasion-strip-body h3 {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 20px; color: var(--paper); margin-bottom: 4px;
-}
-.occasion-strip-body h3::after {
-  content: "→"; font-family: var(--sans); font-size: 14px; opacity: 0.7;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.occasion-strip:hover h3::after,
-.occasion-strip:focus-visible h3::after { transform: translateX(3px); opacity: 1; }
-.occasion-strip-body p { font-size: 13px; color: rgba(248,246,239,0.8); line-height: 1.45; }
+.occasion-card:focus-visible h3::after { transform: translateX(4px); }
+.occasion-card p { margin-top: 4px; font-size: 14px; color: var(--ink-faint); }
+@media (max-width: 559px) { .occasion-card p { display: none; } }
+.occasion-more { margin-top: 36px; font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-soft); }
+.occasion-more a { color: var(--mocha-dark); text-underline-offset: 3px; }
+.occasion-more a:hover { color: var(--ink); }
 .season-tag {
-  display: inline-block; margin-bottom: 8px;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--ink); background: var(--gold); padding: 3px 7px;
+  display: inline-block;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink); background: var(--gold); padding: 5px 10px; border-radius: 2px;
 }
 
 /* Kerst in de aankondigingsbalk. */
